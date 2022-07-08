@@ -1,0 +1,7 @@
+---
+title: "Reanalysis of a Data set"
+author: "Kilian Sander, Yves Wycisk, Reinhard Kopiez"
+date: '2022'
+output: html_document
+csl: inst/apa.csl
+---
