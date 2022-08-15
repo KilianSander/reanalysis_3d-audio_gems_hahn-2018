@@ -8,16 +8,15 @@ csl: inst/apa.csl
 # Preparation
 
 ## Packages
-```{r packages, messages=FALSE, warnings=FALSE, results='hide'}
-sapply(c("tidyverse", "MANOVA.RM"),
-       require, character.only = T)
+```{r packages, message=FALSE, warning=FALSE, results='hide'}
+sapply(c("tidyverse", "MANOVA.RM"), require, character.only = T)
 ```
 Load the data:
 ```{r dataset, messages=FALSE}
 load("data/data_raw.Rda")
 ```
 
-```{r formats and GEMS, messages=FALSE}
+```{r formats and GEMS, message=FALSE}
 formats <- c("stereo", "surround", "auro")
 gems_factors <- c("wonder", "transcendence", "tenderness", "nostalgia",
                   "peacefulness", "power", "joyful_activation", "tension",
@@ -34,7 +33,7 @@ tension <- c("agitated", "nervous", "tense")
 sadness <- c("sad", "sorrowful", "tearful")
 ```
 Exclude a participant if there are at least two `NA`s for a GEMS factor of a stimulus:
-```{r filter cases, messages=FALSE}
+```{r filter cases, message=FALSE}
 data_raw$complete <- TRUE
 for (p in data_raw$participant) {
   part_data <- data_raw %>% filter(participant == p)

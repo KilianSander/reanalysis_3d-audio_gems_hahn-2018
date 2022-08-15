@@ -374,19 +374,7 @@ pre code {
 <h1>Preparation</h1>
 <div id="packages" class="section level2">
 <h2>Packages</h2>
-<pre class="r"><code>sapply(c(&quot;tidyverse&quot;, &quot;MANOVA.RM&quot;),
-       require, character.only = T)</code></pre>
-<pre><code>## Lade nötiges Paket: tidyverse</code></pre>
-<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
-<pre><code>## v ggplot2 3.3.5     v purrr   0.3.4
-## v tibble  3.1.6     v dplyr   1.0.8
-## v tidyr   1.2.0     v stringr 1.4.0
-## v readr   2.1.2     v forcats 0.5.1</code></pre>
-<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre><code>## Lade nötiges Paket: MANOVA.RM</code></pre>
-<pre><code>## Warning: Paket &#39;MANOVA.RM&#39; wurde unter R Version 4.1.3 erstellt</code></pre>
+<pre class="r"><code>sapply(c(&quot;tidyverse&quot;, &quot;MANOVA.RM&quot;), require, character.only = T)</code></pre>
 <p>Load the data:</p>
 <pre class="r"><code>load(&quot;data/data_raw.Rda&quot;)</code></pre>
 <pre class="r"><code>formats &lt;- c(&quot;stereo&quot;, &quot;surround&quot;, &quot;auro&quot;)
