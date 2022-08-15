@@ -5,3 +5,54 @@ date: '2022'
 output: html_document
 csl: inst/apa.csl
 ---
+# Preparation
+
+## Packages
+```{r packages, messages=FALSE, warnings=FALSE, results='hide'}
+sapply(c("tidyverse", "MANOVA.RM"),
+       require, character.only = T)
+```
+Load the data:
+```{r dataset, messages=FALSE}
+load("data/data_raw.Rda")
+```
+
+```{r formats and GEMS, messages=FALSE}
+formats <- c("stereo", "surround", "auro")
+gems_factors <- c("wonder", "transcendence", "tenderness", "nostalgia",
+                  "peacefulness", "power", "joyful_activation", "tension",
+                  "sadness")
+# item to factor mapping
+wonder <- c("moved", "filled_with_wonder", "allured")
+transcendence <- c("feeling_of_transcendence", "fascinated", "overwhelmed")
+tenderness <- c("affectionate", "tender", "mellowed")
+nostalgia <- c("sentimental", "dreamy", "nostalgic")
+peacefulness <- c("calm", "serene", "soothed")
+power <- c("energetic", "triumphant", "strong")
+joyful_activation <- c("joyful", "animated", "bouncy")
+tension <- c("agitated", "nervous", "tense")
+sadness <- c("sad", "sorrowful", "tearful")
+```
+Exclude a participant if there are at least two `NA`s for a GEMS factor of a stimulus:
+```{r filter cases, messages=FALSE}
+data_raw$complete <- TRUE
+for (p in data_raw$participant) {
+  part_data <- data_raw %>% filter(participant == p)
+  for (excerpt in c("a", "b")) {
+    for (format in formats) {
+      for (factor in gems_factors) {
+        temp_data <- part_data %>%
+          dplyr::select(starts_with(paste(excerpt, format, get(factor), sep = "_")))
+        nas <- temp_data %>% t() %>% is.na() %>% sum()
+        if (nas > 1) {
+          data_raw$complete[p] <- FALSE
+        }
+      }
+    }
+  }
+}
+rm(part_data, temp_data, nas, p, format, excerpt)
+data_filtered <- data_raw %>% filter(complete==TRUE)
+N <- length(data_filtered$participant)
+```
+After identifying incomplete cases the data set contains `r N` participants.
