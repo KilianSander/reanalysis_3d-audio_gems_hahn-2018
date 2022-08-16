@@ -115,3 +115,12 @@ names(data_long_mult) <- names(data_long_mult) %>%
 ```
 # Analyses
 ## Descriptives
+```{r age summary, include=FALSE}
+age_summary <- summary(data_filtered$age)
+```
+Out of the `r N` participants `r table(data_filtered$gender)[["female"]]`
+indicated "female" as their gender whereas `r table(data_filtered$gender)[["male"]]`
+indicated "male".
+The participants' age ranged from `r age_summary[[1]]` to `r age_summary[[6]]`
+with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
+## Multivariate Analysis of Variance
