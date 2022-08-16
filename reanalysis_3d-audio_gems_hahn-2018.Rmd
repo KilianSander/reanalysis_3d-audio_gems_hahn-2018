@@ -7,7 +7,7 @@ csl: inst/apa.csl
 ---
 # Preparation
 
-## Packages
+Load relevant packages:
 ```{r packages, message=FALSE, warning=FALSE, results='hide'}
 sapply(c("tidyverse", "MANOVA.RM"), require, character.only = T)
 ```
@@ -15,7 +15,7 @@ Load the data:
 ```{r dataset, messages=FALSE}
 load("data/data_raw.Rda")
 ```
-
+Prepare the design factors:
 ```{r formats and GEMS, message=FALSE}
 formats <- c("stereo", "surround", "auro")
 gems_factors <- c("wonder", "transcendence", "tenderness", "nostalgia",
@@ -32,7 +32,8 @@ joyful_activation <- c("joyful", "animated", "bouncy")
 tension <- c("agitated", "nervous", "tense")
 sadness <- c("sad", "sorrowful", "tearful")
 ```
-Exclude a participant if there are at least two `NA`s for a GEMS factor of a stimulus:
+## Filtering
+Exclude a participant if there are at least two `NA`s for a GEMS factor of one stimulus:
 ```{r filter cases, message=FALSE}
 data_raw$complete <- TRUE
 for (p in data_raw$participant) {
@@ -54,4 +55,6 @@ rm(part_data, temp_data, nas, p, format, excerpt)
 data_filtered <- data_raw %>% filter(complete==TRUE)
 N <- length(data_filtered$participant)
 ```
-After identifying incomplete cases the data set contains `r N` participants.
+After removing incomplete cases the data set contains `r N` participants.
+
+## Scoring

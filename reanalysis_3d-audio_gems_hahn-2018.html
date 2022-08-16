@@ -372,11 +372,11 @@ pre code {
 
 <div id="preparation" class="section level1">
 <h1>Preparation</h1>
-<div id="packages" class="section level2">
-<h2>Packages</h2>
+<p>Load relevant packages:</p>
 <pre class="r"><code>sapply(c(&quot;tidyverse&quot;, &quot;MANOVA.RM&quot;), require, character.only = T)</code></pre>
 <p>Load the data:</p>
 <pre class="r"><code>load(&quot;data/data_raw.Rda&quot;)</code></pre>
+<p>Prepare the design factors:</p>
 <pre class="r"><code>formats &lt;- c(&quot;stereo&quot;, &quot;surround&quot;, &quot;auro&quot;)
 gems_factors &lt;- c(&quot;wonder&quot;, &quot;transcendence&quot;, &quot;tenderness&quot;, &quot;nostalgia&quot;,
                   &quot;peacefulness&quot;, &quot;power&quot;, &quot;joyful_activation&quot;, &quot;tension&quot;,
@@ -391,8 +391,10 @@ power &lt;- c(&quot;energetic&quot;, &quot;triumphant&quot;, &quot;strong&quot;)
 joyful_activation &lt;- c(&quot;joyful&quot;, &quot;animated&quot;, &quot;bouncy&quot;)
 tension &lt;- c(&quot;agitated&quot;, &quot;nervous&quot;, &quot;tense&quot;)
 sadness &lt;- c(&quot;sad&quot;, &quot;sorrowful&quot;, &quot;tearful&quot;)</code></pre>
+<div id="filtering" class="section level2">
+<h2>Filtering</h2>
 <p>Exclude a participant if there are at least two <code>NA</code>s for
-a GEMS factor of a stimulus:</p>
+a GEMS factor of one stimulus:</p>
 <pre class="r"><code>data_raw$complete &lt;- TRUE
 for (p in data_raw$participant) {
   part_data &lt;- data_raw %&gt;% filter(participant == p)
@@ -412,8 +414,11 @@ for (p in data_raw$participant) {
 rm(part_data, temp_data, nas, p, format, excerpt)
 data_filtered &lt;- data_raw %&gt;% filter(complete==TRUE)
 N &lt;- length(data_filtered$participant)</code></pre>
-<p>After identifying incomplete cases the data set contains 52
+<p>After removing incomplete cases the data set contains 52
 participants.</p>
+</div>
+<div id="scoring" class="section level2">
+<h2>Scoring</h2>
 </div>
 </div>
 
