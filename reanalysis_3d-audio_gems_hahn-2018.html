@@ -372,11 +372,13 @@ pre code {
 
 <div id="preparation" class="section level1">
 <h1>Preparation</h1>
-<p>Load relevant packages:</p>
-<pre class="r"><code>sapply(c(&quot;tidyverse&quot;, &quot;MANOVA.RM&quot;), require, character.only = T)</code></pre>
+<div id="data-packages-and-design" class="section level2">
+<h2>Data, Packages, and Design</h2>
 <p>Load the data:</p>
 <pre class="r"><code>load(&quot;data/data_raw.Rda&quot;)</code></pre>
-<p>Prepare the design factors:</p>
+<p>Load relevant packages:</p>
+<pre class="r"><code>sapply(c(&quot;tidyverse&quot;, &quot;MANOVA.RM&quot;), require, character.only = T)</code></pre>
+<p>Prepare the design with vectors:</p>
 <pre class="r"><code>formats &lt;- c(&quot;stereo&quot;, &quot;surround&quot;, &quot;auro&quot;)
 gems_factors &lt;- c(&quot;wonder&quot;, &quot;transcendence&quot;, &quot;tenderness&quot;, &quot;nostalgia&quot;,
                   &quot;peacefulness&quot;, &quot;power&quot;, &quot;joyful_activation&quot;, &quot;tension&quot;,
@@ -391,6 +393,7 @@ power &lt;- c(&quot;energetic&quot;, &quot;triumphant&quot;, &quot;strong&quot;)
 joyful_activation &lt;- c(&quot;joyful&quot;, &quot;animated&quot;, &quot;bouncy&quot;)
 tension &lt;- c(&quot;agitated&quot;, &quot;nervous&quot;, &quot;tense&quot;)
 sadness &lt;- c(&quot;sad&quot;, &quot;sorrowful&quot;, &quot;tearful&quot;)</code></pre>
+</div>
 <div id="filtering" class="section level2">
 <h2>Filtering</h2>
 <p>Exclude a participant if there are at least two <code>NA</code>s for
@@ -419,6 +422,63 @@ participants.</p>
 </div>
 <div id="scoring" class="section level2">
 <h2>Scoring</h2>
+<p>Calculate mean values for each item per format:</p>
+<pre class="r"><code>for (format in formats) {
+  for (factor in gems_factors) {
+    for (item in get(factor)) {
+      item_mean_vector &lt;- data_filtered %&gt;%
+        select(ends_with(paste0(format, &quot;_&quot;, item))) %&gt;%
+        rowMeans(na.rm = TRUE)
+      eval(str2expression(paste0(&quot;data_filtered$&quot;,
+                                 format, &quot;_&quot;, item,
+                                 &quot; &lt;- item_mean_vector&quot;)))
+    }
+  }
+}
+rm(item, item_mean_vector)
+data_filtered &lt;- data_filtered %&gt;% mutate_all(~ifelse(is.nan(.), NA, .))</code></pre>
+<p>Calculate the mean of each factor per format across its items:</p>
+<pre class="r"><code>for (format in formats) {
+  for (factor in gems_factors) {
+    factor_mean_vector &lt;- data_filtered %&gt;%
+      select(paste0(format, &quot;_&quot;, get(factor))) %&gt;% 
+      rowMeans(na.rm = TRUE)
+    eval(str2expression(paste0(&quot;data_filtered$&quot;,
+                                 format, &quot;_&quot;, factor,
+                                 &quot; &lt;- factor_mean_vector&quot;)))
+  }
+}
+rm(format, factor, factor_mean_vector)</code></pre>
+</div>
+<div id="long-format" class="section level2">
+<h2>Long format</h2>
+<pre class="r"><code>vars_vector &lt;- sapply(formats,
+                      function(format) {
+                        paste0(format, &quot;_&quot;, gems_factors)
+                      },
+                      USE.NAMES = F) %&gt;% as.vector()
+data_long_mult &lt;- data_filtered %&gt;% select(participant, vars_vector)
+names(data_long_mult) &lt;- names(data_long_mult) %&gt;%
+  gsub(&quot;joyful_activation&quot;, &quot;joyfulactivation&quot;, .)
+data_long_mult &lt;- data_long_mult %&gt;%
+  pivot_longer(!participant,
+               names_to = c(&quot;format&quot;, &quot;.value&quot;),
+               names_pattern = &quot;(.*)_(.*)&quot;)
+data_long_single &lt;- data_long_mult %&gt;%
+  pivot_longer(!c(participant, format),
+               values_to = &quot;score&quot;,
+               names_to = &quot;factor&quot;) %&gt;% 
+  mutate(factor = recode(factor,
+                         joyfulactivation = &quot;joyful activation&quot;) %&gt;% tools::toTitleCase(),
+         format = format %&gt;% tools::toTitleCase() %&gt;% as_factor())
+names(data_long_mult) &lt;- names(data_long_mult) %&gt;%
+  gsub(&quot;joyfulactivation&quot;, &quot;joyful_activation&quot;, .)</code></pre>
+</div>
+</div>
+<div id="analyses" class="section level1">
+<h1>Analyses</h1>
+<div id="descriptives" class="section level2">
+<h2>Descriptives</h2>
 </div>
 </div>
 

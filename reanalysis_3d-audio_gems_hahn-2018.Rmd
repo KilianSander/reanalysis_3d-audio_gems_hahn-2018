@@ -6,16 +6,16 @@ output: html_document
 csl: inst/apa.csl
 ---
 # Preparation
-
-Load relevant packages:
-```{r packages, message=FALSE, warning=FALSE, results='hide'}
-sapply(c("tidyverse", "MANOVA.RM"), require, character.only = T)
-```
+## Data, Packages, and Design
 Load the data:
 ```{r dataset, messages=FALSE}
 load("data/data_raw.Rda")
 ```
-Prepare the design factors:
+Load relevant packages:
+```{r packages, message=FALSE, warning=FALSE, results='hide'}
+sapply(c("tidyverse", "MANOVA.RM"), require, character.only = T)
+```
+Prepare the design with vectors:
 ```{r formats and GEMS, message=FALSE}
 formats <- c("stereo", "surround", "auro")
 gems_factors <- c("wonder", "transcendence", "tenderness", "nostalgia",
@@ -58,3 +58,60 @@ N <- length(data_filtered$participant)
 After removing incomplete cases the data set contains `r N` participants.
 
 ## Scoring
+Calculate mean values for each item per format:
+```{r item means, message=FALSE, warning=FALSE}
+for (format in formats) {
+  for (factor in gems_factors) {
+    for (item in get(factor)) {
+      item_mean_vector <- data_filtered %>%
+        select(ends_with(paste0(format, "_", item))) %>%
+        rowMeans(na.rm = TRUE)
+      eval(str2expression(paste0("data_filtered$",
+                                 format, "_", item,
+                                 " <- item_mean_vector")))
+    }
+  }
+}
+rm(item, item_mean_vector)
+data_filtered <- data_filtered %>% mutate_all(~ifelse(is.nan(.), NA, .))
+```
+Calculate the mean of each factor per format across its items:
+```{r factor means, message=FALSE, warning=FALSE}
+for (format in formats) {
+  for (factor in gems_factors) {
+    factor_mean_vector <- data_filtered %>%
+      select(paste0(format, "_", get(factor))) %>% 
+      rowMeans(na.rm = TRUE)
+    eval(str2expression(paste0("data_filtered$",
+                                 format, "_", factor,
+                                 " <- factor_mean_vector")))
+  }
+}
+rm(format, factor, factor_mean_vector)
+```
+## Long format
+```{r long formats, message=FALSE, warning=FALSE}
+vars_vector <- sapply(formats,
+                      function(format) {
+                        paste0(format, "_", gems_factors)
+                      },
+                      USE.NAMES = F) %>% as.vector()
+data_long_mult <- data_filtered %>% select(participant, vars_vector)
+names(data_long_mult) <- names(data_long_mult) %>%
+  gsub("joyful_activation", "joyfulactivation", .)
+data_long_mult <- data_long_mult %>%
+  pivot_longer(!participant,
+               names_to = c("format", ".value"),
+               names_pattern = "(.*)_(.*)")
+data_long_single <- data_long_mult %>%
+  pivot_longer(!c(participant, format),
+               values_to = "score",
+               names_to = "factor") %>% 
+  mutate(factor = recode(factor,
+                         joyfulactivation = "joyful activation") %>% tools::toTitleCase(),
+         format = format %>% tools::toTitleCase() %>% as_factor())
+names(data_long_mult) <- names(data_long_mult) %>%
+  gsub("joyfulactivation", "joyful_activation", .)
+```
+# Analyses
+## Descriptives
