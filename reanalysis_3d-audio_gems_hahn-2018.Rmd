@@ -130,8 +130,8 @@ with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
 
 ## Correlations
 To get a mean correlation individual correlation coefficients have to be
-Fisher-z transformed.
-This equivalent to the inverse hyperbolic tangent.
+Fisher z-transformed.
+The Fisher z-transformation is equivalent to the inverse hyperbolic tangent.
 ```{r average correlations}
 #atanh()
 ```
