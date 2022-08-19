@@ -125,3 +125,13 @@ The participants' age ranged from `r age_summary[[1]]` to `r age_summary[[6]]`
 with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
 
 ## Multivariate Analysis of Variance
+
+## Analysis of Variance for *Transcendence*
+
+## Correlations
+To get a mean correlation individual correlation coefficients have to be
+Fisher-z transformed.
+This equivalent to the inverse hyperbolic tangent.
+```{r average correlations}
+#atanh()
+```
