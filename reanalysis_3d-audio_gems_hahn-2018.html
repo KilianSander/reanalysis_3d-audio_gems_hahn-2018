@@ -472,7 +472,8 @@ data_long_single &lt;- data_long_mult %&gt;%
                          joyfulactivation = &quot;joyful activation&quot;) %&gt;% tools::toTitleCase(),
          format = format %&gt;% tools::toTitleCase() %&gt;% as_factor())
 names(data_long_mult) &lt;- names(data_long_mult) %&gt;%
-  gsub(&quot;joyfulactivation&quot;, &quot;joyful_activation&quot;, .)</code></pre>
+  gsub(&quot;joyfulactivation&quot;, &quot;joyful_activation&quot;, .)
+data_long_mult$format &lt;- data_long_mult$format %&gt;% as_factor()</code></pre>
 </div>
 </div>
 <div id="analyses" class="section level1">
@@ -485,6 +486,45 @@ with a mean of 30.1346154 (<em>SD</em> = 12.4601779).</p>
 </div>
 <div id="multivariate-analysis-of-variance" class="section level2">
 <h2>Multivariate Analysis of Variance</h2>
+<pre class="r"><code>#rm_manova &lt;-
+#  multRM(formula = cbind(wonder, transcendence, tenderness,
+#                         nostalgia, peacefulness, power,
+#                         joyful_activation, tension, sadness) ~ format,
+#         data = data_long_mult,
+#         subject = &quot;participant&quot;,
+#         within = &quot;format&quot;,
+#         para = TRUE,
+#         iter = 50000,
+#         dec = 5,
+#         seed = 987)
+load(file = &quot;results/rm_manova.Rda&quot;)
+summary(rm_manova)</code></pre>
+<pre><code>## Call: 
+## cbind(wonder, transcendence, tenderness, nostalgia, peacefulness, 
+##     power, joyful_activation, tension, sadness) ~ format
+## A multivariate repeated measures analysis with  1 within-subject factor(s) ( format )and  0 between-subject factor(s). 
+## 
+## Descriptive:
+##     format  n  wonder  transcendence  tenderness  nostalgia  peacefulness
+## 1   stereo 52 2.69231        2.58654     2.27564    2.33333       2.42949
+## 2 surround 52 2.82372        2.76923     2.33654    2.41026       2.43910
+## 3     auro 52 2.99679        3.00000     2.37500    2.49038       2.48077
+##     power  joyful_activation  tension  sadness
+## 1 2.27244            2.18910  2.24840  1.89744
+## 2 2.38462            2.28526  2.34295  1.89423
+## 3 2.48077            2.33654  2.30609  2.00321
+## 
+## Wald-Type Statistic (WTS):
+##        Test statistic df   p-value  
+## format &quot;40.78519&quot;     &quot;18&quot; &quot;0.00163&quot;
+## 
+## modified ANOVA-Type Statistic (MATS):
+##        Test statistic
+## format       17.90262
+## 
+## p-values resampling:
+##        paramBS (WTS) paramBS (MATS)
+## format &quot;0.14638&quot;     &quot;0.00386&quot;</code></pre>
 </div>
 <div id="analysis-of-variance-for-transcendence" class="section level2">
 <h2>Analysis of Variance for <em>Transcendence</em></h2>

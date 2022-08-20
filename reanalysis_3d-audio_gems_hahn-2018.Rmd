@@ -112,6 +112,7 @@ data_long_single <- data_long_mult %>%
          format = format %>% tools::toTitleCase() %>% as_factor())
 names(data_long_mult) <- names(data_long_mult) %>%
   gsub("joyfulactivation", "joyful_activation", .)
+data_long_mult$format <- data_long_mult$format %>% as_factor()
 ```
 # Analyses
 ## Descriptives
@@ -126,6 +127,21 @@ with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
 
 ## Multivariate Analysis of Variance
 
+```{r manova}
+#rm_manova <-
+#  multRM(formula = cbind(wonder, transcendence, tenderness,
+#                         nostalgia, peacefulness, power,
+#                         joyful_activation, tension, sadness) ~ format,
+#         data = data_long_mult,
+#         subject = "participant",
+#         within = "format",
+#         para = TRUE,
+#         iter = 50000,
+#         dec = 5,
+#         seed = 987)
+load(file = "results/rm_manova.Rda")
+summary(rm_manova)
+```
 ## Analysis of Variance for *Transcendence*
 
 ## Correlations
