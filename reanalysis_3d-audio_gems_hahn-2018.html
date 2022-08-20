@@ -529,12 +529,69 @@ summary(rm_manova)</code></pre>
 <div id="analysis-of-variance-for-transcendence" class="section level2">
 <h2>Analysis of Variance for <em>Transcendence</em></h2>
 </div>
-<div id="correlations" class="section level2">
-<h2>Correlations</h2>
+<div id="correlations-for-transcendence" class="section level2">
+<h2>Correlations for <em>Transcendence</em></h2>
+<div id="correlations-between-the-formats" class="section level3">
+<h3>Correlations Between the Formats</h3>
+<table>
+<colgroup>
+<col width="29%" />
+<col width="16%" />
+<col width="11%" />
+<col width="16%" />
+<col width="5%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Formats</th>
+<th align="center"><span class="math inline">\(r\)</span></th>
+<th align="center"><span class="math inline">\(p\)</span></th>
+<th align="center">LL</th>
+<th align="center">UL</th>
+<th align="center">Fisher’s <span class="math inline">\(z\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Stereo – Surround</td>
+<td align="center">0.7009808</td>
+<td align="center">&lt; .001</td>
+<td align="center">0.5609698</td>
+<td align="center">1</td>
+<td align="center">0.8692263</td>
+</tr>
+<tr class="even">
+<td align="left">Stereo – Auro 3D</td>
+<td align="center">0.7018141</td>
+<td align="center">&lt; .001</td>
+<td align="center">0.5620928</td>
+<td align="center">1</td>
+<td align="center">0.8708664</td>
+</tr>
+<tr class="odd">
+<td align="left">Surround – Auro 3D</td>
+<td align="center">0.8163160</td>
+<td align="center">&lt; .001</td>
+<td align="center">0.7214658</td>
+<td align="center">1</td>
+<td align="center">1.1456743</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="average-correlation" class="section level3">
+<h3>Average Correlation</h3>
 <p>To get a mean correlation individual correlation coefficients have to
 be Fisher z-transformed. The Fisher z-transformation is equivalent to
 the inverse hyperbolic tangent.</p>
-<pre class="r"><code>#atanh()</code></pre>
+<pre class="r"><code>avg_cor_z &lt;- mean(cor_table$`Fisher&#39;s z`)
+avg_cor_r &lt;- tanh(avg_cor_z)</code></pre>
+<p>Taking the averaged Fisher z-transformed values results in a value of
+0.9619223. Back-transformed to Person’s <em>r</em> the average
+correlation between the three audio formats for the GEMS factor
+Transcendence is 0.7451331.</p>
+</div>
 </div>
 </div>
 
