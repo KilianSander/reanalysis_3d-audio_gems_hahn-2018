@@ -13,7 +13,7 @@ load("data/data_raw.Rda")
 ```
 Load relevant packages:
 ```{r packages, message=FALSE, warning=FALSE, results='hide'}
-sapply(c("tidyverse", "MANOVA.RM"), require, character.only = T)
+sapply(c("tidyverse", "MANOVA.RM", "rstatix"), require, character.only = T)
 ```
 Prepare the design with vectors:
 ```{r formats and GEMS, message=FALSE}
@@ -125,6 +125,27 @@ indicated "male".
 The participants' age ranged from `r age_summary[[1]]` to `r age_summary[[6]]`
 with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
 
+```{r descriptives, echo=FALSE, message=FALSE, warning=FALSE}
+data_long_single %>% group_by(factor, format) %>%
+  summarise(M = mean(score), SD = sd(score)) %>% 
+  knitr::kable(col.names = c("GEMS Factor", "Format", "$M$", "$SD$"),
+               align = "llcc")
+```
+```{r mean plot, echo=FALSE, message=FALSE, warning=FALSE}
+data_long_single %>% group_by(format, factor) %>%
+  summarise(M = mean(score), SD = sd(score)) %>%
+  ggplot(., aes(x = factor, y = M, color = format)) +
+  geom_point(aes(shape = format)) +
+  geom_path(aes(group = format, linetype = format)) +
+  ylim(1,5) +
+  theme_bw() +
+  theme(legend.position = c(.99,.99),
+        legend.justification = c(1,1)
+        ) +
+  xlab("GEMS Factor") +
+  ylab("Mean")
+```
+
 ## Multivariate Analysis of Variance
 
 ```{r manova}
@@ -143,7 +164,11 @@ load(file = "results/rm_manova.Rda")
 summary(rm_manova)
 ```
 ## Analysis of Variance for *Transcendence*
-
+```{r}
+transcendence_anova <-
+  aov(formula = transcendence ~ format + Error(factor(participant)),
+      data = data_long_mult)
+```
 ## Correlations for *Transcendence*
 ### Correlations Between the Formats
 ```{r correlations, include=FALSE}
