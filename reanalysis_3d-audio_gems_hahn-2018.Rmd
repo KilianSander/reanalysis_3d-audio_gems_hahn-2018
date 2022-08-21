@@ -164,10 +164,15 @@ load(file = "results/rm_manova.Rda")
 summary(rm_manova)
 ```
 ## Analysis of Variance for *Transcendence*
-```{r}
+```{r anova}
 transcendence_anova <-
-  aov(formula = transcendence ~ format + Error(factor(participant)),
-      data = data_long_mult)
+  anova_test(data = data_long_mult,
+             dv = transcendence,
+             wid = participant,
+             within = format,
+             type = 3,
+             effect.size = "pes",
+             detailed = T)
 ```
 ## Correlations for *Transcendence*
 ### Correlations Between the Formats
