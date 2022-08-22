@@ -13,7 +13,7 @@ load("data/data_raw.Rda")
 ```
 Load relevant packages:
 ```{r packages, message=FALSE, warning=FALSE, results='hide'}
-sapply(c("tidyverse", "MANOVA.RM", "rstatix"), require, character.only = T)
+sapply(c("tidyverse", "MANOVA.RM", "rstatix", "ggpubr"), require, character.only = T)
 ```
 Prepare the design with vectors:
 ```{r formats and GEMS, message=FALSE}
@@ -131,19 +131,20 @@ data_long_single %>% group_by(factor, format) %>%
   knitr::kable(col.names = c("GEMS Factor", "Format", "$M$", "$SD$"),
                align = "llcc")
 ```
-```{r mean plot, echo=FALSE, message=FALSE, warning=FALSE}
+```{r mean plot, echo=FALSE, fig.width=10, message=FALSE, warning=FALSE}
 data_long_single %>% group_by(format, factor) %>%
   summarise(M = mean(score), SD = sd(score)) %>%
   ggplot(., aes(x = factor, y = M, color = format)) +
   geom_point(aes(shape = format)) +
   geom_path(aes(group = format, linetype = format)) +
   ylim(1,5) +
-  theme_bw() +
+  theme_pubr() +
   theme(legend.position = c(.99,.99),
         legend.justification = c(1,1)
         ) +
   xlab("GEMS Factor") +
-  ylab("Mean")
+  ylab("Mean") +
+  labs(color = "Format", shape = "Format", linetype = "Format")
 ```
 
 ## Multivariate Analysis of Variance
@@ -164,6 +165,24 @@ load(file = "results/rm_manova.Rda")
 summary(rm_manova)
 ```
 ## Analysis of Variance for *Transcendence*
+### Assumption Checks
+#### Extreme Outliers
+```{r anova outliers}
+data_long_mult %>% group_by(format) %>%
+  select(format, participant, transcendence) %>%
+  identify_outliers(transcendence) %>% 
+  filter(is.outlier)
+ggboxplot(data_long_mult, x = "format", y = "transcendence", add = "point")
+```
+
+#### Normality
+```{r anova normality}
+data_long_mult %>% group_by(format) %>%
+  shapiro_test(transcendence)
+ggqqplot(data_long_mult, "transcendence", facet.by = "format")
+```
+
+#### Sphericity
 ```{r anova}
 transcendence_anova <-
   anova_test(data = data_long_mult,
@@ -171,9 +190,26 @@ transcendence_anova <-
              wid = participant,
              within = format,
              type = 3,
-             effect.size = "pes",
-             detailed = T)
+             effect.size = "pes")
+transcendence_ges <- anova_test(data = data_long_mult,
+           dv = transcendence,
+           wid = participant,
+           within = format,
+           type = 3,
+           effect.size = "ges")$ANOVA$ges
+transcendence_anova$`Mauchly's Test for Sphericity`
 ```
+### Results
+```{r anova results, echo=FALSE}
+transcendence_res <- get_anova_table(transcendence_anova)
+class(transcendence_res) <- "data.frame"
+transcendence_res %>% mutate(ges = transcendence_ges) %>%
+  select(!`p<.05`) %>% knitr::kable(col.names = c("Effect", "DFn", "DFd",
+                                                  "$F$", "$p$",
+                                                  "$\\eta^2_p$",
+                                                  "$\\eta^2_G$"))
+```
+
 ## Correlations for *Transcendence*
 ### Correlations Between the Formats
 ```{r correlations, include=FALSE}
@@ -212,7 +248,8 @@ cor_table <- data.frame(Formats = c("Stereo -- Surround",
                               cor_surround_auro$conf.int[2])) %>% 
   mutate(`Fisher's z` = atanh(r),
          p = sapply(p,
-                    function(x) if(x < 10^-3) "< .001"))
+                    function(x) if(x < 10^-3) "< .001")) %>% 
+  mutate(across(where(is.numeric), round, digits = 4))
 ```
 ```{r correlations table, echo=FALSE}
 knitr::kable(cor_table,
@@ -222,13 +259,13 @@ knitr::kable(cor_table,
 
 ### Average Correlation
 To get a mean correlation individual correlation coefficients have to be
-Fisher z-transformed.
-The Fisher z-transformation is equivalent to the inverse hyperbolic tangent.
+Fisher $z$-transformed.
+The Fisher $z$-transformation is equivalent to the inverse hyperbolic tangent.
 ```{r average correlations}
 avg_cor_z <- mean(cor_table$`Fisher's z`)
 avg_cor_r <- tanh(avg_cor_z)
 ```
-Taking the averaged Fisher z-transformed values results in a value of
-`r avg_cor_z`.
-Back-transformed to Person's *r* the average correlation between the three
-audio formats for the GEMS factor Transcendence is `r avg_cor_r`.
+Taking the averaged Fisher $z$-transformed values results in a value of
+`r round(avg_cor_z, 4)`.
+Back-transformed to Person's $r$ the average correlation between the three
+audio formats for the GEMS factor Transcendence is `r round(avg_cor_r, 4)`.
