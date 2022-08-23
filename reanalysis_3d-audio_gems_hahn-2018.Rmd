@@ -216,6 +216,13 @@ transcendence_res %>% mutate(ges = transcendence_ges) %>%
 *Note.* Error bars represent 95% confidence intervals.
 GEMS factors are on a 5-point Likert scale coded from 1 to 5.
 
+
+|Contrasts         |Estimate|CI LL  |CI UL  |SE     |df   |$t$  |$p$     |
+|:-----------------|:------:|:-----:|:-----:|:-----:|:---:|:---:|:------:|
+|Stereo -- Surround|0.183   |0.023  |0.343  |0.081  |102  |2.266|0.026   |
+|Stereo -- Auro    |0.413   |0.254  |0.573  |0.081  |102  |5.128|1.397e-6|
+|Surround --Auro   |0.231   |0.071  |0.391  |0.081  |102  |2.862|0.005   |
+
 ## Correlations for *Transcendence*
 ### Correlations Between the Formats
 ```{r correlations, include=FALSE}
@@ -259,7 +266,7 @@ cor_table <- data.frame(Formats = c("Stereo -- Surround",
 ```{r correlations table, echo=FALSE}
 knitr::kable(cor_table %>% 
   mutate(across(where(is.numeric), round, digits = 4)),
-             col.names = c("Formats", "$r$", "$p$", "LL", "UL", "Fisher's $z$"),
+             col.names = c("Formats", "$r$", "$p$", "CI LL", "CI UL", "Fisher's $z$"),
              align = "lccccc")
 ```
 
