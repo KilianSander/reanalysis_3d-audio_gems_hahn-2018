@@ -813,7 +813,7 @@ transcendence_anova$`Mauchly&#39;s Test for Sphericity`</code></pre>
 <td align="center">0.8692</td>
 </tr>
 <tr class="even">
-<td align="left">Stereo – Auro 3D</td>
+<td align="left">Stereo – Auro</td>
 <td align="center">0.7018</td>
 <td align="center">&lt; .001</td>
 <td align="center">0.5621</td>
@@ -821,7 +821,7 @@ transcendence_anova$`Mauchly&#39;s Test for Sphericity`</code></pre>
 <td align="center">0.8709</td>
 </tr>
 <tr class="odd">
-<td align="left">Surround – Auro 3D</td>
+<td align="left">Surround – Auro</td>
 <td align="center">0.8163</td>
 <td align="center">&lt; .001</td>
 <td align="center">0.7215</td>
@@ -843,6 +843,65 @@ avg_cor_r &lt;- tanh(avg_cor_z)</code></pre>
 of 0.9619. Back-transformed to Person’s <span class="math inline">\(r\)</span> the average correlation between the
 three audio formats for the GEMS factor Transcendence is 0.7451.</p>
 </div>
+</div>
+<div id="common-language-effect-sizes-for-transcendence" class="section level2">
+<h2>Common Language Effect Sizes for <em>Transcendence</em></h2>
+<p>The common language effect size (CLE) expresses “the probability that
+an individual has a higher value on one measurement than the other”
+(Lakens, 2013, p. 4). The CLE is therefore the probability that a <span class="math inline">\(Z\)</span>-score is greater than a specific <span class="math inline">\(Z_{\textrm{CLE}}\)</span> (given a standard normal
+distribution). For repeated measures the <span class="math inline">\(Z_{\textrm{CLE}}\)</span> is calculated from the
+means and standard deviations from two measurements as well as their
+correlation: <span class="math display">\[
+Z_{\textrm{CLE}} =
+\frac{M_1 -
+M_2}{\sqrt{SD_1^2+SD_2^2-2\cdot{}SD_1\cdot{}SD_2\cdot{}r_{12}}}
+\]</span></p>
+<pre class="r"><code>get_cle &lt;- function(mean1, mean2, sd1, sd2, r12) {
+  Z_cle &lt;- (mean1 - mean2) / sqrt(sd1^2 + sd2^2 - 2 * sd1 * sd2 * r12)
+  Z_cle %&gt;% pnorm(lower.tail = F)
+}</code></pre>
+<pre class="r"><code>cle_table &lt;- data.frame(format1 = c(&quot;Stereo&quot;, &quot;Stereo&quot;, &quot;Surround&quot;),
+                        format2 = c(&quot;Surround&quot;, &quot;Auro&quot;, &quot;Auro&quot;))
+cle_table$cle &lt;-
+  mapply(function(f1, f2) {
+    desc &lt;- descriptives %&gt;% filter(factor == &quot;Transcendence&quot;)
+    get_cle(mean1 = desc$M[desc$format == f1],
+            mean2 = desc$M[desc$format == f2],
+            sd1 = desc$SD[desc$format == f1],
+            sd2 = desc$SD[desc$format == f2],
+            r12 = cor_table$r[cor_table$Formats == paste(f1, f2,
+                                                         sep = &quot; -- &quot;)])
+  },
+  cle_table$format1, cle_table$format2)
+cle_table %&gt;% mutate(across(where(is.numeric), round, digits = 4)) %&gt;% 
+  knitr::kable(col.names = c(&quot;Format 1&quot;, &quot;Format 2&quot;, &quot;CLE&quot;),
+               align = &quot;llc&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Format 1</th>
+<th align="left">Format 2</th>
+<th align="center">CLE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Stereo</td>
+<td align="left">Surround</td>
+<td align="center">0.6222</td>
+</tr>
+<tr class="even">
+<td align="left">Stereo</td>
+<td align="left">Auro</td>
+<td align="center">0.7405</td>
+</tr>
+<tr class="odd">
+<td align="left">Surround</td>
+<td align="left">Auro</td>
+<td align="center">0.6751</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 

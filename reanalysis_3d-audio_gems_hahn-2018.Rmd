@@ -126,8 +126,9 @@ The participants' age ranged from `r age_summary[[1]]` to `r age_summary[[6]]`
 with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
 
 ```{r descriptives, echo=FALSE, message=FALSE, warning=FALSE}
-data_long_single %>% group_by(factor, format) %>%
-  summarise(M = mean(score), SD = sd(score)) %>% 
+descriptives <- data_long_single %>% group_by(factor, format) %>%
+  summarise(M = mean(score), SD = sd(score))
+descriptives %>% 
   knitr::kable(col.names = c("GEMS Factor", "Format", "$M$", "$SD$"),
                align = "llcc")
 ```
@@ -232,8 +233,8 @@ cor_surround_auro <-
            method = "pearson",
            conf.level = .95)
 cor_table <- data.frame(Formats = c("Stereo -- Surround",
-                                    "Stereo -- Auro 3D",
-                                    "Surround -- Auro 3D"),
+                                    "Stereo -- Auro",
+                                    "Surround -- Auro"),
                         r = c(cor_stereo_surround$estimate,
                               cor_stereo_auro$estimate,
                               cor_surround_auro$estimate),
@@ -248,11 +249,11 @@ cor_table <- data.frame(Formats = c("Stereo -- Surround",
                               cor_surround_auro$conf.int[2])) %>% 
   mutate(`Fisher's z` = atanh(r),
          p = sapply(p,
-                    function(x) if(x < 10^-3) "< .001")) %>% 
-  mutate(across(where(is.numeric), round, digits = 4))
+                    function(x) if(x < 10^-3) "< .001"))
 ```
 ```{r correlations table, echo=FALSE}
-knitr::kable(cor_table,
+knitr::kable(cor_table %>% 
+  mutate(across(where(is.numeric), round, digits = 4)),
              col.names = c("Formats", "$r$", "$p$", "LL", "UL", "Fisher's $z$"),
              align = "lccccc")
 ```
@@ -269,3 +270,40 @@ Taking the averaged Fisher $z$-transformed values results in a value of
 `r round(avg_cor_z, 4)`.
 Back-transformed to Person's $r$ the average correlation between the three
 audio formats for the GEMS factor Transcendence is `r round(avg_cor_r, 4)`.
+
+## Common Language Effect Sizes for *Transcendence*
+The common language effect size (CLE) expresses "the probability that an
+individual has a higher value on one measurement than the other"
+(Lakens, 2013, p. 4).
+The CLE is therefore the probability that a $Z$-score is greater than a
+specific $Z_{\textrm{CLE}}$ (given a standard normal distribution).
+For repeated measures the $Z_{\textrm{CLE}}$ is calculated from the means
+and standard deviations from two measurements as well as their correlation:
+$$
+Z_{\textrm{CLE}} =
+\frac{M_1 - M_2}{\sqrt{SD_1^2+SD_2^2-2\cdot{}SD_1\cdot{}SD_2\cdot{}r_{12}}}
+$$
+```{r cle function}
+get_cle <- function(mean1, mean2, sd1, sd2, r12) {
+  Z_cle <- (mean1 - mean2) / sqrt(sd1^2 + sd2^2 - 2 * sd1 * sd2 * r12)
+  Z_cle %>% pnorm(lower.tail = F)
+}
+```
+```{r cle table}
+cle_table <- data.frame(format1 = c("Stereo", "Stereo", "Surround"),
+                        format2 = c("Surround", "Auro", "Auro"))
+cle_table$cle <-
+  mapply(function(f1, f2) {
+    desc <- descriptives %>% filter(factor == "Transcendence")
+    get_cle(mean1 = desc$M[desc$format == f1],
+            mean2 = desc$M[desc$format == f2],
+            sd1 = desc$SD[desc$format == f1],
+            sd2 = desc$SD[desc$format == f2],
+            r12 = cor_table$r[cor_table$Formats == paste(f1, f2,
+                                                         sep = " -- ")])
+  },
+  cle_table$format1, cle_table$format2)
+cle_table %>% mutate(across(where(is.numeric), round, digits = 4)) %>% 
+  knitr::kable(col.names = c("Format 1", "Format 2", "CLE"),
+               align = "llc")
+```
