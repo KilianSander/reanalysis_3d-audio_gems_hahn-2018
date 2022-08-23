@@ -211,6 +211,11 @@ transcendence_res %>% mutate(ges = transcendence_ges) %>%
                                                   "$\\eta^2_G$"))
 ```
 
+![](results/rm_anova_transcendence_plot.svg)
+
+*Note.* Error bars represent 95% confidence intervals.
+GEMS factors are on a 5-point Likert scale coded from 1 to 5.
+
 ## Correlations for *Transcendence*
 ### Correlations Between the Formats
 ```{r correlations, include=FALSE}
