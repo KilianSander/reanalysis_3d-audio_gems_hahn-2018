@@ -293,17 +293,17 @@ For repeated measures the $Z_{\textrm{CLE}}$ is calculated from the means
 and standard deviations from two measurements as well as their correlation:
 $$
 Z_{\textrm{CLE}} =
-\frac{M_1 - M_2}{\sqrt{SD_1^2+SD_2^2-2\cdot{}SD_1\cdot{}SD_2\cdot{}r_{12}}}
+\frac{M_2 - M_1}{\sqrt{SD_1^2+SD_2^2-2\cdot{}SD_1\cdot{}SD_2\cdot{}r_{12}}}
 $$
 ```{r cle function}
 get_cle <- function(mean1, mean2, sd1, sd2, r12) {
-  Z_cle <- (mean1 - mean2) / sqrt(sd1^2 + sd2^2 - 2 * sd1 * sd2 * r12)
+  Z_cle <- (mean2 - mean1) / sqrt(sd1^2 + sd2^2 - 2 * sd1 * sd2 * r12)
   Z_cle %>% pnorm(lower.tail = F)
 }
 ```
 ```{r cle table}
-cle_table <- data.frame(format1 = c("Stereo", "Stereo", "Surround"),
-                        format2 = c("Surround", "Auro", "Auro"))
+cle_table <- data.frame(format1 = c("Auro", "Auro", "Surround"),
+                        format2 = c("Surround", "Stereo", "Stereo"))
 cle_table$cle <-
   mapply(function(f1, f2) {
     desc <- descriptives %>% filter(factor == "Transcendence")
@@ -311,7 +311,7 @@ cle_table$cle <-
             mean2 = desc$M[desc$format == f2],
             sd1 = desc$SD[desc$format == f1],
             sd2 = desc$SD[desc$format == f2],
-            r12 = cor_table$r[cor_table$Formats == paste(f1, f2,
+            r12 = cor_table$r[cor_table$Formats == paste(f2, f1,
                                                          sep = " -- ")])
   },
   cle_table$format1, cle_table$format2)
