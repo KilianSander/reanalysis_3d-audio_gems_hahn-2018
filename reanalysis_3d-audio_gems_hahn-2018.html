@@ -253,6 +253,28 @@ if (window.hljs) {
 
 
 
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 
 
@@ -814,7 +836,7 @@ factors are on a 5-point Likert scale coded from 1 to 5.</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Stereo – Surround</td>
+<td align="left">Surround – Stereo</td>
 <td align="center">0.183</td>
 <td align="center">0.023</td>
 <td align="center">0.343</td>
@@ -824,7 +846,7 @@ factors are on a 5-point Likert scale coded from 1 to 5.</p>
 <td align="center">0.026</td>
 </tr>
 <tr class="even">
-<td align="left">Stereo – Auro</td>
+<td align="left">Auro – Stereo</td>
 <td align="center">0.413</td>
 <td align="center">0.254</td>
 <td align="center">0.573</td>
@@ -834,7 +856,7 @@ factors are on a 5-point Likert scale coded from 1 to 5.</p>
 <td align="center">1.397e-6</td>
 </tr>
 <tr class="odd">
-<td align="left">Surround –Auro</td>
+<td align="left">Auro – Surround</td>
 <td align="center">0.231</td>
 <td align="center">0.071</td>
 <td align="center">0.391</td>
@@ -893,9 +915,8 @@ factors are on a 5-point Likert scale coded from 1 to 5.</p>
 <div id="average-correlation" class="section level3">
 <h3>Average Correlation</h3>
 <p>To get a mean correlation individual correlation coefficients have to
-be Fisher <span class="math inline">\(z\)</span>-transformed. The Fisher
-<span class="math inline">\(z\)</span>-transformation is equivalent to
-the inverse hyperbolic tangent.</p>
+be Fisher <span class="math inline">\(z\)</span>-transformed <span class="citation">(Corey et al., 1998)</span>. The Fisher <span class="math inline">\(z\)</span>-transformation is equivalent to the
+inverse hyperbolic tangent.</p>
 <pre class="r"><code>avg_cor_z &lt;- mean(cor_table$`Fisher&#39;s z`)
 avg_cor_r &lt;- tanh(avg_cor_z)</code></pre>
 <p>Taking the averaged Fisher <span class="math inline">\(z\)</span>-transformed values results in a value
@@ -907,20 +928,23 @@ three audio formats for the GEMS factor Transcendence is 0.7451.</p>
 <h2>Common Language Effect Sizes for <em>Transcendence</em></h2>
 <p>The common language effect size (CLE) expresses “the probability that
 an individual has a higher value on one measurement than the other”
-(Lakens, 2013, p. 4). The CLE is therefore the probability that a <span class="math inline">\(Z\)</span>-score is greater than a specific <span class="math inline">\(Z_{\textrm{CLE}}\)</span> (given a standard normal
+<span class="citation">(Lakens, 2013, p. 4)</span>. The CLE is therefore
+the probability that a <span class="math inline">\(Z\)</span>-score is
+greater than a specific <span class="math inline">\(Z_{\textrm{CLE}}\)</span> (given a standard normal
 distribution). For repeated measures the <span class="math inline">\(Z_{\textrm{CLE}}\)</span> is calculated from the
 means and standard deviations from two measurements as well as their
-correlation: <span class="math display">\[
+correlation <span class="citation">(McGraw &amp; Wong, 1992)</span>:
+<span class="math display">\[
 Z_{\textrm{CLE}} =
-\frac{M_1 -
-M_2}{\sqrt{SD_1^2+SD_2^2-2\cdot{}SD_1\cdot{}SD_2\cdot{}r_{12}}}
+\frac{M_2 -
+M_1}{\sqrt{SD_1^2+SD_2^2-2\cdot{}SD_1\cdot{}SD_2\cdot{}r_{12}}}
 \]</span></p>
 <pre class="r"><code>get_cle &lt;- function(mean1, mean2, sd1, sd2, r12) {
-  Z_cle &lt;- (mean1 - mean2) / sqrt(sd1^2 + sd2^2 - 2 * sd1 * sd2 * r12)
+  Z_cle &lt;- (mean2 - mean1) / sqrt(sd1^2 + sd2^2 - 2 * sd1 * sd2 * r12)
   Z_cle %&gt;% pnorm(lower.tail = F)
 }</code></pre>
-<pre class="r"><code>cle_table &lt;- data.frame(format1 = c(&quot;Stereo&quot;, &quot;Stereo&quot;, &quot;Surround&quot;),
-                        format2 = c(&quot;Surround&quot;, &quot;Auro&quot;, &quot;Auro&quot;))
+<pre class="r"><code>cle_table &lt;- data.frame(format1 = c(&quot;Auro&quot;, &quot;Auro&quot;, &quot;Surround&quot;),
+                        format2 = c(&quot;Surround&quot;, &quot;Stereo&quot;, &quot;Stereo&quot;))
 cle_table$cle &lt;-
   mapply(function(f1, f2) {
     desc &lt;- descriptives %&gt;% filter(factor == &quot;Transcendence&quot;)
@@ -928,7 +952,7 @@ cle_table$cle &lt;-
             mean2 = desc$M[desc$format == f2],
             sd1 = desc$SD[desc$format == f1],
             sd2 = desc$SD[desc$format == f2],
-            r12 = cor_table$r[cor_table$Formats == paste(f1, f2,
+            r12 = cor_table$r[cor_table$Formats == paste(f2, f1,
                                                          sep = &quot; -- &quot;)])
   },
   cle_table$format1, cle_table$format2)
@@ -945,22 +969,49 @@ cle_table %&gt;% mutate(across(where(is.numeric), round, digits = 4)) %&gt;%
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Stereo</td>
+<td align="left">Auro</td>
 <td align="left">Surround</td>
-<td align="center">0.6222</td>
+<td align="center">0.6751</td>
 </tr>
 <tr class="even">
-<td align="left">Stereo</td>
 <td align="left">Auro</td>
+<td align="left">Stereo</td>
 <td align="center">0.7405</td>
 </tr>
 <tr class="odd">
 <td align="left">Surround</td>
-<td align="left">Auro</td>
-<td align="center">0.6751</td>
+<td align="left">Stereo</td>
+<td align="center">0.6222</td>
 </tr>
 </tbody>
 </table>
+<p>Using the correction formula for multiple groups from <span class="citation">McGraw &amp; Wong (1992)</span>, the CLE for higher
+values in Auro than in Stereo and Surround is:</p>
+<pre class="r"><code>p_auro &lt;- .88 * prod(cle_table$cle[cle_table$format1 == &quot;Auro&quot;]) + .11
+p_auro</code></pre>
+<pre><code>## [1] 0.5498967</code></pre>
+<p>Thus, the probability that a random participant scored higher in Auro
+than in Stereo and Surround is 54.99%.</p>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-corey_averaging_1998" class="csl-entry">
+Corey, D. M., Dunlap, W. P., &amp; Burke, M. J. (1998). Averaging
+correlations: <span>Expected</span> values and bias in combined pearson
+<em>r</em>s and <span>Fisher</span>’s <em>z</em> transformations.
+<em>The Journal of General Psychology</em>, <em>125</em>(3), 245–261. <a href="https://doi.org/10.1080/00221309809595548">https://doi.org/10.1080/00221309809595548</a>
+</div>
+<div id="ref-lakens_calculating_2013" class="csl-entry">
+Lakens, D. (2013). Calculating and reporting effect sizes to facilitate
+cumulative science: A practical primer for t-tests and
+<span>ANOVAs</span>. <em>Frontiers in Psychology</em>, <em>4</em>. <a href="https://doi.org/10.3389/fpsyg.2013.00863">https://doi.org/10.3389/fpsyg.2013.00863</a>
+</div>
+<div id="ref-mcgraw_common_1992" class="csl-entry">
+McGraw, K. O., &amp; Wong, S. P. (1992). A common language effect size
+statistic. <em>Psychological Bulletin</em>, <em>111</em>(2), 361–365. <a href="https://doi.org/10.1037/0033-2909.111.2.361">https://doi.org/10.1037/0033-2909.111.2.361</a>
+</div>
 </div>
 </div>
 

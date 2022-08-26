@@ -4,6 +4,7 @@ author: "Kilian Sander, Yves Wycisk, Reinhard Kopiez"
 date: '2022'
 output: html_document
 csl: inst/apa.csl
+bibliography: inst/reanalysis_3d-audio_gems_hahn.bib
 ---
 # Preparation
 ## Data, Packages, and Design
@@ -219,9 +220,9 @@ GEMS factors are on a 5-point Likert scale coded from 1 to 5.
 
 |Contrasts         |Estimate|CI LL  |CI UL  |SE     |df   |$t$  |$p$     |
 |:-----------------|:------:|:-----:|:-----:|:-----:|:---:|:---:|:------:|
-|Stereo -- Surround|0.183   |0.023  |0.343  |0.081  |102  |2.266|0.026   |
-|Stereo -- Auro    |0.413   |0.254  |0.573  |0.081  |102  |5.128|1.397e-6|
-|Surround --Auro   |0.231   |0.071  |0.391  |0.081  |102  |2.862|0.005   |
+|Surround -- Stereo|0.183   |0.023  |0.343  |0.081  |102  |2.266|0.026   |
+|Auro -- Stereo    |0.413   |0.254  |0.573  |0.081  |102  |5.128|1.397e-6|
+|Auro -- Surround  |0.231   |0.071  |0.391  |0.081  |102  |2.862|0.005   |
 
 ## Correlations for *Transcendence*
 ### Correlations Between the Formats
@@ -272,7 +273,7 @@ knitr::kable(cor_table %>%
 
 ### Average Correlation
 To get a mean correlation individual correlation coefficients have to be
-Fisher $z$-transformed.
+Fisher $z$-transformed [@corey_averaging_1998].
 The Fisher $z$-transformation is equivalent to the inverse hyperbolic tangent.
 ```{r average correlations}
 avg_cor_z <- mean(cor_table$`Fisher's z`)
@@ -286,11 +287,12 @@ audio formats for the GEMS factor Transcendence is `r round(avg_cor_r, 4)`.
 ## Common Language Effect Sizes for *Transcendence*
 The common language effect size (CLE) expresses "the probability that an
 individual has a higher value on one measurement than the other"
-(Lakens, 2013, p. 4).
+[@lakens_calculating_2013, p.4].
 The CLE is therefore the probability that a $Z$-score is greater than a
 specific $Z_{\textrm{CLE}}$ (given a standard normal distribution).
 For repeated measures the $Z_{\textrm{CLE}}$ is calculated from the means
-and standard deviations from two measurements as well as their correlation:
+and standard deviations from two measurements as well as their correlation
+[@mcgraw_common_1992]:
 $$
 Z_{\textrm{CLE}} =
 \frac{M_2 - M_1}{\sqrt{SD_1^2+SD_2^2-2\cdot{}SD_1\cdot{}SD_2\cdot{}r_{12}}}
@@ -319,3 +321,13 @@ cle_table %>% mutate(across(where(is.numeric), round, digits = 4)) %>%
   knitr::kable(col.names = c("Format 1", "Format 2", "CLE"),
                align = "llc")
 ```
+Using the correction formula for multiple groups from @mcgraw_common_1992,
+the CLE for higher values in Auro than in Stereo and Surround is:
+```{r cle auro versus stereo and surround}
+p_auro <- .88 * prod(cle_table$cle[cle_table$format1 == "Auro"]) + .11
+p_auro
+```
+Thus, the probability that a random participant scored higher in Auro than
+in Stereo and Surround is `r round(p_auro, digits = 4)*100`%.
+
+# References
