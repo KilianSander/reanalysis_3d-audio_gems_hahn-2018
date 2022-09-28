@@ -733,7 +733,7 @@ summary(rm_manova)</code></pre>
   select(format, participant, transcendence) %&gt;%
   identify_outliers(transcendence) %&gt;% 
   filter(is.outlier)</code></pre>
-<pre><code>## # A tibble: 10 x 5
+<pre><code>## # A tibble: 10 × 5
 ##    format   participant transcendence is.outlier is.extreme
 ##    &lt;fct&gt;          &lt;int&gt;         &lt;dbl&gt; &lt;lgl&gt;      &lt;lgl&gt;     
 ##  1 stereo             1          1.33 TRUE       FALSE     
@@ -753,7 +753,7 @@ summary(rm_manova)</code></pre>
 <h4>Normality</h4>
 <pre class="r"><code>data_long_mult %&gt;% group_by(format) %&gt;%
   shapiro_test(transcendence)</code></pre>
-<pre><code>## # A tibble: 3 x 4
+<pre><code>## # A tibble: 3 × 4
 ##   format   variable      statistic      p
 ##   &lt;fct&gt;    &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt;
 ## 1 stereo   transcendence     0.972 0.254 
