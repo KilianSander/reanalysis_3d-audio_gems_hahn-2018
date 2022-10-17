@@ -372,9 +372,10 @@ imei_cor_mat %>% cor_gather() %>% filter(var1 != var2) %>% relocate(var2) %>%
                        mean_stereo_imei = "Stereo"),
          var1 = recode(.$var1, mean_stereo_imei = "Stereo",
                        mean_3d_imei = "3D"),
-         p = sapply(.$p, function(P) ifelse(P < .001, "< .001", P))) %>%
-  knitr::kable(col.names = c("", "", "$r$", "$p$"),
-               align = "llcc")
+         p = sapply(.$p, function(P) ifelse(P < .001, "< .001", P)),
+         `Fisher z` = atanh(cor)) %>%
+  knitr::kable(col.names = c("", "", "$r$", "$p$", "Fisher $z$"),
+               align = "llccc")
 ```
 
 # References

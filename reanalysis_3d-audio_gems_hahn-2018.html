@@ -1034,9 +1034,10 @@ imei_cor_mat %&gt;% cor_gather() %&gt;% filter(var1 != var2) %&gt;% relocate(var
                        mean_stereo_imei = &quot;Stereo&quot;),
          var1 = recode(.$var1, mean_stereo_imei = &quot;Stereo&quot;,
                        mean_3d_imei = &quot;3D&quot;),
-         p = sapply(.$p, function(P) ifelse(P &lt; .001, &quot;&lt; .001&quot;, P))) %&gt;%
-  knitr::kable(col.names = c(&quot;&quot;, &quot;&quot;, &quot;$r$&quot;, &quot;$p$&quot;),
-               align = &quot;llcc&quot;)</code></pre>
+         p = sapply(.$p, function(P) ifelse(P &lt; .001, &quot;&lt; .001&quot;, P)),
+         `Fisher z` = atanh(cor)) %&gt;%
+  knitr::kable(col.names = c(&quot;&quot;, &quot;&quot;, &quot;$r$&quot;, &quot;$p$&quot;, &quot;Fisher $z$&quot;),
+               align = &quot;llccc&quot;)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -1044,6 +1045,7 @@ imei_cor_mat %&gt;% cor_gather() %&gt;% filter(var1 != var2) %&gt;% relocate(var
 <th align="left"></th>
 <th align="center"><span class="math inline">\(r\)</span></th>
 <th align="center"><span class="math inline">\(p\)</span></th>
+<th align="center">Fisher <span class="math inline">\(z\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -1052,18 +1054,21 @@ imei_cor_mat %&gt;% cor_gather() %&gt;% filter(var1 != var2) %&gt;% relocate(var
 <td align="left">Stereo</td>
 <td align="center">0.79</td>
 <td align="center">&lt; .001</td>
+<td align="center">1.071432</td>
 </tr>
 <tr class="even">
 <td align="left">Mono</td>
 <td align="left">3D</td>
 <td align="center">0.68</td>
 <td align="center">&lt; .001</td>
+<td align="center">0.829114</td>
 </tr>
 <tr class="odd">
 <td align="left">Stereo</td>
 <td align="left">3D</td>
 <td align="center">0.87</td>
 <td align="center">&lt; .001</td>
+<td align="center">1.333080</td>
 </tr>
 </tbody>
 </table>
