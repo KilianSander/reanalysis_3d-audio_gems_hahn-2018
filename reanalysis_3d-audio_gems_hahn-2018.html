@@ -994,6 +994,81 @@ than in Stereo and Surround is 54.99%.</p>
 </div>
 </div>
 </div>
+<div id="data-set-from-wycisk_wrapped_2022" class="section level1">
+<h1>Data set from <span class="citation">Wycisk et al.
+(2022)</span></h1>
+<div id="preparation-1" class="section level2">
+<h2>Preparation</h2>
+<p>Load the outlier-adjusted data from <span class="citation">Wycisk et
+al. (2022)</span> containing <em>N</em> = 190 participants. Then
+calculate the IMEI score, i.e., the average of the ten items, as well as
+the mean IMEI score per audio format.</p>
+<pre class="r"><code>imei_data &lt;- read.csv(&quot;data/imei_data_outlier_adjusted.csv&quot;)
+imei_items &lt;- paste0(&quot;imei&quot;, c(15,8,12,21,19,6,11,5,7,4))
+imei_data_long &lt;- imei_data %&gt;% select(participant, piece,
+                            version, all_of(imei_items)) %&gt;%
+  mutate(piece = piece %&gt;% recode(&quot;1&quot; = &quot;radio&quot;, &quot;2&quot; = &quot;hantel&quot;,
+                                  &quot;3&quot; = &quot;jene&quot;, &quot;4&quot; = &quot;rokoko&quot;),
+         version = version %&gt;% recode(&quot;1&quot; = &quot;mono&quot;, &quot;2&quot; = &quot;stereo&quot;,
+                                      &quot;3&quot; = &quot;3d&quot;) %&gt;% as_factor())
+imei_data_long$imei &lt;- imei_data_long %&gt;%
+  select(all_of(imei_items)) %&gt;% rowMeans()
+imei_data_wide &lt;- imei_data_long %&gt;%
+  pivot_wider(id_cols = participant,
+              names_from = c(piece, version),
+              values_from = imei,
+              names_glue = &quot;{piece}_{version}_imei&quot;)
+for (v in c(&quot;mono&quot;, &quot;stereo&quot;, &quot;3d&quot;)) {
+  temp &lt;- imei_data_wide %&gt;% select(contains(v)) %&gt;% rowMeans()
+  eval(str2expression(paste0(&quot;imei_data_wide$mean_&quot;, v, &quot;_imei &lt;- temp&quot;)))
+}
+rm(temp, v)</code></pre>
+</div>
+<div id="imei-correlations-across-audio-formats" class="section level2">
+<h2>IMEI Correlations Across Audio Formats</h2>
+<pre class="r"><code>imei_cor_mat &lt;- imei_data_wide %&gt;%
+  select(starts_with(&quot;mean_&quot;)) %&gt;% cor_mat()
+imei_cor_mat %&gt;% cor_gather() %&gt;% filter(var1 != var2) %&gt;% relocate(var2) %&gt;%
+  filter(var2 != &quot;mean_3d_imei&quot;, var1 != &quot;mean_mono_imei&quot;) %&gt;%
+  mutate(var2 = recode(.$var2, mean_mono_imei = &quot;Mono&quot;,
+                       mean_stereo_imei = &quot;Stereo&quot;),
+         var1 = recode(.$var1, mean_stereo_imei = &quot;Stereo&quot;,
+                       mean_3d_imei = &quot;3D&quot;),
+         p = sapply(.$p, function(P) ifelse(P &lt; .001, &quot;&lt; .001&quot;, P))) %&gt;%
+  knitr::kable(col.names = c(&quot;&quot;, &quot;&quot;, &quot;$r$&quot;, &quot;$p$&quot;),
+               align = &quot;llcc&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left"></th>
+<th align="center"><span class="math inline">\(r\)</span></th>
+<th align="center"><span class="math inline">\(p\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mono</td>
+<td align="left">Stereo</td>
+<td align="center">0.79</td>
+<td align="center">&lt; .001</td>
+</tr>
+<tr class="even">
+<td align="left">Mono</td>
+<td align="left">3D</td>
+<td align="center">0.68</td>
+<td align="center">&lt; .001</td>
+</tr>
+<tr class="odd">
+<td align="left">Stereo</td>
+<td align="left">3D</td>
+<td align="center">0.87</td>
+<td align="center">&lt; .001</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="unnumbered">References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
@@ -1020,6 +1095,12 @@ cumulative science: A practical primer for t-tests and
 <div id="ref-mcgraw_common_1992" class="csl-entry">
 McGraw, K. O., &amp; Wong, S. P. (1992). A common language effect size
 statistic. <em>Psychological Bulletin</em>, <em>111</em>(2), 361–365. <a href="https://doi.org/10.1037/0033-2909.111.2.361">https://doi.org/10.1037/0033-2909.111.2.361</a>
+</div>
+<div id="ref-wycisk_wrapped_2022" class="csl-entry">
+Wycisk, Y., Sander, K., Kopiez, R., Platz, F., Preihs, S., &amp;
+Peissig, J. (2022). Wrapped into sound: <span>Development</span> of the
+immersive music experience inventory (<span>IMEI</span>). <em>Frontiers
+in Psychology</em>. <a href="https://doi.org/10.3389/fpsyg.2022.951161">https://doi.org/10.3389/fpsyg.2022.951161</a>
 </div>
 </div>
 </div>

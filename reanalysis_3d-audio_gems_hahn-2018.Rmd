@@ -333,6 +333,48 @@ p_auro
 Thus, the probability that a random participant scored higher in Auro than
 in Stereo and Surround is `r round(p_auro, digits = 4)*100`%.
 
+# Data set from @wycisk_wrapped_2022
+## Preparation
+Load the outlier-adjusted data from @wycisk_wrapped_2022 containing
+*N* = 190 participants.
+Then calculate the IMEI score, i.e., the average of the ten items, as
+well as the mean IMEI score per audio format.
+```{r imei data}
+imei_data <- read.csv("data/imei_data_outlier_adjusted.csv")
+imei_items <- paste0("imei", c(15,8,12,21,19,6,11,5,7,4))
+imei_data_long <- imei_data %>% select(participant, piece,
+                            version, all_of(imei_items)) %>%
+  mutate(piece = piece %>% recode("1" = "radio", "2" = "hantel",
+                                  "3" = "jene", "4" = "rokoko"),
+         version = version %>% recode("1" = "mono", "2" = "stereo",
+                                      "3" = "3d") %>% as_factor())
+imei_data_long$imei <- imei_data_long %>%
+  select(all_of(imei_items)) %>% rowMeans()
+imei_data_wide <- imei_data_long %>%
+  pivot_wider(id_cols = participant,
+              names_from = c(piece, version),
+              values_from = imei,
+              names_glue = "{piece}_{version}_imei")
+for (v in c("mono", "stereo", "3d")) {
+  temp <- imei_data_wide %>% select(contains(v)) %>% rowMeans()
+  eval(str2expression(paste0("imei_data_wide$mean_", v, "_imei <- temp")))
+}
+rm(temp, v)
+```
 
+## IMEI Correlations Across Audio Formats
+```{r imei correlation matrix}
+imei_cor_mat <- imei_data_wide %>%
+  select(starts_with("mean_")) %>% cor_mat()
+imei_cor_mat %>% cor_gather() %>% filter(var1 != var2) %>% relocate(var2) %>%
+  filter(var2 != "mean_3d_imei", var1 != "mean_mono_imei") %>%
+  mutate(var2 = recode(.$var2, mean_mono_imei = "Mono",
+                       mean_stereo_imei = "Stereo"),
+         var1 = recode(.$var1, mean_stereo_imei = "Stereo",
+                       mean_3d_imei = "3D"),
+         p = sapply(.$p, function(P) ifelse(P < .001, "< .001", P))) %>%
+  knitr::kable(col.names = c("", "", "$r$", "$p$"),
+               align = "llcc")
+```
 
 # References
