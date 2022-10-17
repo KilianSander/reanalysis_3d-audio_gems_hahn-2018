@@ -1,13 +1,14 @@
 ---
-title: "Reanalysis of a Data set"
+title: "Intensified Emotions due to 3D Audio? Comparative Reanalysis of a Data set on the Emotional Listening Experience in Stereo, 5.1 Surround Sound and 3D Audio"
 author: "Kilian Sander, Yves Wycisk, Reinhard Kopiez"
 date: '2022'
 output: html_document
 csl: inst/apa.csl
 bibliography: inst/reanalysis_3d-audio_gems_hahn.bib
 ---
-# Preparation
-## Data, Packages, and Design
+# Data set from @hahn_musical_2018
+## Preparation
+### Data, Packages, and Design
 Load the data:
 ```{r dataset, messages=FALSE}
 load("data/data_raw.Rda")
@@ -33,7 +34,7 @@ joyful_activation <- c("joyful", "animated", "bouncy")
 tension <- c("agitated", "nervous", "tense")
 sadness <- c("sad", "sorrowful", "tearful")
 ```
-## Filtering
+### Filtering
 Exclude a participant if there are at least two `NA`s for a GEMS factor of one stimulus:
 ```{r filter cases, message=FALSE}
 data_raw$complete <- TRUE
@@ -58,7 +59,7 @@ N <- length(data_filtered$participant)
 ```
 After removing incomplete cases the data set contains `r N` participants.
 
-## Scoring
+### Scoring
 Calculate mean values for each item per format:
 ```{r item means, message=FALSE, warning=FALSE}
 for (format in formats) {
@@ -90,7 +91,7 @@ for (format in formats) {
 }
 rm(format, factor, factor_mean_vector)
 ```
-## Long format
+### Long format
 ```{r long formats, message=FALSE, warning=FALSE}
 vars_vector <- sapply(formats,
                       function(format) {
@@ -115,8 +116,8 @@ names(data_long_mult) <- names(data_long_mult) %>%
   gsub("joyfulactivation", "joyful_activation", .)
 data_long_mult$format <- data_long_mult$format %>% as_factor()
 ```
-# Analyses
-## Descriptives
+## Analyses
+### Descriptives
 ```{r age summary, include=FALSE}
 age_summary <- summary(data_filtered$age)
 ```
@@ -149,7 +150,7 @@ data_long_single %>% group_by(format, factor) %>%
   labs(color = "Format", shape = "Format", linetype = "Format")
 ```
 
-## Multivariate Analysis of Variance
+### Multivariate Analysis of Variance
 
 ```{r manova}
 #rm_manova <-
@@ -166,9 +167,9 @@ data_long_single %>% group_by(format, factor) %>%
 load(file = "results/rm_manova.Rda")
 summary(rm_manova)
 ```
-## Analysis of Variance for *Transcendence*
-### Assumption Checks
-#### Extreme Outliers
+### Analysis of Variance for *Transcendence*
+#### Assumption Checks
+##### Extreme Outliers
 ```{r anova outliers}
 data_long_mult %>% group_by(format) %>%
   select(format, participant, transcendence) %>%
@@ -177,14 +178,14 @@ data_long_mult %>% group_by(format) %>%
 ggboxplot(data_long_mult, x = "format", y = "transcendence", add = "point")
 ```
 
-#### Normality
+##### Normality
 ```{r anova normality}
 data_long_mult %>% group_by(format) %>%
   shapiro_test(transcendence)
 ggqqplot(data_long_mult, "transcendence", facet.by = "format")
 ```
 
-#### Sphericity
+##### Sphericity
 ```{r anova}
 transcendence_anova <-
   anova_test(data = data_long_mult,
@@ -201,7 +202,7 @@ transcendence_ges <- anova_test(data = data_long_mult,
            effect.size = "ges")$ANOVA$ges
 transcendence_anova$`Mauchly's Test for Sphericity`
 ```
-### Results
+#### Results
 ```{r anova results, echo=FALSE}
 transcendence_res <- get_anova_table(transcendence_anova)
 class(transcendence_res) <- "data.frame"
@@ -216,6 +217,7 @@ transcendence_res %>% mutate(ges = transcendence_ges) %>%
 
 *Note.* Error bars represent 95% confidence intervals.
 GEMS factors are on a 5-point Likert scale coded from 1 to 5.
+Plot was exported from JASP [@JASP].
 
 
 |Contrasts         |Estimate|CI LL  |CI UL  |SE     |df   |$t$  |$p$     |
@@ -223,9 +225,10 @@ GEMS factors are on a 5-point Likert scale coded from 1 to 5.
 |Surround -- Stereo|0.183   |0.023  |0.343  |0.081  |102  |2.266|0.026   |
 |Auro -- Stereo    |0.413   |0.254  |0.573  |0.081  |102  |5.128|1.397e-6|
 |Auro -- Surround  |0.231   |0.071  |0.391  |0.081  |102  |2.862|0.005   |
+*Note.* Contrasts were calculated in JASP [@JASP].
 
-## Correlations for *Transcendence*
-### Correlations Between the Formats
+### Correlations for *Transcendence*
+#### Correlations Between the Formats
 ```{r correlations, include=FALSE}
 cor_stereo_surround <-
   cor.test(data_filtered$stereo_transcendence,
@@ -271,7 +274,7 @@ knitr::kable(cor_table %>%
              align = "lccccc")
 ```
 
-### Average Correlation
+#### Average Correlation
 To get a mean correlation individual correlation coefficients have to be
 Fisher $z$-transformed [@corey_averaging_1998].
 The Fisher $z$-transformation is equivalent to the inverse hyperbolic tangent.
@@ -284,7 +287,7 @@ Taking the averaged Fisher $z$-transformed values results in a value of
 Back-transformed to Person's $r$ the average correlation between the three
 audio formats for the GEMS factor Transcendence is `r round(avg_cor_r, 4)`.
 
-## Common Language Effect Sizes for *Transcendence*
+### Common Language Effect Sizes for *Transcendence*
 The common language effect size (CLE) expresses "the probability that an
 individual has a higher value on one measurement than the other"
 [@lakens_calculating_2013, p.4].
@@ -329,5 +332,7 @@ p_auro
 ```
 Thus, the probability that a random participant scored higher in Auro than
 in Stereo and Surround is `r round(p_auro, digits = 4)*100`%.
+
+
 
 # References
