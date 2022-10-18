@@ -409,5 +409,39 @@ imei_cor_table %>% knitr::kable(align = "lccccc",
                                 col.names = c("", "$r$", "$p$", "CI LL",
                                               "CI UL", "Fisher's $z$"))
 ```
+## IMEI ANOVA
+### IMEI Descriptives
+```{r imei anova preparation, echo=FALSE, message=FALSE, warning=FALSE}
+imei_data_long_anova <- imei_data_long %>%
+  select(participant, piece, version, imei) %>%
+  mutate(version = version %>% as_factor() %>%
+           recode_factor(mono = "Mono",
+                         stereo = "Stereo",
+                         `3d` = "3D")) %>%
+  group_by(participant, version) %>%
+  summarise(imei = mean(imei))
+imei_data_long_anova %>% group_by(version) %>%
+  get_summary_stats(imei, type = "mean_sd") %>%
+  select(!c(variable, n)) %>%
+  knitr::kable(col.names = c("Version", "$M$", "$SD$"))
+```
+```{r imei boxplot, echo=FALSE}
+imei_data_long_anova %>% ggboxplot(x = "version", y = "imei") +
+  ylab("IMEI") +
+  xlab("Version")
+```
+
+### Outliers
+```{r imei anova outliers}
+imei_data_long_anova %>% group_by(version) %>% identify_outliers(imei)
+```
+### Normality Shapiro-Wilk Test
+```{r imei anova normality, echo=FALSE}
+imei_data_long_anova %>% group_by(version) %>% shapiro_test(imei) %>%
+  select(!variable) %>%
+  knitr::kable(align = "lcc",
+               col.names = c("Version", "Test Statistic", "$p$"))
+ggqqplot(imei_data_long_anova, "imei", facet.by = "version")
+```
 
 # References
