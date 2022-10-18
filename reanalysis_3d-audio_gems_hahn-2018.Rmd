@@ -443,5 +443,29 @@ imei_data_long_anova %>% group_by(version) %>% shapiro_test(imei) %>%
                col.names = c("Version", "Test Statistic", "$p$"))
 ggqqplot(imei_data_long_anova, "imei", facet.by = "version")
 ```
+```{r imei anova test, include=FALSE}
+imei_anova <- anova_test(data = imei_data_long_anova %>% ungroup(),
+                         dv = imei,
+                         wid = participant,
+                         within = version,
+                         effect.size = "pes",
+                         detailed = TRUE)
+
+```
+### Sphericity
+```{r anova sphericity}
+imei_anova$`Mauchly's Test for Sphericity` %>%
+  knitr::kable(col.names = c("Effect", "$W$", "$p$", "$p<.05$"),
+               align = "lccc")
+imei_anova$`Sphericity Corrections` %>% select(!ends_with("<.05")) %>%
+  knitr::kable(col.names = c("Effect", "Grennhouse-Geisser $\\epsilon$",
+                             "df(G-G)", "$p$(G-G)", "Huynh-Feldt $\\epsilon$",
+                             "df(H-F)", "$p$(H-F)"),
+               align = "lccrccr")
+```
+### Results
+```{r anova table}
+get_anova_table(imei_anova)
+```
 
 # References
