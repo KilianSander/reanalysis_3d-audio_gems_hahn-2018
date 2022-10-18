@@ -1026,49 +1026,65 @@ rm(temp, v)</code></pre>
 </div>
 <div id="imei-correlations-across-audio-formats" class="section level2">
 <h2>IMEI Correlations Across Audio Formats</h2>
-<pre class="r"><code>imei_cor_mat &lt;- imei_data_wide %&gt;%
-  select(starts_with(&quot;mean_&quot;)) %&gt;% cor_mat()
-imei_cor_mat %&gt;% cor_gather() %&gt;% filter(var1 != var2) %&gt;% relocate(var2) %&gt;%
-  filter(var2 != &quot;mean_3d_imei&quot;, var1 != &quot;mean_mono_imei&quot;) %&gt;%
-  mutate(var2 = recode(.$var2, mean_mono_imei = &quot;Mono&quot;,
-                       mean_stereo_imei = &quot;Stereo&quot;),
-         var1 = recode(.$var1, mean_stereo_imei = &quot;Stereo&quot;,
-                       mean_3d_imei = &quot;3D&quot;),
-         p = sapply(.$p, function(P) ifelse(P &lt; .001, &quot;&lt; .001&quot;, P)),
-         `Fisher z` = atanh(cor)) %&gt;%
-  knitr::kable(col.names = c(&quot;&quot;, &quot;&quot;, &quot;$r$&quot;, &quot;$p$&quot;, &quot;Fisher $z$&quot;),
-               align = &quot;llccc&quot;)</code></pre>
 <table>
+<colgroup>
+<col width="42%" />
+<col width="12%" />
+<col width="8%" />
+<col width="12%" />
+<col width="7%" />
+<col width="15%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left"></th>
-<th align="left"></th>
 <th align="center"><span class="math inline">\(r\)</span></th>
 <th align="center"><span class="math inline">\(p\)</span></th>
-<th align="center">Fisher <span class="math inline">\(z\)</span></th>
+<th align="center">CI LL</th>
+<th align="center">CI UL</th>
+<th align="center">Fisher’s <span class="math inline">\(z\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Mono</td>
-<td align="left">Stereo</td>
-<td align="center">0.79</td>
+<td align="left">Mono – Stereo</td>
+<td align="center">0.7886444</td>
 <td align="center">&lt; .001</td>
-<td align="center">1.071432</td>
+<td align="center">0.7386729</td>
+<td align="center">1</td>
+<td align="center">1.0678358</td>
 </tr>
 <tr class="even">
-<td align="left">Mono</td>
-<td align="left">3D</td>
-<td align="center">0.68</td>
+<td align="left">Mono – 3D</td>
+<td align="center">0.6753984</td>
 <td align="center">&lt; .001</td>
-<td align="center">0.829114</td>
+<td align="center">0.6045710</td>
+<td align="center">1</td>
+<td align="center">0.8206039</td>
 </tr>
 <tr class="odd">
-<td align="left">Stereo</td>
-<td align="left">3D</td>
-<td align="center">0.87</td>
+<td align="left">Stereo – 3D</td>
+<td align="center">0.8731923</td>
 <td align="center">&lt; .001</td>
-<td align="center">1.333080</td>
+<td align="center">0.8414386</td>
+<td align="center">1</td>
+<td align="center">1.3463639</td>
+</tr>
+<tr class="even">
+<td align="left">Average</td>
+<td align="center">0.7790784</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">1.0782678</td>
+</tr>
+<tr class="odd">
+<td align="left">Back-transformed Fisher’s <span class="math inline">\(z\)</span> average</td>
+<td align="center">0.7925559</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
 </tr>
 </tbody>
 </table>

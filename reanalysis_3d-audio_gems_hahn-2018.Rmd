@@ -265,7 +265,7 @@ cor_table <- data.frame(Formats = c("Stereo -- Surround",
                               cor_surround_auro$conf.int[2])) %>% 
   mutate(`Fisher's z` = atanh(r),
          p = sapply(p,
-                    function(x) if(x < 10^-3) "< .001"))
+                    function(x) ifelse(x < 10^-3, "< .001", x)))
 ```
 ```{r correlations table, echo=FALSE}
 knitr::kable(cor_table %>% 
@@ -363,19 +363,51 @@ rm(temp, v)
 ```
 
 ## IMEI Correlations Across Audio Formats
-```{r imei correlation matrix}
-imei_cor_mat <- imei_data_wide %>%
-  select(starts_with("mean_")) %>% cor_mat()
-imei_cor_mat %>% cor_gather() %>% filter(var1 != var2) %>% relocate(var2) %>%
-  filter(var2 != "mean_3d_imei", var1 != "mean_mono_imei") %>%
-  mutate(var2 = recode(.$var2, mean_mono_imei = "Mono",
-                       mean_stereo_imei = "Stereo"),
-         var1 = recode(.$var1, mean_stereo_imei = "Stereo",
-                       mean_3d_imei = "3D"),
-         p = sapply(.$p, function(P) ifelse(P < .001, "< .001", P)),
-         `Fisher z` = atanh(cor)) %>%
-  knitr::kable(col.names = c("", "", "$r$", "$p$", "Fisher $z$"),
-               align = "llccc")
+```{r imei correlations, include=FALSE}
+imei_cor_mono_stereo <-
+  cor.test(imei_data_wide$mean_mono_imei, imei_data_wide$mean_stereo_imei,
+           alternative = "greater",
+           method = "pearson",
+           conf.level = .95)
+imei_cor_mono_3d <-
+  cor.test(imei_data_wide$mean_mono_imei, imei_data_wide$mean_3d_imei,
+           alternative = "greater",
+           method = "pearson",
+           conf.level = .95)
+imei_cor_stereo_3d <-
+  cor.test(imei_data_wide$mean_stereo_imei, imei_data_wide$mean_3d_imei,
+           alternative = "greater",
+           method = "pearson",
+           conf.level = .95)
+imei_cor_table <- data.frame(Formats = c("Mono -- Stereo",
+                                    "Mono -- 3D",
+                                    "Stereo -- 3D"),
+                             r = c(imei_cor_mono_stereo$estimate,
+                                   imei_cor_mono_3d$estimate,
+                                   imei_cor_stereo_3d$estimate),
+                             p = c(imei_cor_mono_stereo$p.value,
+                                   imei_cor_mono_3d$p.value,
+                                   imei_cor_stereo_3d$p.value),
+                             LL = c(imei_cor_mono_stereo$conf.int[1],
+                                    imei_cor_mono_3d$conf.int[1],
+                                    imei_cor_stereo_3d$conf.int[1]),
+                             UL = c(imei_cor_mono_stereo$conf.int[2],
+                                    imei_cor_mono_3d$conf.int[2],
+                                    imei_cor_stereo_3d$conf.int[2])) %>%
+  mutate(`Fisher's z` = atanh(r),
+         p = sapply(p,
+                    function(x) ifelse(x < 10^-3, "< .001", x))) %>%
+  add_row(Formats = "Average",
+          r = mean(.$r),
+          `Fisher's z` = mean(.$`Fisher's z`)) %>%
+  add_row(Formats = "Back-transformed Fisher's $z$ average",
+          r = tanh(.$`Fisher's z`[.$Formats == "Average"]))
+```
+```{r imei correlation table, echo=FALSE}
+options(knitr.kable.NA = "")
+imei_cor_table %>% knitr::kable(align = "lccccc",
+                                col.names = c("", "$r$", "$p$", "CI LL",
+                                              "CI UL", "Fisher's $z$"))
 ```
 
 # References
