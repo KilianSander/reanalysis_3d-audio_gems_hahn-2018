@@ -178,14 +178,17 @@ data_long_mult %>% group_by(format) %>%
 ggboxplot(data_long_mult, x = "format", y = "transcendence", add = "point")
 ```
 
-##### Normality
-```{r anova normality}
+##### Normality: Shapiro-Wilk Test and QQ-Plots
+```{r anova normality, echo=FALSE}
 data_long_mult %>% group_by(format) %>%
-  shapiro_test(transcendence)
+  shapiro_test(transcendence) %>%
+  select(!variable) %>%
+  knitr::kable(align = "lcc",
+               col.names = c("Version", "Test Statistic", "$p$"))
 ggqqplot(data_long_mult, "transcendence", facet.by = "format")
 ```
 
-##### Sphericity
+##### Mauchly's Test for Sphericity
 ```{r anova}
 transcendence_anova <-
   anova_test(data = data_long_mult,
@@ -200,7 +203,9 @@ transcendence_ges <- anova_test(data = data_long_mult,
            within = format,
            type = 3,
            effect.size = "ges")$ANOVA$ges
-transcendence_anova$`Mauchly's Test for Sphericity`
+transcendence_anova$`Mauchly's Test for Sphericity` %>%
+  knitr::kable(col.names = c("Effect", "$W$", "$p$", "$p<.05$"),
+               align = "lccc")
 ```
 #### Results
 ```{r anova results, echo=FALSE}
@@ -435,7 +440,7 @@ imei_data_long_anova %>% ggboxplot(x = "version", y = "imei") +
 ```{r imei anova outliers}
 imei_data_long_anova %>% group_by(version) %>% identify_outliers(imei)
 ```
-### Normality Shapiro-Wilk Test
+### Normality: Shapiro-Wilk Test and QQ-Plots
 ```{r imei anova normality, echo=FALSE}
 imei_data_long_anova %>% group_by(version) %>% shapiro_test(imei) %>%
   select(!variable) %>%
