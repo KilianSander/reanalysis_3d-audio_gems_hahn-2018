@@ -450,10 +450,19 @@ imei_anova <- anova_test(data = imei_data_long_anova %>% ungroup(),
                          within = version,
                          effect.size = "pes",
                          detailed = TRUE)
-
+imei_anova_ges <- anova_test(data = imei_data_long_anova %>% ungroup(),
+                             dv = imei,
+                             wid = participant,
+                             within = version,
+                             effect.size = "ges",
+                             detailed = TRUE)$ANOVA$ges
+imei_anova_results <- get_anova_table(imei_anova)
+class(imei_anova_results) <- "data.frame"
+imei_anova_results <- imei_anova_results %>%
+  mutate(ges = imei_anova_ges)
 ```
-### Sphericity
-```{r anova sphericity}
+### Mauchly's Test for Sphericity
+```{r anova sphericity, echo=FALSE}
 imei_anova$`Mauchly's Test for Sphericity` %>%
   knitr::kable(col.names = c("Effect", "$W$", "$p$", "$p<.05$"),
                align = "lccc")
@@ -464,8 +473,15 @@ imei_anova$`Sphericity Corrections` %>% select(!ends_with("<.05")) %>%
                align = "lccrccr")
 ```
 ### Results
-```{r anova table}
-get_anova_table(imei_anova)
+```{r anova table, echo=FALSE}
+imei_anova_results %>% select(!c(`p<.05`, SSn, SSd)) %>%
+  filter(Effect != "(Intercept)") %>%
+  mutate(p = sapply(p, function(x) ifelse(x < .001, "< .001", x))) %>%
+  knitr::kable(col.names = c("Effect", "DFn", "DFd",
+                              "$F$", "$p$",
+                              "$\\eta^2_p$",
+                              "$\\eta^2_G$"),
+               align = "lcccccc")
 ```
 
 # References
