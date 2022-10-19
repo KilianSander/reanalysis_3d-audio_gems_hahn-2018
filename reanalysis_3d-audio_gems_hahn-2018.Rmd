@@ -489,4 +489,30 @@ imei_anova_results %>% select(!c(`p<.05`, SSn, SSd)) %>%
                align = "lcccccc")
 ```
 
+## IMEI CLEs
+```{r imei cle, echo=FALSE}
+imei_cle_table <- data.frame(format1 = c("3D", "3D", "Stereo"),
+                             format2 = c("Stereo", "Mono", "Mono"))
+imei_cle_table$cle <-
+  mapply(function(f1, f2) {
+    desc <- imei_data_long_anova %>% group_by(version) %>%
+      summarise(M = mean(imei), SD = sd(imei))
+    get_cle(mean1 = desc$M[desc$version == f1],
+            mean2 = desc$M[desc$version == f2],
+            sd1 = desc$SD[desc$version == f1],
+            sd2 = desc$SD[desc$version == f2],
+            r12 = imei_cor_table$r[imei_cor_table$Formats == paste(f2, f1,
+                                                                   sep = " -- ")])},
+    imei_cle_table$format1, imei_cle_table$format2)
+imei_cle_table %>% mutate(across(where(is.numeric), round, digits = 4)) %>% 
+  knitr::kable(col.names = c("Format 1", "Format 2", "CLE"),
+               align = "llc")
+```
+
+```{r imei cle 3d vs stereo and mono}
+p_3d <- .88 * prod(imei_cle_table$cle[imei_cle_table$format1 == "3D"]) + .11
+```
+Once again using the correction formula for multiple conditions from
+@mcgraw_common_1992, the CLE for 3D versus Stereo and Mono is `r p_3d`.
+
 # References

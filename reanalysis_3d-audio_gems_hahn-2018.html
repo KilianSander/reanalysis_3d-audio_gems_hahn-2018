@@ -1274,6 +1274,39 @@ rm(temp, v)</code></pre>
 </table>
 </div>
 </div>
+<div id="imei-cles" class="section level2">
+<h2>IMEI CLEs</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Format 1</th>
+<th align="left">Format 2</th>
+<th align="center">CLE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">3D</td>
+<td align="left">Stereo</td>
+<td align="center">0.5861</td>
+</tr>
+<tr class="even">
+<td align="left">3D</td>
+<td align="left">Mono</td>
+<td align="center">0.7705</td>
+</tr>
+<tr class="odd">
+<td align="left">Stereo</td>
+<td align="left">Mono</td>
+<td align="center">0.7818</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>p_3d &lt;- .88 * prod(imei_cle_table$cle[imei_cle_table$format1 == &quot;3D&quot;]) + .11</code></pre>
+<p>Once again using the correction formula for multiple conditions from
+<span class="citation">McGraw &amp; Wong (1992)</span>, the CLE for 3D
+versus Stereo and Mono is 0.5073903.</p>
+</div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="unnumbered">References</h1>
