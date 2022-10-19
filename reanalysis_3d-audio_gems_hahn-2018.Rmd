@@ -1,10 +1,13 @@
 ---
-title: "Intensified Emotions due to 3D Audio? Comparative Reanalysis of a Data set on the Emotional Listening Experience in Stereo, 5.1 Surround Sound and 3D Audio"
+title: Intensified Emotions due to 3D Audio? Comparative Reanalysis of a Data set
+  on the Emotional Listening Experience in Stereo, 5.1 Surround Sound and 3D Audio
 author: "Kilian Sander, Yves Wycisk, Reinhard Kopiez"
 date: '2022'
-output: html_document
+output:
+  word_document: default
+  html_document: default
 csl: inst/apa.csl
-bibliography: inst/reanalysis_3d-audio_gems_hahn.bib
+bibliography: "inst/reanalysis_3d-audio_gems_hahn.bib"
 ---
 # Data set from @hahn_musical_2018
 ## Preparation
