@@ -9,6 +9,9 @@
       stroke-linejoin: round;
       stroke-miterlimit: 10.00;
     }
+    .svglite text {
+      white-space: pre;
+    }
   ]]></style>
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
@@ -46,12 +49,12 @@
 </g>
 <g clip-path='url(#cpMC4wMHwzMDAuMDB8MC4wMHwzMDAuMDA=)'>
 <polyline points='69.23,234.25 69.23,0.00 ' style='stroke-width: 0.00; stroke: none; stroke-linecap: butt;' />
-<text x='53.75' y='229.69' text-anchor='end' style='font-size: 17.00px; font-family: Arial;' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>2.4</text>
-<text x='53.75' y='187.10' text-anchor='end' style='font-size: 17.00px; font-family: Arial;' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>2.6</text>
-<text x='53.75' y='144.51' text-anchor='end' style='font-size: 17.00px; font-family: Arial;' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>2.8</text>
-<text x='53.75' y='101.92' text-anchor='end' style='font-size: 17.00px; font-family: Arial;' textLength='9.45px' lengthAdjust='spacingAndGlyphs'>3</text>
-<text x='53.75' y='59.33' text-anchor='end' style='font-size: 17.00px; font-family: Arial;' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>3.2</text>
-<text x='53.75' y='16.74' text-anchor='end' style='font-size: 17.00px; font-family: Arial;' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>3.4</text>
+<text x='53.75' y='229.69' text-anchor='end' style='font-size: 17.00px; font-family: "Arial";' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>2.4</text>
+<text x='53.75' y='187.10' text-anchor='end' style='font-size: 17.00px; font-family: "Arial";' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>2.6</text>
+<text x='53.75' y='144.51' text-anchor='end' style='font-size: 17.00px; font-family: "Arial";' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>2.8</text>
+<text x='53.75' y='101.92' text-anchor='end' style='font-size: 17.00px; font-family: "Arial";' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>3.0</text>
+<text x='53.75' y='59.33' text-anchor='end' style='font-size: 17.00px; font-family: "Arial";' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>3.2</text>
+<text x='53.75' y='16.74' text-anchor='end' style='font-size: 17.00px; font-family: "Arial";' textLength='23.63px' lengthAdjust='spacingAndGlyphs'>3.4</text>
 <polyline points='60.72,223.60 69.23,223.60 ' style='stroke-width: 0.64; stroke-linecap: butt;' />
 <polyline points='60.72,181.01 69.23,181.01 ' style='stroke-width: 0.64; stroke-linecap: butt;' />
 <polyline points='60.72,138.42 69.23,138.42 ' style='stroke-width: 0.64; stroke-linecap: butt;' />
@@ -62,10 +65,10 @@
 <polyline points='112.50,242.75 112.50,234.25 ' style='stroke-width: 0.64; stroke-linecap: butt;' />
 <polyline points='184.61,242.75 184.61,234.25 ' style='stroke-width: 0.64; stroke-linecap: butt;' />
 <polyline points='256.73,242.75 256.73,234.25 ' style='stroke-width: 0.64; stroke-linecap: butt;' />
-<text x='112.50' y='261.90' text-anchor='middle' style='font-size: 17.00px; font-family: Arial;' textLength='50.08px' lengthAdjust='spacingAndGlyphs'>Stereo</text>
-<text x='184.61' y='261.90' text-anchor='middle' style='font-size: 17.00px; font-family: Arial;' textLength='69.93px' lengthAdjust='spacingAndGlyphs'>Surround</text>
-<text x='256.73' y='261.90' text-anchor='middle' style='font-size: 17.00px; font-family: Arial;' textLength='35.91px' lengthAdjust='spacingAndGlyphs'>Auro</text>
-<text x='184.61' y='292.02' text-anchor='middle' style='font-size: 17.00px; font-family: Arial;' textLength='53.83px' lengthAdjust='spacingAndGlyphs'>Format</text>
-<text transform='translate(17.16,117.12) rotate(-90)' text-anchor='middle' style='font-size: 17.00px; font-family: Arial;' textLength='116.55px' lengthAdjust='spacingAndGlyphs'>Transcendence</text>
+<text x='112.50' y='261.90' text-anchor='middle' style='font-size: 17.00px; font-family: "Arial";' textLength='50.08px' lengthAdjust='spacingAndGlyphs'>Stereo</text>
+<text x='184.61' y='261.90' text-anchor='middle' style='font-size: 17.00px; font-family: "Arial";' textLength='69.93px' lengthAdjust='spacingAndGlyphs'>Surround</text>
+<text x='256.73' y='261.90' text-anchor='middle' style='font-size: 17.00px; font-family: "Arial";' textLength='63.30px' lengthAdjust='spacingAndGlyphs'>Auro-3D</text>
+<text x='184.61' y='292.02' text-anchor='middle' style='font-size: 17.00px; font-family: "Arial";' textLength='53.83px' lengthAdjust='spacingAndGlyphs'>Format</text>
+<text transform='translate(17.16,117.12) rotate(-90)' text-anchor='middle' style='font-size: 17.00px; font-family: "Arial";' textLength='116.55px' lengthAdjust='spacingAndGlyphs'>Transcendence</text>
 </g>
 </svg>
