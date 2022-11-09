@@ -1,11 +1,12 @@
 ---
-title: Intensified Emotions due to 3D Audio? Comparative Reanalysis of a Data set
-  on the Emotional Listening Experience in Stereo, 5.1 Surround Sound and 3D Audio
+title: Intensified Emotions due to Immersive 3D Audio? Reanalysis
+  of Data From a Study by Hahn (2018) on the Emotional Effects of
+  Music Presented in Various Audio Formats
 author: "Kilian Sander, Yves Wycisk, Reinhard Kopiez"
 date: '2022'
 output:
-  word_document: default
   html_document: default
+  word_document: default
 csl: inst/apa.csl
 bibliography: "inst/reanalysis_3d-audio_gems_hahn.bib"
 ---
@@ -101,7 +102,7 @@ vars_vector <- sapply(formats,
                         paste0(format, "_", gems_factors)
                       },
                       USE.NAMES = F) %>% as.vector()
-data_long_mult <- data_filtered %>% select(participant, vars_vector)
+data_long_mult <- data_filtered %>% select(participant, all_of(vars_vector))
 names(data_long_mult) <- names(data_long_mult) %>%
   gsub("joyful_activation", "joyfulactivation", .)
 data_long_mult <- data_long_mult %>%
@@ -182,7 +183,7 @@ ggboxplot(data_long_mult, x = "format", y = "transcendence", add = "point")
 ```
 
 ##### Normality: Shapiro-Wilk Test and QQ-Plots
-```{r anova normality, echo=FALSE}
+```{r anova normality, echo=FALSE, warning=FALSE}
 data_long_mult %>% group_by(format) %>%
   shapiro_test(transcendence) %>%
   select(!variable) %>%
@@ -444,7 +445,7 @@ imei_data_long_anova %>% ggboxplot(x = "version", y = "imei") +
 imei_data_long_anova %>% group_by(version) %>% identify_outliers(imei)
 ```
 ### Normality: Shapiro-Wilk Test and QQ-Plots
-```{r imei anova normality, echo=FALSE}
+```{r imei anova normality, echo=FALSE, warning=FALSE}
 imei_data_long_anova %>% group_by(version) %>% shapiro_test(imei) %>%
   select(!variable) %>%
   knitr::kable(align = "lcc",
