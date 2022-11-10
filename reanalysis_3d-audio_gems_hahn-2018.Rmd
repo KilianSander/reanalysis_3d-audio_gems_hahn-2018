@@ -228,6 +228,62 @@ transcendence_res %>% mutate(ges = transcendence_ges) %>%
 GEMS factors are on a 5-point Likert scale coded from 1 to 5.
 Plot was exported from JASP [@JASP].
 
+```{r, transcendence contrasts, echo=FALSE}
+data_wide_transcendence <- data_long_single %>%
+  filter(factor == "Transcendence") %>%
+  mutate(across(where(is.character), tolower)) %>%
+  mutate(across(where(is.factor), tolower)) %>%
+  pivot_wider(id_cols = participant,
+              values_from = score,
+              names_from = c(format, factor),
+              names_sep = "_") %>%
+  mutate(diff_stereo_surround = surround_transcendence - stereo_transcendence,
+         diff_stereo_auro = auro_transcendence - stereo_transcendence,
+         diff_surround_auro = auro_transcendence - surround_transcendence)
+
+transcendence_contrasts <- data_wide_transcendence %>%
+  select(participant, starts_with("diff")) %>%
+  pivot_longer(starts_with("diff"),
+               names_to = "contrast",
+               values_to = "diff",
+               names_prefix = "diff_") %>%
+  group_by(contrast) %>%
+  summarise(mean_diff = mean(diff),
+            sd_diff = sd(diff)) %>%
+  mutate(format1 = str_split(contrast, "_") %>%
+           lapply(function(x) x[[1]]) %>% unlist,
+         format2 = str_split(contrast, "_") %>%
+           lapply(function(x) x[[2]]) %>% unlist)
+transcendence_contrasts$sd_diff_pooled <-
+  sapply(1:3,
+         function(n) {
+      .5 * (
+        sd(data_wide_transcendence[[str_c(transcendence_contrasts$format1[[n]], "_transcendence")]]) +
+          sd(data_wide_transcendence[[str_c(transcendence_contrasts$format2[[n]], "_transcendence")]]))
+           })
+transcendence_contrasts$sd_diff_d_rm <-
+  sapply(1:3,
+         function(n) {
+           format1 <-
+             str_c(transcendence_contrasts$format1[[n]],
+                   "_transcendence")
+           format2 <-
+             str_c(transcendence_contrasts$format2[[n]],
+                   "_transcendence")
+           sd1 <- sd(data_wide_transcendence[[format1]])
+           sd2 <- sd(data_wide_transcendence[[format2]])
+           cor12 <- cor(data_wide_transcendence[[format1]],
+                        data_wide_transcendence[[format2]])
+           out <- sqrt(2 * (1 - cor12)) /
+             sqrt(sd1 ^ 2 + sd2 ^ 2 - 2 * cor12 * sd1 * sd2)
+           out
+         })
+transcendence_contrasts <- transcendence_contrasts %>%
+  mutate(cohens_d_z = mean_diff / sd_diff,
+         cohens_d_av = mean_diff / sd_diff_pooled,
+         cohens_d_rm = sd_diff_d_rm * mean_diff)
+transcendence_contrasts %>% knitr::kable()
+```
 
 |Contrasts         |Estimate|CI LL  |CI UL  |SE     |df   |$t$  |$p$     |
 |:-----------------|:------:|:-----:|:-----:|:-----:|:---:|:---:|:------:|
