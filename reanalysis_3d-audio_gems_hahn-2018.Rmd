@@ -282,7 +282,8 @@ transcendence_contrasts <- transcendence_contrasts %>%
   mutate(cohens_d_z = mean_diff / sd_diff,
          cohens_d_av = mean_diff / sd_diff_pooled,
          cohens_d_rm = sd_diff_d_rm * mean_diff)
-transcendence_contrasts %>% knitr::kable()
+transcendence_contrasts %>% select(-c(format1, format2)) %>%
+  knitr::kable()
 ```
 
 |Contrasts         |Estimate|CI LL  |CI UL  |SE     |df   |$t$  |$p$     |
