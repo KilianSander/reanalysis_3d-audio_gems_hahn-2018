@@ -355,8 +355,8 @@ cor_surround_auro <-
            method = "pearson",
            conf.level = .95)
 cor_table <- data.frame(Formats = c("Stereo -- Surround",
-                                    "Stereo -- Auro",
-                                    "Surround -- Auro"),
+                                    "Stereo -- Auro-3D",
+                                    "Surround -- Auro-3D"),
                         r = c(cor_stereo_surround$estimate,
                               cor_stereo_auro$estimate,
                               cor_surround_auro$estimate),
@@ -413,7 +413,7 @@ get_cle <- function(mean1, mean2, sd1, sd2, r12) {
 }
 ```
 ```{r cle table}
-cle_table <- data.frame(format1 = c("Auro", "Auro", "Surround"),
+cle_table <- data.frame(format1 = c("Auro-3D", "Auro-3D", "Surround"),
                         format2 = c("Surround", "Stereo", "Stereo"))
 cle_table$cle <-
   mapply(function(f1, f2) {
