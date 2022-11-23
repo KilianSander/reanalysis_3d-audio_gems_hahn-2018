@@ -1,0 +1,291 @@
+---
+title: "Intensified Emotions due to Immersive 3D Audio? Reanalysis of Data From a Study by Hahn (2018) on the Emotional Effects of Music Presented in Various Audio Formats"
+author: "Kilian Sander, Yves Wycisk, Reinhard Kopiez"
+date: "2022"
+format:
+  html: default
+  docx: default
+csl: inst/apa.csl
+bibliography: "inst/reanalysis_3d-audio_gems_hahn.bib"
+---
+# Data set from @hahn_musical_2018
+## Preparation
+### Data, Packages, and Design
+Load the data:
+```{r dataset}
+#| message: false
+load("data/data_raw.Rda")
+```
+Load relevant packages:
+```{r packages}
+#| message: false
+#| warning: false
+#| results: hide
+sapply(c("tidyverse", "MANOVA.RM", "rstatix", "ggpubr",
+         "afex", "emmeans", "ggbeeswarm", "pwr", "sjstats"),
+       require, character.only = T)
+afex_options(emmeans_model = "univariate",
+             include_aov = TRUE)
+```
+Prepare the design with vectors:
+```{r formats and GEMS}
+#| message: false
+formats <- c("stereo", "surround", "auro")
+gems_factors <- c("wonder", "transcendence", "tenderness", "nostalgia",
+                  "peacefulness", "power", "joyful_activation", "tension",
+                  "sadness")
+# item to factor mapping
+wonder <- c("moved", "filled_with_wonder", "allured")
+transcendence <- c("feeling_of_transcendence", "fascinated", "overwhelmed")
+tenderness <- c("affectionate", "tender", "mellowed")
+nostalgia <- c("sentimental", "dreamy", "nostalgic")
+peacefulness <- c("calm", "serene", "soothed")
+power <- c("energetic", "triumphant", "strong")
+joyful_activation <- c("joyful", "animated", "bouncy")
+tension <- c("agitated", "nervous", "tense")
+sadness <- c("sad", "sorrowful", "tearful")
+```
+### Filtering
+Exclude a participant if there are at least two `NA`s for a GEMS factor of one stimulus:
+```{r filter cases}
+#| message: false
+data_raw$complete <- TRUE
+for (p in data_raw$participant) {
+  part_data <- data_raw %>% filter(participant == p)
+  for (excerpt in c("a", "b")) {
+    for (format in formats) {
+      for (factor in gems_factors) {
+        temp_data <- part_data %>%
+          dplyr::select(starts_with(paste(excerpt, format, get(factor), sep = "_")))
+        nas <- temp_data %>% t() %>% is.na() %>% sum()
+        if (nas > 1) {
+          data_raw$complete[p] <- FALSE
+        }
+      }
+    }
+  }
+}
+rm(part_data, temp_data, nas, p, format, excerpt)
+data_filtered <- data_raw %>% filter(complete==TRUE)
+N <- length(data_filtered$participant)
+```
+After removing incomplete cases the data set contains `r N` participants.
+
+### Scoring
+Calculate mean values for each item per format:
+```{r item means}
+#| message: false
+#| warning: false
+for (format in formats) {
+  for (factor in gems_factors) {
+    for (item in get(factor)) {
+      item_mean_vector <- data_filtered %>%
+        select(ends_with(paste0(format, "_", item))) %>%
+        rowMeans(na.rm = TRUE)
+      eval(str2expression(paste0("data_filtered$",
+                                 format, "_", item,
+                                 " <- item_mean_vector")))
+    }
+  }
+}
+rm(item, item_mean_vector)
+data_filtered <- data_filtered %>% mutate_all(~ifelse(is.nan(.), NA, .))
+```
+Calculate the mean of each factor per format across its items:
+```{r factor means}
+#| message: false
+#| warning: false
+for (format in formats) {
+  for (factor in gems_factors) {
+    factor_mean_vector <- data_filtered %>%
+      select(paste0(format, "_", get(factor))) %>% 
+      rowMeans(na.rm = TRUE)
+    eval(str2expression(paste0("data_filtered$",
+                                 format, "_", factor,
+                                 " <- factor_mean_vector")))
+  }
+}
+rm(format, factor, factor_mean_vector)
+```
+
+### Long format
+```{r long formats}
+#| message: false
+#| warning: false
+vars_vector <- sapply(formats,
+                      function(format) {
+                        paste0(format, "_", gems_factors)
+                      },
+                      USE.NAMES = F) %>% as.vector()
+data_long_mult <- data_filtered %>% select(participant, all_of(vars_vector))
+names(data_long_mult) <- names(data_long_mult) %>%
+  gsub("joyful_activation", "joyfulactivation", .)
+data_long_mult <- data_long_mult %>%
+  pivot_longer(!participant,
+               names_to = c("format", ".value"),
+               names_pattern = "(.*)_(.*)")
+data_long_single <- data_long_mult %>%
+  pivot_longer(!c(participant, format),
+               values_to = "score",
+               names_to = "factor") %>% 
+  mutate(factor = recode(factor,
+                         joyfulactivation = "joyful activation") %>% tools::toTitleCase(),
+         format = format %>% tools::toTitleCase() %>%
+           recode(Auro = "Auro-3D") %>% as_factor())
+names(data_long_mult) <- names(data_long_mult) %>%
+  gsub("joyfulactivation", "joyful_activation", .)
+data_long_mult$format <- data_long_mult$format %>%
+  tools::toTitleCase() %>%
+  recode(Auro = "Auro-3D") %>%
+  as_factor()
+```
+
+## Analyses
+### Descriptives
+```{r age summary}
+#| include: false
+age_summary <- summary(data_filtered$age)
+```
+Out of the `r N` participants `r table(data_filtered$gender)[["female"]]`
+indicated "female" as their gender whereas `r table(data_filtered$gender)[["male"]]`
+indicated "male".
+The participants' age ranged from `r age_summary[[1]]` to `r age_summary[[6]]`
+with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
+
+```{r descriptives}
+#| echo: false
+#| message: false
+#| warning: false
+descriptives <- data_long_single %>%
+  group_by(factor, format) %>%
+  summarise(M = mean(score), SD = sd(score))
+descriptives %>% 
+  knitr::kable(col.names = c("GEMS Factor", "Format", "$M$", "$SD$"),
+               align = "llcc")
+```
+```{r mean plot}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 10
+data_long_single %>% group_by(format, factor) %>%
+  mutate(format = format %>% as.character() %>%
+           tools::toTitleCase() %>%
+           recode("Auro" = "Auro-3D") %>%
+           as_factor()) %>%
+  summarise(M = mean(score), SD = sd(score)) %>%
+  ggplot(., aes(x = factor, y = M, color = format)) +
+  geom_point(aes(shape = format)) +
+  geom_path(aes(group = format, linetype = format)) +
+  ylim(1,5) +
+  theme_pubr() +
+  theme(legend.position = c(.99,.99),
+        legend.justification = c(1,1)
+        ) +
+  xlab("GEMS Factor") +
+  ylab("Mean") +
+  labs(color = "Format", shape = "Format", linetype = "Format")
+```
+
+### Multivariate Analysis of Variance
+
+```{r manova}
+#rm_manova <-
+#  multRM(formula = cbind(wonder, transcendence, tenderness,
+#                         nostalgia, peacefulness, power,
+#                         joyful_activation, tension, sadness) ~ format,
+#         data = data_long_mult,
+#         subject = "participant",
+#         within = "format",
+#         para = TRUE,
+#         iter = 50000,
+#         dec = 5,
+#         seed = 987)
+load(file = "results/rm_manova.Rda")
+summary(rm_manova)
+```
+### Analysis of Variance for *Transcendence*
+#### Assumption Checks
+##### Extreme Outliers
+```{r anova outliers}
+data_long_mult %>% group_by(format) %>%
+  select(format, participant, transcendence) %>%
+  identify_outliers(transcendence) %>% 
+  filter(is.outlier)
+ggboxplot(data_long_mult, x = "format", y = "transcendence", add = "point")
+```
+
+##### Normality: Shapiro-Wilk Test and QQ-Plots
+```{r anova normality}
+#| echo: false
+#| warning: false
+data_long_mult %>% group_by(format) %>%
+  shapiro_test(transcendence) %>%
+  select(!variable) %>%
+  knitr::kable(align = "lcc",
+               col.names = c("Version", "Test Statistic", "$p$"))
+ggqqplot(data_long_mult, "transcendence", facet.by = "format")
+```
+
+##### Mauchly's Test for Sphericity
+```{r anova}
+transcendence_anova <-
+  anova_test(data = data_long_mult,
+             dv = transcendence,
+             wid = participant,
+             within = format,
+             type = 3,
+             effect.size = "pes")
+transcendence_ges <- anova_test(data = data_long_mult,
+           dv = transcendence,
+           wid = participant,
+           within = format,
+           type = 3,
+           effect.size = "ges")$ANOVA$ges
+transcendence_anova$`Mauchly's Test for Sphericity` %>%
+  knitr::kable(col.names = c("Effect", "$W$", "$p$", "$p<.05$"),
+               align = "lccc")
+```
+#### Results
+```{r anova results}
+#| echo: false
+transcendence_res <- get_anova_table(transcendence_anova)
+class(transcendence_res) <- "data.frame"
+transcendence_res %>% mutate(ges = transcendence_ges) %>%
+  select(!`p<.05`) %>% knitr::kable(col.names = c("Effect", "DFn", "DFd",
+                                                  "$F$", "$p$",
+                                                  "$\\eta^2_p$",
+                                                  "$\\eta^2_G$"))
+```
+
+```{r, error plor}
+transcendence_anova_afex <-
+  aov_car(transcendence ~ format + Error(participant/format),
+          data_long_mult,
+          include_aov = TRUE,
+          emmeans_model = "univariate")
+transcendence_anova_afex$aov %>% sjstats::anova_stats()
+afex_plot(transcendence_anova_afex,
+          x = "format",
+          data_plot = FALSE,
+          error = "within",
+          error_ci = TRUE,
+          error_level = .95,
+          error_arg = list(width = .1),
+          emmeans_arg = list(model = "univariate")) +
+  ylim(2.4, 3.2) +
+  ylab("Transcendence") +
+  scale_x_discrete(name = "Format",
+                   labels = c("stereo" = "Stereo",
+                              "surround" = "Surround",
+                              "auro" = "Auro-3D")) +
+  theme_pubr()
+```
+
+```{r contrasts}
+contrast(emmeans(transcendence_anova_afex,
+                 ~ format),
+         method = "revpairwise", adjust = "holm") %>%
+  knitr::kable(col.names = c("Contrast", "Mean Difference", "$SE$", "df", "$t$", "$p$"))
+```
+
