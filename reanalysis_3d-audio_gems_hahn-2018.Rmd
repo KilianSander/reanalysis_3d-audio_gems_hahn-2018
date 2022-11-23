@@ -322,8 +322,12 @@ contrast(emmeans(aov_car(transcendence ~ format + Error(participant/format),
                          data_long_mult, include_aov = TRUE,
                          emmeans_model = "univariate"),
                  ~ format),
-         method = "revpairwise", adjust = "holm")
-
+         method = "revpairwise", adjust = "holm") # adjust = "none" to match JASP results
+cat("\n")
+eff_size(emmeans(transcendence_anova_afex, ~ format),
+         edf = df.residual(transcendence_anova_afex$lm),
+         sigma = sqrt(mean(sigma(transcendence_anova_afex$lm)^2)),
+         level = 1 - .05/3) # matching JASP results
 ```
 
 |Contrasts         |Estimate|CI LL  |CI UL  |SE     |df   |$t$  |$p$     |
