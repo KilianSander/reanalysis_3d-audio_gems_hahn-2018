@@ -234,10 +234,12 @@ transcendence_res %>% mutate(ges = transcendence_ges) %>%
 ```
 
 ```{r, error plor}
-afex_plot(aov_car(transcendence ~ format + Error(participant/format),
-                  data_long_mult,
-                  include_aov = TRUE,
-                  emmeans_model = "univariate"),
+transcendence_anova_afex <-
+  aov_car(transcendence ~ format + Error(participant/format),
+          data_long_mult,
+          include_aov = TRUE,
+          emmeans_model = "univariate")
+afex_plot(transcendence_anova_afex,
           x = "format",
           data_plot = FALSE,
           error = "within",
@@ -310,20 +312,29 @@ transcendence_contrasts$sd_diff_d_rm <-
              sqrt(sd1 ^ 2 + sd2 ^ 2 - 2 * cor12 * sd1 * sd2)
            out
          })
+correct_d_to_g <- function(d, N) {
+  g <-  d * (1 - (3 / (8 * N - 9)))
+  g
+}
 transcendence_contrasts <- transcendence_contrasts %>%
   mutate(cohens_d_z = mean_diff / sd_diff,
          cohens_d_av = mean_diff / sd_diff_pooled,
-         cohens_d_rm = sd_diff_d_rm * mean_diff)
-transcendence_contrasts %>% select(-c(format1, format2)) %>%
+         cohens_d_rm = sd_diff_d_rm * mean_diff,
+         hedges_g_av = correct_d_to_g(cohens_d_av, N),
+         hedges_g_rm = correct_d_to_g(cohens_d_rm, N))
+transcendence_contrasts %>% select(-c(format1, format2, starts_with("sd"))) %>%
   knitr::kable()
 ```
 ```{r, transcendence contrasts}
-contrast(emmeans(aov_car(transcendence ~ format + Error(participant/format),
-                         data_long_mult, include_aov = TRUE,
-                         emmeans_model = "univariate"),
-                 ~ format),
-         method = "revpairwise", adjust = "holm") # adjust = "none" to match JASP results
-cat("\n")
+transcendence_anova_contrasts <-
+  contrast(emmeans(aov_car(transcendence ~ format + Error(participant/format),
+                           data_long_mult, include_aov = TRUE,
+                           emmeans_model = "univariate"),
+                   ~ format),
+           method = "revpairwise", adjust = "holm") # adjust = "none" to match JASP results
+cbind(confint(transcendence_anova_contrasts, level = .95),
+      transcendence_anova_contrasts %>% as.data.frame %>% select(c(t.ratio, p.value)))
+
 eff_size(emmeans(transcendence_anova_afex, ~ format),
          edf = df.residual(transcendence_anova_afex$lm),
          sigma = sqrt(mean(sigma(transcendence_anova_afex$lm)^2)),
