@@ -18,7 +18,7 @@ must be present in the same directory.
 * filtered data set with calculated scores in wide format (`data_filtered.Rda` and `data_filtered.csv`)
 * outlier-adjusted data set from Wycisk et al. (2022) in long format (`imei_data_outlier_adjusted.Rda` and `imei_data_outlier_adjusted.csv`)
 
-`inst/` contains the `apa.csl` citation style language file and the bibliography file `reanalysis_3d-audio_gems_hahn.bib` which is formatted according to biblatex-apa. They are used for referencing in the Quarto document.
+`inst/` contains the `apa.csl` citation style language file and the bibliography file `reanalysis_3d-audio_gems_hahn.bib` which is formatted according to biblatex-apa. They are used for citations in the Quarto document.
 
 `results/` contains some intermediate results and plots, e.g., the output of the multivariate analysis of variance (`rm_manova.Rda`).
 
