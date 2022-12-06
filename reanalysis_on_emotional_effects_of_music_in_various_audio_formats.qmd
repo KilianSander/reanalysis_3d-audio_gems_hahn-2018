@@ -261,7 +261,7 @@ transcendence_res %>% mutate(ges = transcendence_ges) %>%
                                                   "$\\eta^2_G$"))
 ```
 
-```{r, error plor}
+```{r, error plot}
 transcendence_anova_afex <-
   aov_car(transcendence ~ format + Error(participant/format),
           data_long_mult,
