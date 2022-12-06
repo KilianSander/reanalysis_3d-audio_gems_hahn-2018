@@ -1,9 +1,10 @@
 ---
-title: "Intensified Emotions due to Immersive 3D Audio? Reanalysis of Data From a Study by Hahn (2018) on the Emotional Effects of Music Presented in Various Audio Formats"
+title: "Supplementary Materials: Added Emotional Value by Immersive 3D Audio? Reanalysis of Data From a Study by Hahn (2018) on the Emotional Effects of Music Presented in Various Audio Formats"
 author: "Kilian Sander, Yves Wycisk, Reinhard Kopiez"
 date: "2022"
 format:
-  html: default
+  html:
+    toc: true
   docx: default
 csl: inst/apa.csl
 bibliography: "inst/reanalysis_3d-audio_gems_hahn.bib"
@@ -66,10 +67,10 @@ for (p in data_raw$participant) {
   }
 }
 rm(part_data, temp_data, nas, p, format, excerpt)
-data_filtered <- data_raw %>% filter(complete==TRUE)
+data_filtered <- data_raw %>% filter(complete)
 N <- length(data_filtered$participant)
 ```
-After removing incomplete cases the data set contains `r N` participants.
+After removing invalid cases the data set contains `r N` participants.
 
 ### Scoring
 Calculate mean values for each item per format:
@@ -108,7 +109,7 @@ for (format in formats) {
 rm(format, factor, factor_mean_vector)
 ```
 
-### Long format
+### Long Format
 ```{r long formats}
 #| message: false
 #| warning: false
@@ -129,7 +130,8 @@ data_long_single <- data_long_mult %>%
                values_to = "score",
                names_to = "factor") %>% 
   mutate(factor = recode(factor,
-                         joyfulactivation = "joyful activation") %>% tools::toTitleCase(),
+                         joyfulactivation = "joyful activation") %>%
+           tools::toTitleCase(),
          format = format %>% tools::toTitleCase() %>%
            recode(Auro = "Auro-3D") %>% as_factor())
 names(data_long_mult) <- names(data_long_mult) %>%
@@ -201,6 +203,7 @@ data_long_single %>% group_by(format, factor) %>%
 #         iter = 50000,
 #         dec = 5,
 #         seed = 987)
+#save(rm_manova, file = "results/rm_manova.Rda")
 load(file = "results/rm_manova.Rda")
 summary(rm_manova)
 ```
@@ -286,6 +289,276 @@ afex_plot(transcendence_anova_afex,
 contrast(emmeans(transcendence_anova_afex,
                  ~ format),
          method = "revpairwise", adjust = "holm") %>%
-  knitr::kable(col.names = c("Contrast", "Mean Difference", "$SE$", "df", "$t$", "$p$"))
+  knitr::kable(col.names = c("Contrast", "Mean Difference",
+                             "$SE$", "df", "$t$", "$p$"))
 ```
 
+### Effect Sizes for Contrasts
+Calculate correlations:
+```{r correlations}
+cor_stereo_surround <-
+  cor.test(data_filtered$stereo_transcendence,
+           data_filtered$surround_transcendence,
+           alternative = "greater",
+           method = "pearson",
+           conf.level = .95)
+cor_stereo_auro <-
+  cor.test(data_filtered$stereo_transcendence,
+           data_filtered$auro_transcendence,
+           alternative = "greater",
+           method = "pearson",
+           conf.level = .95)
+cor_surround_auro <-
+  cor.test(data_filtered$surround_transcendence,
+           data_filtered$auro_transcendence,
+           alternative = "greater",
+           method = "pearson",
+           conf.level = .95)
+cor_table <- data.frame(Formats = c("Stereo -- Surround",
+                                    "Stereo -- Auro-3D",
+                                    "Surround -- Auro-3D"),
+                        r = c(cor_stereo_surround$estimate,
+                              cor_stereo_auro$estimate,
+                              cor_surround_auro$estimate),
+                        p = c(cor_stereo_surround$p.value,
+                              cor_stereo_auro$p.value,
+                              cor_surround_auro$p.value),
+                        LL = c(cor_stereo_surround$conf.int[1],
+                              cor_stereo_auro$conf.int[1],
+                              cor_surround_auro$conf.int[1]),
+                        UL = c(cor_stereo_surround$conf.int[2],
+                              cor_stereo_auro$conf.int[2],
+                              cor_surround_auro$conf.int[2])) %>%
+  mutate(`Fisher's z` = atanh(r),
+         p = sapply(p,
+                    function(x) ifelse(x < 10^-3, "< .001", x)))
+```
+@lakens_calculating_2013 provides an overview of different effect sizes.
+We use $d_Z$, $d_{av}$, $d_{rm}$, $g_{av}$, and $g_{rm}$, which are
+variants of Cohen's $d$ and Hedges $g$, and the *Common Language Effect Size*
+[CLE, @mcgraw_common_1992].
+The CLE expresses "the probability that an
+individual has a higher value on one measurement than the other"
+[@lakens_calculating_2013, p.4].
+The CLE is therefore the probability that a $Z$-score is greater than a
+specific $Z_{\textrm{CLE}}$ (given a standard normal distribution).
+For repeated measures the $Z_{\textrm{CLE}}$ is calculated from the means
+and standard deviations from two measurements as well as their correlation
+[@mcgraw_common_1992]:
+$$
+Z_{\textrm{CLE}} =
+\frac{M_2 - M_1}{\sqrt{SD_1^2+SD_2^2-2\cdot{}SD_1\cdot{}SD_2\cdot{}r_{12}}}
+$$
+```{r effect size formulas}
+get_d_Z <- function(mean_diff, sd_diff) {
+  d_Z <- mean_diff / sd_diff
+  d_Z
+}
+get_d_av <- function(mean_diff, sd1, sd2) {
+  d_av <- mean_diff / ((sd1 + sd2) / 2)
+  d_av
+}
+get_s_diff <- function(sd1, sd2, cor12) {
+  s_diff <- sqrt(sd1^2 + sd2^2 - 2 * cor12 * sd1 * sd2)
+  s_diff
+}
+get_d_rm <- function(mean_diff, sd1, sd2, cor12) {
+  s_diff <- get_s_diff(sd1 = sd1, sd2 = sd2, cor12 = cor12)
+  d_rm <- mean_diff / s_diff * sqrt(2 * (1 - cor12))
+  d_rm
+}
+correct_d_to_g <- function(d, N) {
+  g <-  d * (1 - (3 / (8 * N - 9)))
+  g
+}
+get_cle <- function(mean1, mean2, sd1, sd2, cor12) {
+  Z_cle <- (mean2 - mean1) / get_s_diff(sd1 = sd1, sd2 = sd2, cor12 = cor12)
+  Z_cle %>% pnorm(lower.tail = F)
+}
+```
+```{r contrast effect sizes}
+transcendence_differences <- data_long_single %>%
+  filter(factor == "Transcendence") %>%
+  mutate(format = format %>% tolower() %>%
+           gsub("auro-3d", "auro", .),
+         factor = factor %>% tolower()) %>%
+  pivot_wider(id_cols = participant,
+              values_from = score,
+              names_from = c(format, factor),
+              names_sep = "_") %>%
+  mutate(diff_stereo_surround = surround_transcendence - stereo_transcendence,
+         diff_stereo_auro = auro_transcendence - stereo_transcendence,
+         diff_surround_auro = auro_transcendence - surround_transcendence)
+transcendence_effsizes <- transcendence_differences %>%
+  select(participant, starts_with("diff")) %>%
+  pivot_longer(starts_with("diff"),
+               names_to = "contrast",
+               values_to = "diff",
+               names_prefix = "diff_") %>%
+  group_by(contrast) %>%
+  summarise(mean_diff = mean(diff),
+            sd_diff = sd(diff)) %>%
+  mutate(format1 = str_split(contrast, "_") %>%
+           lapply(function(x) x[[1]]) %>% unlist,
+         format2 = str_split(contrast, "_") %>%
+           lapply(function(x) x[[2]]) %>% unlist) %>%
+  mutate(cohens_d_Z = get_d_Z(mean_diff = mean_diff, sd_diff = sd_diff),
+         cohens_d_av = sapply(1:length(.$format1),
+                              function(x) {
+                                f1 <- format1[[x]]
+                                f2 <- format2[[x]]
+                                get_d_av(mean_diff = mean_diff[[x]],
+                                         sd1 = sd(transcendence_differences[[
+                                           str_c(f1, "_transcendence")]]),
+                                         sd2 = sd(transcendence_differences[[
+                                           str_c(f2, "_transcendence")]]))
+                              }),
+         cohens_d_rm = sapply(1:length(.$format1),
+                              function(x) {
+                                f1 <- format1[[x]]
+                                f2 <- format2[[x]]
+                                cor_str <-
+                                  str_c(f1, " -- ", ifelse(f2 == "auro",
+                                                           "Auro-3D", f2)) %>%
+                                  tools::toTitleCase()
+                                get_d_rm(mean_diff = mean_diff[[x]],
+                                         sd1 = sd(transcendence_differences[[
+                                           str_c(f1, "_transcendence")]]),
+                                         sd2 = sd(transcendence_differences[[
+                                           str_c(f2, "_transcendence")]]),
+                                         cor12 = cor_table$r[
+                                           cor_table$Formats == cor_str])
+                              }),
+         hedges_g_av = correct_d_to_g(cohens_d_av, N),
+         hedges_g_rm = correct_d_to_g(cohens_d_rm, N),
+         cle = sapply(1:length(.$format1),
+                      function(x) {
+                        f2 <- format1[[x]]
+                        f1 <- format2[[x]]
+                        cor_str <-
+                          str_c(f2, " -- ", ifelse(f1 == "auro",
+                                                   "Auro-3D", f1)) %>%
+                          tools::toTitleCase()
+                        mean1 <- mean(transcendence_differences[[
+                          str_c(f1, "_transcendence")]])
+                        mean2 <- mean(transcendence_differences[[
+                          str_c(f2, "_transcendence")]])
+                        sd1 <- sd(transcendence_differences[[
+                          str_c(f1, "_transcendence")]])
+                        sd2 <- sd(transcendence_differences[[
+                          str_c(f2, "_transcendence")]])
+                        cor12 <- cor_table$r[cor_table$Formats == cor_str]
+                        get_cle(mean1 = mean1, mean2 = mean2,
+                                sd1 = sd1, sd2 = sd2, cor12 = cor12)
+                      }))
+transcendence_effsizes %>%
+  mutate(contrast = str_c(format1, " -- ", format2) %>%
+           gsub("auro", "Auro-3D", .) %>%
+           tools::toTitleCase()) %>%
+  select(-c(format1, format2, ends_with("_diff"))) %>%
+  knitr::kable(col.names = c("Contrast", "$d_Z$", "$d_{av}$", "$d_{rm}$",
+                             "$g_{av}$", "$g_{rm}$", "CLE"),
+               align = "lcccccc")
+```
+
+
+### Correlations
+```{r correlations table, echo=FALSE}
+knitr::kable(cor_table %>% 
+  mutate(across(where(is.numeric), round, digits = 4)),
+             col.names = c("Formats", "$r$", "$p$", "CI LL",
+                           "CI UL", "Fisher's $z$"),
+             align = "lccccc")
+```
+
+To get a mean correlation, individual correlation coefficients have to be
+Fisher $z$-transformed [@corey_averaging_1998].
+The Fisher $z$-transformation is equivalent to the inverse hyperbolic tangent.
+```{r average correlations}
+avg_cor_z <- mean(cor_table$`Fisher's z`)
+avg_cor_r <- tanh(avg_cor_z)
+```
+Taking the averaged Fisher $z$-transformed values results in a value of
+`r round(avg_cor_z, 4)`.
+Back-transformed to Person's $r$ the average correlation between the three
+audio formats for the GEMS factor Transcendence is `r round(avg_cor_r, 4)`.
+
+# Data set from @wycisk_wrapped_2022
+## Preparation
+Load the outlier-adjusted data from @wycisk_wrapped_2022 containing
+*N* = 190 participants.
+Then calculate the IMEI score, i.e., the average of the ten items, as
+well as the mean IMEI score per audio format.
+```{r imei data}
+imei_data <- read.csv("data/imei_data_outlier_adjusted.csv")
+imei_items <- paste0("imei", c(15,8,12,21,19,6,11,5,7,4))
+imei_data_long <- imei_data %>% select(participant, piece,
+                            version, all_of(imei_items)) %>%
+  mutate(piece = piece %>% recode("1" = "radio", "2" = "hantel",
+                                  "3" = "jene", "4" = "rokoko"),
+         version = version %>% recode("1" = "mono", "2" = "stereo",
+                                      "3" = "3d") %>% as_factor())
+imei_data_long$imei <- imei_data_long %>%
+  select(all_of(imei_items)) %>% rowMeans()
+imei_data_wide <- imei_data_long %>%
+  pivot_wider(id_cols = participant,
+              names_from = c(piece, version),
+              values_from = imei,
+              names_glue = "{piece}_{version}_imei")
+for (v in c("mono", "stereo", "3d")) {
+  temp <- imei_data_wide %>% select(contains(v)) %>% rowMeans()
+  eval(str2expression(paste0("imei_data_wide$mean_", v, "_imei <- temp")))
+}
+rm(temp, v)
+```
+
+## IMEI Correlations Across Audio Formats
+```{r imei correlations}
+imei_cor_mono_stereo <-
+  cor.test(imei_data_wide$mean_mono_imei, imei_data_wide$mean_stereo_imei,
+           alternative = "greater",
+           method = "pearson",
+           conf.level = .95)
+imei_cor_mono_3d <-
+  cor.test(imei_data_wide$mean_mono_imei, imei_data_wide$mean_3d_imei,
+           alternative = "greater",
+           method = "pearson",
+           conf.level = .95)
+imei_cor_stereo_3d <-
+  cor.test(imei_data_wide$mean_stereo_imei, imei_data_wide$mean_3d_imei,
+           alternative = "greater",
+           method = "pearson",
+           conf.level = .95)
+imei_cor_table <- data.frame(Formats = c("Mono -- Stereo",
+                                    "Mono -- 3D",
+                                    "Stereo -- 3D"),
+                             r = c(imei_cor_mono_stereo$estimate,
+                                   imei_cor_mono_3d$estimate,
+                                   imei_cor_stereo_3d$estimate),
+                             p = c(imei_cor_mono_stereo$p.value,
+                                   imei_cor_mono_3d$p.value,
+                                   imei_cor_stereo_3d$p.value),
+                             LL = c(imei_cor_mono_stereo$conf.int[1],
+                                    imei_cor_mono_3d$conf.int[1],
+                                    imei_cor_stereo_3d$conf.int[1]),
+                             UL = c(imei_cor_mono_stereo$conf.int[2],
+                                    imei_cor_mono_3d$conf.int[2],
+                                    imei_cor_stereo_3d$conf.int[2])) %>%
+  mutate(`Fisher's z` = atanh(r),
+         p = sapply(p,
+                    function(x) ifelse(x < 10^-3, "< .001", x))) %>%
+  add_row(Formats = "Average",
+          r = mean(.$r),
+          `Fisher's z` = mean(.$`Fisher's z`)) %>%
+  add_row(Formats = "Back-transformed Fisher's $z$ average",
+          r = tanh(.$`Fisher's z`[.$Formats == "Average"]))
+```
+```{r imei correlation table}
+#| echo: false
+options(knitr.kable.NA = "")
+imei_cor_table %>% knitr::kable(align = "lccccc",
+                                col.names = c("", "$r$", "$p$", "CI LL",
+                                              "CI UL", "Fisher's $z$"))
+```
+
+# References
