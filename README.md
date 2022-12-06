@@ -10,6 +10,8 @@ This repository supplements the paper <q>Added Emotional Value by Immersive 3D A
 
 `inst/` contains the `apa.csl` citation style language file and the bibliography file `reanalysis_3d-audio_gems_hahn.bib` which is formatted according to biblatex-apa. They are used for referencing in the Quarto document.
 
+`results/` contains some intermediate results and plots, e.g., the output of the multivariate analysis of variance (`rm_manova.Rda`).
+
 ## References
 Hahn, E. (2018, July 6&#8211;9). *Musical emotions evoked by 3D audio* [Conference paper]. AES Conference on Spatial Reproduction, Tokyo, Japan. http://www.aes.org/e-lib/browse.cfm?elib=19640
 
