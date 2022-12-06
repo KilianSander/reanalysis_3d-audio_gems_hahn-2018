@@ -2,6 +2,16 @@
 This repository supplements the paper <q>Added Emotional Value by Immersive 3D Audio? Reanalysis of Data from a Study by Hahn (2018) on the Emotional Effects of Music Presented in Various Audio Formats</q> by Kilian Sander, Yves Wycisk, and Reinhard Kopiez.
 
 ## Files
+All analyses are conducted within the Quarto document
+`reanalysis_on_emotional_effects_of_music_in_various_audio_formats.qmd`.
+In the rendered HTML version
+`reanalysis_on_emotional_effects_of_music_in_various_audio_formats.html`
+some code chunks are hidden
+(predominantly those concerning the appearance of outcomes).
+To correctly view the rendered HTML version, the folder
+`reanalysis_on_emotional_effects_of_music_in_various_audio_formats_files`
+must be present in the same directory.
+
 `data/` contains all data sets used in the analyses:
 
 * original data set from Hahn (2018) in wide format (`data_raw.Rda` and `data_raw.csv`).
