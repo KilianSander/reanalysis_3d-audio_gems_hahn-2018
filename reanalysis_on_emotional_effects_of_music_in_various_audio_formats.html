@@ -152,6 +152,7 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#preparation-1" id="toc-preparation-1" class="nav-link" data-scroll-target="#preparation-1">Preparation</a></li>
   <li><a href="#imei-correlations-across-audio-formats" id="toc-imei-correlations-across-audio-formats" class="nav-link" data-scroll-target="#imei-correlations-across-audio-formats">IMEI Correlations Across Audio Formats</a></li>
+  <li><a href="#imei-common-language-effect-sizes" id="toc-imei-common-language-effect-sizes" class="nav-link" data-scroll-target="#imei-common-language-effect-sizes">IMEI Common Language Effect Sizes</a></li>
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -992,6 +993,17 @@ Z_{\textrm{CLE}} =
 </table>
 </div>
 </div>
+<p>Using the correction formula for multiple groups from <span class="citation" data-cites="mcgraw_common_1992">McGraw &amp; Wong (<a href="#ref-mcgraw_common_1992" role="doc-biblioref">1992</a>)</span>, the CLE for higher values in Auro than in Stereo and Surround is:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>p_auro <span class="ot">&lt;-</span> .<span class="dv">88</span> <span class="sc">*</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prod</span>(transcendence_effsizes<span class="sc">$</span>cle[transcendence_effsizes<span class="sc">$</span>format2 <span class="sc">==</span> <span class="st">"auro"</span>]) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  .<span class="dv">11</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>p_auro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5498967</code></pre>
+</div>
+</div>
+<p>Thus, the probability that a random participant scored higher in Auro-3D than in Stereo and Surround is 54.99%.</p>
 </section>
 <section id="correlations" class="level3">
 <h3 class="anchored" data-anchor-id="correlations">Correlations</h3>
@@ -1039,8 +1051,8 @@ Z_{\textrm{CLE}} =
 </div>
 <p>To get a mean correlation, individual correlation coefficients have to be Fisher <span class="math inline">\(z\)</span>-transformed <span class="citation" data-cites="corey_averaging_1998">(<a href="#ref-corey_averaging_1998" role="doc-biblioref">Corey et al., 1998</a>)</span>. The Fisher <span class="math inline">\(z\)</span>-transformation is equivalent to the inverse hyperbolic tangent.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>avg_cor_z <span class="ot">&lt;-</span> <span class="fu">mean</span>(cor_table<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>avg_cor_r <span class="ot">&lt;-</span> <span class="fu">tanh</span>(avg_cor_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>avg_cor_z <span class="ot">&lt;-</span> <span class="fu">mean</span>(cor_table<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>avg_cor_r <span class="ot">&lt;-</span> <span class="fu">tanh</span>(avg_cor_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Taking the averaged Fisher <span class="math inline">\(z\)</span>-transformed values results in a value of 0.9619. Back-transformed to Person’s <span class="math inline">\(r\)</span> the average correlation between the three audio formats for the GEMS factor Transcendence is 0.7451.</p>
 </section>
@@ -1052,69 +1064,69 @@ Z_{\textrm{CLE}} =
 <h2 class="anchored" data-anchor-id="preparation-1">Preparation</h2>
 <p>Load the outlier-adjusted data from <span class="citation" data-cites="wycisk_wrapped_2022">Wycisk et al. (<a href="#ref-wycisk_wrapped_2022" role="doc-biblioref">2022</a>)</span> containing <em>N</em> = 190 participants. Then calculate the IMEI score, i.e., the average of the ten items, as well as the mean IMEI score per audio format.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>imei_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/imei_data_outlier_adjusted.csv"</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>imei_items <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"imei"</span>, <span class="fu">c</span>(<span class="dv">15</span>,<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">21</span>,<span class="dv">19</span>,<span class="dv">6</span>,<span class="dv">11</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">4</span>))</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>imei_data_long <span class="ot">&lt;-</span> imei_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(participant, piece,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                            version, <span class="fu">all_of</span>(imei_items)) <span class="sc">%&gt;%</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">piece =</span> piece <span class="sc">%&gt;%</span> <span class="fu">recode</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"radio"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"hantel"</span>,</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"jene"</span>, <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"rokoko"</span>),</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">version =</span> version <span class="sc">%&gt;%</span> <span class="fu">recode</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"mono"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"stereo"</span>,</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"3d"</span>) <span class="sc">%&gt;%</span> <span class="fu">as_factor</span>())</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>imei_data_long<span class="sc">$</span>imei <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(imei_items)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>()</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>imei_data_wide <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> participant,</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="fu">c</span>(piece, version),</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> imei,</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_glue =</span> <span class="st">"{piece}_{version}_imei"</span>)</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"mono"</span>, <span class="st">"stereo"</span>, <span class="st">"3d"</span>)) {</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  temp <span class="ot">&lt;-</span> imei_data_wide <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">contains</span>(v)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>()</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">eval</span>(<span class="fu">str2expression</span>(<span class="fu">paste0</span>(<span class="st">"imei_data_wide$mean_"</span>, v, <span class="st">"_imei &lt;- temp"</span>)))</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(temp, v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>imei_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/imei_data_outlier_adjusted.csv"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>imei_items <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"imei"</span>, <span class="fu">c</span>(<span class="dv">15</span>,<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">21</span>,<span class="dv">19</span>,<span class="dv">6</span>,<span class="dv">11</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">4</span>))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>imei_data_long <span class="ot">&lt;-</span> imei_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(participant, piece,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                            version, <span class="fu">all_of</span>(imei_items)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">piece =</span> piece <span class="sc">%&gt;%</span> <span class="fu">recode</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"radio"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"hantel"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"jene"</span>, <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"rokoko"</span>),</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">version =</span> version <span class="sc">%&gt;%</span> <span class="fu">recode</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"mono"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"stereo"</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"3d"</span>) <span class="sc">%&gt;%</span> <span class="fu">as_factor</span>())</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>imei_data_long<span class="sc">$</span>imei <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(imei_items)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>()</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>imei_data_wide <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> participant,</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="fu">c</span>(piece, version),</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> imei,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_glue =</span> <span class="st">"{piece}_{version}_imei"</span>)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"mono"</span>, <span class="st">"stereo"</span>, <span class="st">"3d"</span>)) {</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  temp <span class="ot">&lt;-</span> imei_data_wide <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">contains</span>(v)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>()</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">eval</span>(<span class="fu">str2expression</span>(<span class="fu">paste0</span>(<span class="st">"imei_data_wide$mean_"</span>, v, <span class="st">"_imei &lt;- temp"</span>)))</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(temp, v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="imei-correlations-across-audio-formats" class="level2">
 <h2 class="anchored" data-anchor-id="imei-correlations-across-audio-formats">IMEI Correlations Across Audio Formats</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>imei_cor_mono_stereo <span class="ot">&lt;-</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_mono_imei, imei_data_wide<span class="sc">$</span>mean_stereo_imei,</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>imei_cor_mono_3d <span class="ot">&lt;-</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_mono_imei, imei_data_wide<span class="sc">$</span>mean_3d_imei,</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>imei_cor_stereo_3d <span class="ot">&lt;-</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_stereo_imei, imei_data_wide<span class="sc">$</span>mean_3d_imei,</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>imei_cor_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Formats =</span> <span class="fu">c</span>(<span class="st">"Mono -- Stereo"</span>,</span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Mono -- 3D"</span>,</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Stereo -- 3D"</span>),</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">r =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>estimate,</span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_mono_3d<span class="sc">$</span>estimate,</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_stereo_3d<span class="sc">$</span>estimate),</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>                             <span class="at">p =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>p.value,</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_mono_3d<span class="sc">$</span>p.value,</span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_stereo_3d<span class="sc">$</span>p.value),</span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>                             <span class="at">LL =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_mono_3d<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_stereo_3d<span class="sc">$</span>conf.int[<span class="dv">1</span>]),</span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>                             <span class="at">UL =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_mono_3d<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_stereo_3d<span class="sc">$</span>conf.int[<span class="dv">2</span>])) <span class="sc">%&gt;%</span></span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">atanh</span>(r),</span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> <span class="fu">sapply</span>(p,</span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x) <span class="fu">ifelse</span>(x <span class="sc">&lt;</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">3</span>, <span class="st">"&lt; .001"</span>, x))) <span class="sc">%&gt;%</span></span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">Formats =</span> <span class="st">"Average"</span>,</span>
-<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">r =</span> <span class="fu">mean</span>(.<span class="sc">$</span>r),</span>
-<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>          <span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(.<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">Formats =</span> <span class="st">"Back-transformed Fisher's $z$ average"</span>,</span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">r =</span> <span class="fu">tanh</span>(.<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>[.<span class="sc">$</span>Formats <span class="sc">==</span> <span class="st">"Average"</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>imei_cor_mono_stereo <span class="ot">&lt;-</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_mono_imei, imei_data_wide<span class="sc">$</span>mean_stereo_imei,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>imei_cor_mono_3d <span class="ot">&lt;-</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_mono_imei, imei_data_wide<span class="sc">$</span>mean_3d_imei,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>imei_cor_stereo_3d <span class="ot">&lt;-</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_stereo_imei, imei_data_wide<span class="sc">$</span>mean_3d_imei,</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>imei_cor_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Formats =</span> <span class="fu">c</span>(<span class="st">"Mono -- Stereo"</span>,</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Mono -- 3D"</span>,</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Stereo -- 3D"</span>),</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">r =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>estimate,</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_mono_3d<span class="sc">$</span>estimate,</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_stereo_3d<span class="sc">$</span>estimate),</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>                             <span class="at">p =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>p.value,</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_mono_3d<span class="sc">$</span>p.value,</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_stereo_3d<span class="sc">$</span>p.value),</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>                             <span class="at">LL =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_mono_3d<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_stereo_3d<span class="sc">$</span>conf.int[<span class="dv">1</span>]),</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>                             <span class="at">UL =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_mono_3d<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_stereo_3d<span class="sc">$</span>conf.int[<span class="dv">2</span>])) <span class="sc">%&gt;%</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">atanh</span>(r),</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> <span class="fu">sapply</span>(p,</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x) <span class="fu">ifelse</span>(x <span class="sc">&lt;</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">3</span>, <span class="st">"&lt; .001"</span>, x))) <span class="sc">%&gt;%</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">Formats =</span> <span class="st">"Average"</span>,</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">r =</span> <span class="fu">mean</span>(.<span class="sc">$</span>r),</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>          <span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(.<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">Formats =</span> <span class="st">"Back-transformed Fisher's $z$ average"</span>,</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">r =</span> <span class="fu">tanh</span>(.<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>[.<span class="sc">$</span>Formats <span class="sc">==</span> <span class="st">"Average"</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1182,6 +1194,72 @@ Z_{\textrm{CLE}} =
 </table>
 </div>
 </div>
+</section>
+<section id="imei-common-language-effect-sizes" class="level2">
+<h2 class="anchored" data-anchor-id="imei-common-language-effect-sizes">IMEI Common Language Effect Sizes</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>imei_desc <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(participant, piece, version, imei) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">version =</span> version <span class="sc">%&gt;%</span> <span class="fu">as_factor</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">recode_factor</span>(<span class="at">mono =</span> <span class="st">"Mono"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">stereo =</span> <span class="st">"Stereo"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                         <span class="st">`</span><span class="at">3d</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"3D"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(participant, version) <span class="sc">%&gt;%</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">imei =</span> <span class="fu">mean</span>(imei)) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(version) <span class="sc">%&gt;%</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">M =</span> <span class="fu">mean</span>(imei), <span class="at">SD =</span> <span class="fu">sd</span>(imei))</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>imei_cle_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">format1 =</span> <span class="fu">c</span>(<span class="st">"3D"</span>, <span class="st">"3D"</span>, <span class="st">"Stereo"</span>),</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">format2 =</span> <span class="fu">c</span>(<span class="st">"Stereo"</span>, <span class="st">"Mono"</span>, <span class="st">"Mono"</span>))</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>imei_cle_table<span class="sc">$</span>cle <span class="ot">&lt;-</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mapply</span>(<span class="cf">function</span>(f1, f2) {</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    mean1 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>M[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f1]</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    mean2 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>M[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f2]</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    sd1 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>SD[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f1]</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    sd2 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>SD[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f2]</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    cor12 <span class="ot">&lt;-</span> imei_cor_table<span class="sc">$</span>r[imei_cor_table<span class="sc">$</span>Formats <span class="sc">==</span> <span class="fu">str_c</span>(f2, <span class="st">" -- "</span>, f1)]</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">get_cle</span>(<span class="at">mean1 =</span> mean1,</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean2 =</span> mean2,</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd1 =</span> sd1,</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd2 =</span> sd2,</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">cor12 =</span> cor12)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>  }, imei_cle_table<span class="sc">$</span>format1, imei_cle_table<span class="sc">$</span>format2)</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>imei_cle_table <span class="sc">%&gt;%</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), round, <span class="at">digits =</span> <span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Format 1"</span>, <span class="st">"Format 2"</span>, <span class="st">"CLE"</span>),</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="st">"llc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Format 1</th>
+<th style="text-align: left;">Format 2</th>
+<th style="text-align: center;">CLE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">3D</td>
+<td style="text-align: left;">Stereo</td>
+<td style="text-align: center;">0.5861</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3D</td>
+<td style="text-align: left;">Mono</td>
+<td style="text-align: center;">0.7705</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Stereo</td>
+<td style="text-align: left;">Mono</td>
+<td style="text-align: center;">0.7818</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>p_3d <span class="ot">&lt;-</span> .<span class="dv">88</span> <span class="sc">*</span> <span class="fu">prod</span>(imei_cle_table<span class="sc">$</span>cle[imei_cle_table<span class="sc">$</span>format1 <span class="sc">==</span> <span class="st">"3D"</span>]) <span class="sc">+</span> .<span class="dv">11</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once again using the correction formula for multiple conditions from <span class="citation" data-cites="mcgraw_common_1992">McGraw &amp; Wong (<a href="#ref-mcgraw_common_1992" role="doc-biblioref">1992</a>)</span>, the CLE for 3D versus Stereo and Mono is 0.5073903.</p>
 </section>
 </section>
 <section id="references" class="level1 unnumbered">

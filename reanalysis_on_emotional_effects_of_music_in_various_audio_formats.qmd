@@ -460,7 +460,16 @@ transcendence_effsizes %>%
                              "$g_{av}$", "$g_{rm}$", "CLE"),
                align = "lcccccc")
 ```
-
+Using the correction formula for multiple groups from @mcgraw_common_1992,
+the CLE for higher values in Auro than in Stereo and Surround is:
+```{r cle auro versus stereo and surround}
+p_auro <- .88 *
+  prod(transcendence_effsizes$cle[transcendence_effsizes$format2 == "auro"]) +
+  .11
+p_auro
+```
+Thus, the probability that a random participant scored higher in Auro-3D than
+in Stereo and Surround is `r round(p_auro, digits = 4)*100`%.
 
 ### Correlations
 ```{r correlations table, echo=FALSE}
@@ -560,5 +569,45 @@ imei_cor_table %>% knitr::kable(align = "lccccc",
                                 col.names = c("", "$r$", "$p$", "CI LL",
                                               "CI UL", "Fisher's $z$"))
 ```
+
+## IMEI Common Language Effect Sizes
+```{r imei cle}
+#| message: false
+imei_desc <- imei_data_long %>%
+  select(participant, piece, version, imei) %>%
+  mutate(version = version %>% as_factor() %>%
+           recode_factor(mono = "Mono",
+                         stereo = "Stereo",
+                         `3d` = "3D")) %>%
+  group_by(participant, version) %>%
+  summarise(imei = mean(imei)) %>% 
+  group_by(version) %>%
+  summarise(M = mean(imei), SD = sd(imei))
+imei_cle_table <- data.frame(format1 = c("3D", "3D", "Stereo"),
+                             format2 = c("Stereo", "Mono", "Mono"))
+imei_cle_table$cle <-
+  mapply(function(f1, f2) {
+    mean1 <- imei_desc$M[imei_desc$version == f1]
+    mean2 <- imei_desc$M[imei_desc$version == f2]
+    sd1 <- imei_desc$SD[imei_desc$version == f1]
+    sd2 <- imei_desc$SD[imei_desc$version == f2]
+    cor12 <- imei_cor_table$r[imei_cor_table$Formats == str_c(f2, " -- ", f1)]
+    get_cle(mean1 = mean1,
+            mean2 = mean2,
+            sd1 = sd1,
+            sd2 = sd2,
+            cor12 = cor12)
+  }, imei_cle_table$format1, imei_cle_table$format2)
+imei_cle_table %>%
+  mutate(across(where(is.numeric), round, digits = 4)) %>%
+  knitr::kable(col.names = c("Format 1", "Format 2", "CLE"),
+               align = "llc")
+```
+
+```{r imei cle 3d vs stereo and mono}
+p_3d <- .88 * prod(imei_cle_table$cle[imei_cle_table$format1 == "3D"]) + .11
+```
+Once again using the correction formula for multiple conditions from
+@mcgraw_common_1992, the CLE for 3D versus Stereo and Mono is `r p_3d`.
 
 # References
