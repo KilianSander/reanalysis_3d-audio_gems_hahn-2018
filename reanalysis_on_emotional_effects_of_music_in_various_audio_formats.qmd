@@ -22,7 +22,7 @@ Load relevant packages:
 #| message: false
 #| warning: false
 #| results: hide
-sapply(c("tidyverse", "MANOVA.RM", "rstatix", "ggpubr",
+sapply(c("tidyverse", "MVN", "MANOVA.RM", "rstatix", "ggpubr",
          "afex", "emmeans", "ggbeeswarm", "pwr", "sjstats"),
        require, character.only = T)
 afex_options(emmeans_model = "univariate",
@@ -190,7 +190,43 @@ data_long_single %>% group_by(format, factor) %>%
 ```
 
 ### Multivariate Analysis of Variance
+#### Check for Multivariate Normality and Outliers
+```{r mvn}
+covr <- map(c("Stereo", "Surround", "Auro-3D"),
+            function(x) {
+              data_long_mult %>%
+                filter(format == x) %>%
+                select(-c(participant, format)) %>%
+                MASS::cov.mcd(method = "mcd") #%>%
+                # `names<-`(x)
+            }) %>%
+  `names<-`(formats)
+maha_dist <- map(formats,
+                 function(x) {
+                   f <- x %>%
+                     tools::toTitleCase() %>%
+                     ifelse(. == "Auro", "Auro-3D", .)
+                   data <- data_long_mult %>%
+                     filter(format == f) %>%
+                     select(-c(participant, format))
+                   data %>% mahalanobis(center = covr[[x]][["center"]],
+                                        cov = covr[[x]][["cov"]])
+                 }) %>%
+  `names<-`(formats)
+mvn_test <- data_long_mult %>%
+  `class<-`("data.frame") %>%
+  `rownames<-`(str_c(.$participant, "_", .$format)) %>%
+  select(-participant) %>%
+  MVN::mvn(subset = "format",
+           mvnTest = "mardia",
+           univariatePlot = "histogram",
+           multivariatePlot = "qq",
+           multivariateOutlierMethod = "adj",
+           showOutliers = TRUE,
+           showNewData = TRUE)
+```
 
+#### Non-Parametric MANOVA
 ```{r manova}
 #rm_manova <-
 #  multRM(formula = cbind(wonder, transcendence, tenderness,
