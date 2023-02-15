@@ -164,24 +164,41 @@ with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
 descriptives <- data_long_single %>%
   group_by(factor, format) %>%
   summarise(M = mean(score), SD = sd(score))
+source("within_ci_function.R")
+cis <- purrr::map(gems_factors,
+                  function(gems) {
+                    within_ci(data = data_long_mult,
+                              subject = "participant",
+                              condition = "format",
+                              score = gems,
+                              alpha = 0.05) %>% 
+                      mutate(variable = variable %>% gsub("_", " ", .) %>%
+                               tools::toTitleCase()) %>%
+                      rename(factor = variable) %>%
+                      select(factor, format, CI_LL, CI_UL)
+                  }) %>%
+  bind_rows() %>% group_by(factor)
+descriptives <- descriptives %>%
+  full_join(cis, by = join_by(factor, format))
 descriptives %>% 
-  knitr::kable(col.names = c("GEMS Factor", "Format", "$M$", "$SD$"),
-               align = "llcc")
+  knitr::kable(col.names = c("GEMS Factor", "Format", "$M$", "$SD$",
+                             "95% CI LL", "95% CI UL"),
+               align = "llcccc")
 ```
 ```{r mean plot}
 #| echo: false
 #| message: false
 #| warning: false
 #| fig-width: 10
-data_long_single %>% group_by(format, factor) %>%
-  mutate(format = format %>% as.character() %>%
-           tools::toTitleCase() %>%
-           recode("Auro" = "Auro-3D") %>%
-           as_factor()) %>%
-  summarise(M = mean(score), SD = sd(score)) %>%
-  ggplot(., aes(x = factor, y = M, color = format)) +
-  geom_point(aes(shape = format)) +
-  geom_path(aes(group = format, linetype = format)) +
+ggplot(data = descriptives %>% group_by(format),
+       mapping = aes(x = factor, y = M, group = format, color = format)) +
+  geom_errorbar(aes(ymin = CI_LL, ymax = CI_UL),
+                width = .3,
+                position = "dodge") +
+  geom_path(aes(group = format, linetype = format),
+                position = position_dodge(width = .3)) +
+  geom_point(aes(shape = format),
+                position = position_dodge(width = .3)) +
   ylim(1,5) +
   theme_pubr() +
   theme(legend.position = c(.99,.99),
