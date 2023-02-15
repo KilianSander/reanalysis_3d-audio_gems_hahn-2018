@@ -161,6 +161,8 @@ with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
 #| echo: false
 #| message: false
 #| warning: false
+#| label: tbl-means
+#| tbl-cap: Means, Standard Deviations, and Confidence Intervals for the Nine GEMS factors for the Three Audio Formats. Confidence intervals are calculated according to @cousineau_error_2014.
 descriptives <- data_long_single %>%
   group_by(factor, format) %>%
   summarise(M = mean(score), SD = sd(score))
@@ -189,7 +191,9 @@ descriptives %>%
 #| echo: false
 #| message: false
 #| warning: false
+#| label: fig-means-plot
 #| fig-width: 10
+#| fig-cap: Means for the Nine GEMS Factors for the Three Audio Formats. Error bars represent 95% confidence intervals according to @cousineau_error_2014. Emotions felt are reported on a 5-point Likert scale.
 ggplot(data = descriptives %>% group_by(format),
        mapping = aes(x = factor, y = M, group = format, color = format)) +
   geom_errorbar(aes(ymin = CI_LL, ymax = CI_UL),
