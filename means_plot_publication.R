@@ -9,6 +9,8 @@ means_plot <- ggplot(data = descriptives %>% group_by(format),
   geom_errorbar(aes(ymin = CI_LL, ymax = CI_UL),
                 width = .3,
                 position = "dodge") +
+  geom_path(aes(group = format, linetype = format),
+            position = position_dodge(width = .3)) +
   geom_point(aes(shape = format),
              position = position_dodge(width = .3)) +
   jtools::theme_apa() +
@@ -16,7 +18,7 @@ means_plot <- ggplot(data = descriptives %>% group_by(format),
   theme(legend.position = c(.99,.01),
         legend.justification = c(1,0)) +
   xlab("GEMS Factor") +
-  theme(axis.text = element_text(size = 7.5)) +
+  theme(axis.text = element_text(size = 8)) +
   scale_y_continuous(name = "Mean", limits = c(1.8,3.2),
                      breaks = seq(from = 1.8, to = 3.2, by = 0.2)) +
   labs(linetype = "Format",
@@ -25,6 +27,6 @@ means_plot <- ggplot(data = descriptives %>% group_by(format),
 ggsave(filename = "means_plot.svg",
        plot = means_plot,
        device = "svg",
-       units = "in",
-       width = 6.5,
-       height = 4.5) # edit this file in Inkscape to expose linetype in legend
+       units = "mm",
+       width = 171,
+       height = 90) # edit this file in Inkscape to expose linetype in legend
