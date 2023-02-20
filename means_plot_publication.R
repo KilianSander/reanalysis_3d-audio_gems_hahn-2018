@@ -30,3 +30,27 @@ ggsave(filename = "means_plot.svg",
        units = "mm",
        width = 171,
        height = 90) # edit this file in Inkscape to expose linetype in legend
+
+# run `reanalysis_on_emotional_effects_of_music_in_various_audio_formats.qmd` to
+# code chunk `error plot` to obtain the object `transcendence_anova_afex`
+transcendence_error_plot <-
+  afex_plot(transcendence_anova_afex,
+            x = "format",
+            data_plot = FALSE,
+            error = "within",
+            error_ci = TRUE,
+            error_level = .95,
+            error_arg = list(width = .1),
+            emmeans_arg = list(model = "univariate")) +
+  jtools::theme_apa() +
+  ylim(2.4, 3.2) +
+  ylab("Transcendence") +
+  scale_x_discrete(name = "Format",
+                   labels = c("stereo" = "Stereo",
+                              "surround" = "Surround",
+                              "auro" = "Auro-3D"))
+ggsave(filename = "transcendence_error_plot.svg",
+       device = "svg",
+       units = "mm",
+       width = 84,
+       height = 84) # edit this file in Inkscape to replace "Auro.3D" by "Auro-3D"
