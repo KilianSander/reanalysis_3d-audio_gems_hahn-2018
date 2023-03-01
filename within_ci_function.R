@@ -1,5 +1,24 @@
-# This function calculates confidence intervals for within-subjects designs
-# see Cosineau & O'Brien (2014) for details
+#' Within Subjects Designs Confidence Intervals
+#'
+#' This function calculates confidence intervals for within-subjects designs.
+#' For details, see Cosineau & O'Brien (2014).
+#' 
+#' @param data Data frame or tibble
+#' 
+#' @param subject (Character scalar) name of the column containing the subject
+#' identifier (participant ID)
+#' 
+#' @param condition (Character scalar) name of the column containing the
+#' condition
+#' 
+#' @param score (Character scalar) name of the column containing the measurement
+#' values, i.e. the dependent variable
+#' 
+#' @param alpha (numeric scalar) alpha level of the confidence interval
+#' (between 0 and 1)
+#' 
+#' @references
+#' \insertRef{cousineau_error_2014}{}
 within_ci <- function(data,
                       subject,
                       condition,
