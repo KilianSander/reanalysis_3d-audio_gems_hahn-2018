@@ -15,6 +15,7 @@ must be present in the same directory.
 `data/` contains all data sets used in the analyses:
 
 * original data set from Hahn (2018) in wide format (`data_raw.Rda` and `data_raw.csv`).
+* sociodemographics of the Hahn's (2018) sample (`sociodemographics.Rda` and `sociodemographics.csv`)
 * filtered data set with calculated scores in wide format (`data_filtered.Rda` and `data_filtered.csv`)
 * outlier-adjusted data set from Wycisk et al. (2022) in long format (`imei_data_outlier_adjusted.Rda` and `imei_data_outlier_adjusted.csv`)
 

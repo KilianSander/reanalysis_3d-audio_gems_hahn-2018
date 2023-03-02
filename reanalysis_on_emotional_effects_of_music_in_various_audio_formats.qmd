@@ -157,6 +157,44 @@ indicated "male".
 The participants' age ranged from `r age_summary[[1]]` to `r age_summary[[6]]`
 with a mean of `r age_summary[[4]]` (*SD* = `r sd(data_filtered$age)`).
 
+```{r sociodemographics}
+load("data/sociodemographics.Rda")
+sociodemographics_filtered <- sociodemographics %>%
+  filter(participant %in% data_filtered$participant)
+music_prof <- sum(sociodemographics_filtered$music_related_profession_study)
+classical_reg <- sociodemographics_filtered %>%
+  filter(classical_music == "regularly") %>% nrow()
+classical_occ <- sociodemographics_filtered %>%
+  filter(classical_music == "occasionally") %>% nrow()
+stim_familiar <-
+  sociodemographics_filtered$stimulus_familiarity %>% sum()
+stim_familiar_well <-
+  sociodemographics_filtered$stimulus_familiarity_very_well %>% sum()
+f3d <- sociodemographics_filtered %>%
+  filter(familiarity_3d_audio == "heard or read about it") %>% nrow()
+f3dlisten <- sociodemographics_filtered %>%
+  filter(familiarity_3d_audio == "listened to music in 3d audio") %>% nrow()
+```
+`r music_prof` out of `r N` participants
+(`r round(music_prof / N * 100, digits = 1)`%) reported a music-related
+profession or course of study.
+```{r music-related profession or course of study}
+sociodemographics_filtered %>% filter(music_related_profession_study) %>%
+  select(occupation) %>% table()
+```
+Most of the participants stated that they listened to classical music regularly
+(*n* = `r classical_reg`, `r round(classical_reg / N * 100, digits = 1)`%) or
+occasionally (*n* = `r classical_occ`,
+`r round(classical_occ / N * 100, digits = 1)`%).
+`r stim_familiar` participants (`r round(stim_familiar / N * 100, digits = 1)`%)
+were familiar with piece used as stimulus material and `r stim_familiar_well`
+(`r round(stim_familiar_well / N * 100, digits = 1)`%) of these reported knowing
+it very well. 
+Regarding 3D audio, `r f3d` participants (`r round(f3d / N * 100, digits = 1)`%)
+indicated that they heard or read about it, and another `r f3dlisten`
+(`r round(f3dlisten / N * 100, digits = 1)`%) that they had already listened to
+music in a 3D audio format.
+
 ```{r descriptives}
 #| echo: false
 #| message: false

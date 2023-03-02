@@ -326,6 +326,37 @@ div.csl-indent {
 <h3 class="anchored" data-anchor-id="descriptives">Descriptives</h3>
 <p>Out of the 52 participants 17 indicated “female” as their gender whereas 35 indicated “male”. The participants’ age ranged from 15 to 69 with a mean of 30.1346154 (<em>SD</em> = 12.4601779).</p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/sociodemographics.Rda"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sociodemographics_filtered <span class="ot">&lt;-</span> sociodemographics <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(participant <span class="sc">%in%</span> data_filtered<span class="sc">$</span>participant)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>music_prof <span class="ot">&lt;-</span> <span class="fu">sum</span>(sociodemographics_filtered<span class="sc">$</span>music_related_profession_study)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>classical_reg <span class="ot">&lt;-</span> sociodemographics_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(classical_music <span class="sc">==</span> <span class="st">"regularly"</span>) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>classical_occ <span class="ot">&lt;-</span> sociodemographics_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(classical_music <span class="sc">==</span> <span class="st">"occasionally"</span>) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>stim_familiar <span class="ot">&lt;-</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  sociodemographics_filtered<span class="sc">$</span>stimulus_familiarity <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>stim_familiar_well <span class="ot">&lt;-</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  sociodemographics_filtered<span class="sc">$</span>stimulus_familiarity_very_well <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>f3d <span class="ot">&lt;-</span> sociodemographics_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(familiarity_3d_audio <span class="sc">==</span> <span class="st">"heard or read about it"</span>) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>f3dlisten <span class="ot">&lt;-</span> sociodemographics_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(familiarity_3d_audio <span class="sc">==</span> <span class="st">"listened to music in 3d audio"</span>) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>38 out of 52 participants (73.1%) reported a music-related profession or course of study.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sociodemographics_filtered <span class="sc">%&gt;%</span> <span class="fu">filter</span>(music_related_profession_study) <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(occupation) <span class="sc">%&gt;%</span> <span class="fu">table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>occupation
+       musical acoustics                 musician       service technician 
+                       1                       14                        1 
+teaching music and maths               tonmeister     tonmeister/acoustics 
+                       1                       20                        1 </code></pre>
+</div>
+</div>
+<p>Most of the participants stated that they listened to classical music regularly (<em>n</em> = 30, 57.7%) or occasionally (<em>n</em> = 13, 25%). 33 participants (63.5%) were familiar with piece used as stimulus material and 7 (13.5%) of these reported knowing it very well. Regarding 3D audio, 19 participants (36.5%) indicated that they heard or read about it, and another 25 (48.1%) that they had already listened to music in a 3D audio format.</p>
+<div class="cell">
 <div class="cell-output-display">
 <div id="tbl-means" class="anchored">
 <table class="table table-sm table-striped">
@@ -586,17 +617,17 @@ div.csl-indent {
 <section id="check-for-multivariate-normality-and-outliers" class="level4">
 <h4 class="anchored" data-anchor-id="check-for-multivariate-normality-and-outliers">Check for Multivariate Normality and Outliers</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mvn_test <span class="ot">&lt;-</span> data_long_mult <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">class&lt;-</span><span class="st">`</span>(<span class="st">"data.frame"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">rownames&lt;-</span><span class="st">`</span>(<span class="fu">str_c</span>(.<span class="sc">$</span>participant, <span class="st">"_"</span>, .<span class="sc">$</span>format)) <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>participant) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  MVN<span class="sc">::</span><span class="fu">mvn</span>(<span class="at">subset =</span> <span class="st">"format"</span>,</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">mvnTest =</span> <span class="st">"mardia"</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">univariatePlot =</span> <span class="st">"histogram"</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">multivariatePlot =</span> <span class="st">"qq"</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">multivariateOutlierMethod =</span> <span class="st">"adj"</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">showOutliers =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">showNewData =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mvn_test <span class="ot">&lt;-</span> data_long_mult <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">class&lt;-</span><span class="st">`</span>(<span class="st">"data.frame"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">rownames&lt;-</span><span class="st">`</span>(<span class="fu">str_c</span>(.<span class="sc">$</span>participant, <span class="st">"_"</span>, .<span class="sc">$</span>format)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>participant) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  MVN<span class="sc">::</span><span class="fu">mvn</span>(<span class="at">subset =</span> <span class="st">"format"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">mvnTest =</span> <span class="st">"mardia"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">univariatePlot =</span> <span class="st">"histogram"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">multivariatePlot =</span> <span class="st">"qq"</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">multivariateOutlierMethod =</span> <span class="st">"adj"</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">showOutliers =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">showNewData =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="reanalysis_on_emotional_effects_of_music_in_various_audio_formats_files/figure-html/mvn-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -624,48 +655,48 @@ div.csl-indent {
 <div class="cell-output-display">
 <p><img src="reanalysis_on_emotional_effects_of_music_in_various_audio_formats_files/figure-html/mvn-9.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>(mv_normality <span class="ot">&lt;-</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_chr</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>          <span class="cf">function</span>(x) {</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            temp <span class="ot">&lt;-</span> mvn_test[[<span class="st">"multivariateNormality"</span>]][[x]]</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            temp <span class="ot">&lt;-</span> temp<span class="sc">$</span>Result[temp<span class="sc">$</span>Test <span class="sc">==</span> <span class="st">"MVN"</span>]</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            temp</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>          }) <span class="sc">%&gt;%</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">names&lt;-</span><span class="st">`</span>(formats))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>(mv_normality <span class="ot">&lt;-</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_chr</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>          <span class="cf">function</span>(x) {</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>            temp <span class="ot">&lt;-</span> mvn_test[[<span class="st">"multivariateNormality"</span>]][[x]]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            temp <span class="ot">&lt;-</span> temp<span class="sc">$</span>Result[temp<span class="sc">$</span>Test <span class="sc">==</span> <span class="st">"MVN"</span>]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            temp</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>          }) <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">names&lt;-</span><span class="st">`</span>(formats))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  stereo surround     auro 
     "NO"    "YES"     "NO" </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mv_outliers <span class="ot">&lt;-</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>      <span class="cf">function</span>(x) {</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        temp <span class="ot">&lt;-</span> mvn_test[[<span class="st">"multivariateOutliers"</span>]][[x]][[<span class="st">"Observation"</span>]] <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">gsub</span>(<span class="st">".*?([0-9]+).*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, .) <span class="sc">%&gt;%</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">as.numeric</span>()</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>      }) <span class="sc">%&gt;%</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mv_outliers <span class="ot">&lt;-</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>      <span class="cf">function</span>(x) {</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        temp <span class="ot">&lt;-</span> mvn_test[[<span class="st">"multivariateOutliers"</span>]][[x]][[<span class="st">"Observation"</span>]] <span class="sc">%&gt;%</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">gsub</span>(<span class="st">".*?([0-9]+).*"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, .) <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">as.numeric</span>()</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      }) <span class="sc">%&gt;%</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>According to Mardia’s test, multivariate normality is only present for surround sound. There are 29 participants who are multivariate outliers at least in one condition. Excluding these participants would shrink the sample to 44.2%. Therefore, a non-parametric MANOVA will be used.</p>
 </section>
 <section id="non-parametric-manova" class="level4">
 <h4 class="anchored" data-anchor-id="non-parametric-manova">Non-Parametric MANOVA</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rm_manova &lt;-</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  multRM(formula = cbind(wonder, transcendence, tenderness,</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                         nostalgia, peacefulness, power,</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                         joyful_activation, tension, sadness) ~ format,</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         data = data_long_mult,</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         subject = "participant",</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         within = "format",</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#         para = TRUE,</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         iter = 50000,</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         dec = 5,</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         seed = 987)</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#save(rm_manova, file = "results/rm_manova.Rda")</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file =</span> <span class="st">"results/rm_manova.Rda"</span>)</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(rm_manova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rm_manova &lt;-</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  multRM(formula = cbind(wonder, transcendence, tenderness,</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                         nostalgia, peacefulness, power,</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                         joyful_activation, tension, sadness) ~ format,</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         data = data_long_mult,</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         subject = "participant",</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         within = "format",</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#         para = TRUE,</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         iter = 50000,</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         dec = 5,</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         seed = 987)</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">#save(rm_manova, file = "results/rm_manova.Rda")</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file =</span> <span class="st">"results/rm_manova.Rda"</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(rm_manova)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call: 
 cbind(wonder, transcendence, tenderness, nostalgia, peacefulness, 
@@ -704,10 +735,10 @@ format "0.14638"     "0.00386"     </code></pre>
 <section id="extreme-outliers" class="level5">
 <h5 class="anchored" data-anchor-id="extreme-outliers">Extreme Outliers</h5>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>data_long_mult <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(format) <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(format, participant, transcendence) <span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identify_outliers</span>(transcendence) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(is.outlier)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data_long_mult <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(format) <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(format, participant, transcendence) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">identify_outliers</span>(transcendence) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(is.outlier)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 5
    format   participant transcendence is.outlier is.extreme
@@ -723,7 +754,7 @@ format "0.14638"     "0.00386"     </code></pre>
  9 Surround          47          4.67 TRUE       FALSE     
 10 Surround          48          1.17 TRUE       FALSE     </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggboxplot</span>(data_long_mult, <span class="at">x =</span> <span class="st">"format"</span>, <span class="at">y =</span> <span class="st">"transcendence"</span>, <span class="at">add =</span> <span class="st">"point"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggboxplot</span>(data_long_mult, <span class="at">x =</span> <span class="st">"format"</span>, <span class="at">y =</span> <span class="st">"transcendence"</span>, <span class="at">add =</span> <span class="st">"point"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="reanalysis_on_emotional_effects_of_music_in_various_audio_formats_files/figure-html/anova%20outliers-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -768,22 +799,22 @@ format "0.14638"     "0.00386"     </code></pre>
 <section id="mauchlys-test-for-sphericity" class="level5">
 <h5 class="anchored" data-anchor-id="mauchlys-test-for-sphericity">Mauchly’s Test for Sphericity</h5>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>transcendence_anova <span class="ot">&lt;-</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anova_test</span>(<span class="at">data =</span> data_long_mult,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">dv =</span> transcendence,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">wid =</span> participant,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">within =</span> format,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">type =</span> <span class="dv">3</span>,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">effect.size =</span> <span class="st">"pes"</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>transcendence_ges <span class="ot">&lt;-</span> <span class="fu">anova_test</span>(<span class="at">data =</span> data_long_mult,</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">dv =</span> transcendence,</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">wid =</span> participant,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">within =</span> format,</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="dv">3</span>,</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">effect.size =</span> <span class="st">"ges"</span>)<span class="sc">$</span>ANOVA<span class="sc">$</span>ges</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>transcendence_anova<span class="sc">$</span><span class="st">`</span><span class="at">Mauchly's Test for Sphericity</span><span class="st">`</span> <span class="sc">%&gt;%</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Effect"</span>, <span class="st">"$W$"</span>, <span class="st">"$p$"</span>, <span class="st">"$p&lt;.05$"</span>),</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="st">"lccc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>transcendence_anova <span class="ot">&lt;-</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anova_test</span>(<span class="at">data =</span> data_long_mult,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">dv =</span> transcendence,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">wid =</span> participant,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">within =</span> format,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">type =</span> <span class="dv">3</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">effect.size =</span> <span class="st">"pes"</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>transcendence_ges <span class="ot">&lt;-</span> <span class="fu">anova_test</span>(<span class="at">data =</span> data_long_mult,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">dv =</span> transcendence,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">wid =</span> participant,</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">within =</span> format,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="dv">3</span>,</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">effect.size =</span> <span class="st">"ges"</span>)<span class="sc">$</span>ANOVA<span class="sc">$</span>ges</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>transcendence_anova<span class="sc">$</span><span class="st">`</span><span class="at">Mauchly's Test for Sphericity</span><span class="st">`</span> <span class="sc">%&gt;%</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Effect"</span>, <span class="st">"$W$"</span>, <span class="st">"$p$"</span>, <span class="st">"$p&lt;.05$"</span>),</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="st">"lccc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <thead>
@@ -838,12 +869,12 @@ format "0.14638"     "0.00386"     </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>transcendence_anova_afex <span class="ot">&lt;-</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aov_car</span>(transcendence <span class="sc">~</span> format <span class="sc">+</span> <span class="fu">Error</span>(participant<span class="sc">/</span>format),</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>          data_long_mult,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">include_aov =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">emmeans_model =</span> <span class="st">"univariate"</span>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>transcendence_anova_afex<span class="sc">$</span>aov <span class="sc">%&gt;%</span> sjstats<span class="sc">::</span><span class="fu">anova_stats</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>transcendence_anova_afex <span class="ot">&lt;-</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aov_car</span>(transcendence <span class="sc">~</span> format <span class="sc">+</span> <span class="fu">Error</span>(participant<span class="sc">/</span>format),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>          data_long_mult,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">include_aov =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">emmeans_model =</span> <span class="st">"univariate"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>transcendence_anova_afex<span class="sc">$</span>aov <span class="sc">%&gt;%</span> sjstats<span class="sc">::</span><span class="fu">anova_stats</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>stratum            |      term |  df |  sumsq | meansq | statistic | p.value | etasq | partial.etasq | omegasq | partial.omegasq | epsilonsq | cohens.f | power
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -851,31 +882,31 @@ participant        | Residuals |  51 | 80.741 |  1.583 |           |         | 0
 participant:format |    format |   2 |  4.465 |  2.232 |    13.209 |  &lt; .001 | 0.044 |         0.206 |   0.040 |           0.135 |     0.040 |    0.509 | 0.998
 participant:format | Residuals | 102 | 17.239 |  0.169 |           |         |       |               |         |                 |           |          |      </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">afex_plot</span>(transcendence_anova_afex,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">"format"</span>,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">data_plot =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">error =</span> <span class="st">"within"</span>,</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">error_ci =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">error_level =</span> .<span class="dv">95</span>,</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">error_arg =</span> <span class="fu">list</span>(<span class="at">width =</span> .<span class="dv">1</span>),</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">emmeans_arg =</span> <span class="fu">list</span>(<span class="at">model =</span> <span class="st">"univariate"</span>)) <span class="sc">+</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fl">2.4</span>, <span class="fl">3.2</span>) <span class="sc">+</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Transcendence"</span>) <span class="sc">+</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name =</span> <span class="st">"Format"</span>,</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"stereo"</span> <span class="ot">=</span> <span class="st">"Stereo"</span>,</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"surround"</span> <span class="ot">=</span> <span class="st">"Surround"</span>,</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"auro"</span> <span class="ot">=</span> <span class="st">"Auro-3D"</span>)) <span class="sc">+</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_pubr</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">afex_plot</span>(transcendence_anova_afex,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">"format"</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">data_plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">error =</span> <span class="st">"within"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">error_ci =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">error_level =</span> .<span class="dv">95</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">error_arg =</span> <span class="fu">list</span>(<span class="at">width =</span> .<span class="dv">1</span>),</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">emmeans_arg =</span> <span class="fu">list</span>(<span class="at">model =</span> <span class="st">"univariate"</span>)) <span class="sc">+</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fl">2.4</span>, <span class="fl">3.2</span>) <span class="sc">+</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Transcendence"</span>) <span class="sc">+</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name =</span> <span class="st">"Format"</span>,</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"stereo"</span> <span class="ot">=</span> <span class="st">"Stereo"</span>,</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"surround"</span> <span class="ot">=</span> <span class="st">"Surround"</span>,</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"auro"</span> <span class="ot">=</span> <span class="st">"Auro-3D"</span>)) <span class="sc">+</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_pubr</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="reanalysis_on_emotional_effects_of_music_in_various_audio_formats_files/figure-html/error%20plot-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(transcendence_anova_afex,</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                 <span class="sc">~</span> format),</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"revpairwise"</span>, <span class="at">adjust =</span> <span class="st">"holm"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Contrast"</span>, <span class="st">"Mean Difference"</span>,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"$SE$"</span>, <span class="st">"df"</span>, <span class="st">"$t$"</span>, <span class="st">"$p$"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(<span class="fu">emmeans</span>(transcendence_anova_afex,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                 <span class="sc">~</span> format),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"revpairwise"</span>, <span class="at">adjust =</span> <span class="st">"holm"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Contrast"</span>, <span class="st">"Mean Difference"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"$SE$"</span>, <span class="st">"df"</span>, <span class="st">"$t$"</span>, <span class="st">"$p$"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <colgroup>
@@ -931,157 +962,157 @@ participant:format | Residuals | 102 | 17.239 |  0.169 |           |         |  
 <h3 class="anchored" data-anchor-id="effect-sizes-for-contrasts">Effect Sizes for Contrasts</h3>
 <p>Calculate correlations:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>cor_stereo_surround <span class="ot">&lt;-</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(data_filtered<span class="sc">$</span>stereo_transcendence,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>           data_filtered<span class="sc">$</span>surround_transcendence,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>cor_stereo_auro <span class="ot">&lt;-</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(data_filtered<span class="sc">$</span>stereo_transcendence,</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>           data_filtered<span class="sc">$</span>auro_transcendence,</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>cor_surround_auro <span class="ot">&lt;-</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(data_filtered<span class="sc">$</span>surround_transcendence,</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>           data_filtered<span class="sc">$</span>auro_transcendence,</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>cor_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Formats =</span> <span class="fu">c</span>(<span class="st">"Stereo -- Surround"</span>,</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Stereo -- Auro-3D"</span>,</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Surround -- Auro-3D"</span>),</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>                        <span class="at">r =</span> <span class="fu">c</span>(cor_stereo_surround<span class="sc">$</span>estimate,</span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>                              cor_stereo_auro<span class="sc">$</span>estimate,</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>                              cor_surround_auro<span class="sc">$</span>estimate),</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>                        <span class="at">p =</span> <span class="fu">c</span>(cor_stereo_surround<span class="sc">$</span>p.value,</span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>                              cor_stereo_auro<span class="sc">$</span>p.value,</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>                              cor_surround_auro<span class="sc">$</span>p.value),</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>                        <span class="at">LL =</span> <span class="fu">c</span>(cor_stereo_surround<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>                              cor_stereo_auro<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>                              cor_surround_auro<span class="sc">$</span>conf.int[<span class="dv">1</span>]),</span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>                        <span class="at">UL =</span> <span class="fu">c</span>(cor_stereo_surround<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>                              cor_stereo_auro<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>                              cor_surround_auro<span class="sc">$</span>conf.int[<span class="dv">2</span>])) <span class="sc">%&gt;%</span></span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">atanh</span>(r),</span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> <span class="fu">sapply</span>(p,</span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x) <span class="fu">ifelse</span>(x <span class="sc">&lt;</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">3</span>, <span class="st">"&lt; .001"</span>, x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cor_stereo_surround <span class="ot">&lt;-</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(data_filtered<span class="sc">$</span>stereo_transcendence,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>           data_filtered<span class="sc">$</span>surround_transcendence,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>cor_stereo_auro <span class="ot">&lt;-</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(data_filtered<span class="sc">$</span>stereo_transcendence,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>           data_filtered<span class="sc">$</span>auro_transcendence,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>cor_surround_auro <span class="ot">&lt;-</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(data_filtered<span class="sc">$</span>surround_transcendence,</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>           data_filtered<span class="sc">$</span>auro_transcendence,</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>cor_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Formats =</span> <span class="fu">c</span>(<span class="st">"Stereo -- Surround"</span>,</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Stereo -- Auro-3D"</span>,</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Surround -- Auro-3D"</span>),</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>                        <span class="at">r =</span> <span class="fu">c</span>(cor_stereo_surround<span class="sc">$</span>estimate,</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>                              cor_stereo_auro<span class="sc">$</span>estimate,</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>                              cor_surround_auro<span class="sc">$</span>estimate),</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>                        <span class="at">p =</span> <span class="fu">c</span>(cor_stereo_surround<span class="sc">$</span>p.value,</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>                              cor_stereo_auro<span class="sc">$</span>p.value,</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>                              cor_surround_auro<span class="sc">$</span>p.value),</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>                        <span class="at">LL =</span> <span class="fu">c</span>(cor_stereo_surround<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>                              cor_stereo_auro<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>                              cor_surround_auro<span class="sc">$</span>conf.int[<span class="dv">1</span>]),</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>                        <span class="at">UL =</span> <span class="fu">c</span>(cor_stereo_surround<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>                              cor_stereo_auro<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>                              cor_surround_auro<span class="sc">$</span>conf.int[<span class="dv">2</span>])) <span class="sc">%&gt;%</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">atanh</span>(r),</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> <span class="fu">sapply</span>(p,</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x) <span class="fu">ifelse</span>(x <span class="sc">&lt;</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">3</span>, <span class="st">"&lt; .001"</span>, x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><span class="citation" data-cites="lakens_calculating_2013">Lakens (<a href="#ref-lakens_calculating_2013" role="doc-biblioref">2013</a>)</span> provides an overview of different effect sizes. We use <span class="math inline">\(d_Z\)</span>, <span class="math inline">\(d_{av}\)</span>, <span class="math inline">\(d_{rm}\)</span>, <span class="math inline">\(g_{av}\)</span>, and <span class="math inline">\(g_{rm}\)</span>, which are variants of Cohen’s <span class="math inline">\(d\)</span> and Hedges <span class="math inline">\(g\)</span>, and the <em>Common Language Effect Size</em> <span class="citation" data-cites="mcgraw_common_1992">(CLE, <a href="#ref-mcgraw_common_1992" role="doc-biblioref">McGraw &amp; Wong, 1992</a>)</span>. The CLE expresses “the probability that an individual has a higher value on one measurement than the other” <span class="citation" data-cites="lakens_calculating_2013">(<a href="#ref-lakens_calculating_2013" role="doc-biblioref">Lakens, 2013, p. 4</a>)</span>. The CLE is therefore the probability that a <span class="math inline">\(Z\)</span>-score is greater than a specific <span class="math inline">\(Z_{\textrm{CLE}}\)</span> (given a standard normal distribution). For repeated measures the <span class="math inline">\(Z_{\textrm{CLE}}\)</span> is calculated from the means and standard deviations from two measurements as well as their correlation <span class="citation" data-cites="mcgraw_common_1992">(<a href="#ref-mcgraw_common_1992" role="doc-biblioref">McGraw &amp; Wong, 1992</a>)</span>: <span class="math display">\[
 Z_{\textrm{CLE}} =
 \frac{M_2 - M_1}{\sqrt{SD_1^2+SD_2^2-2\cdot{}SD_1\cdot{}SD_2\cdot{}r_{12}}}
 \]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>get_d_Z <span class="ot">&lt;-</span> <span class="cf">function</span>(mean_diff, sd_diff) {</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  d_Z <span class="ot">&lt;-</span> mean_diff <span class="sc">/</span> sd_diff</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  d_Z</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>get_d_av <span class="ot">&lt;-</span> <span class="cf">function</span>(mean_diff, sd1, sd2) {</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  d_av <span class="ot">&lt;-</span> mean_diff <span class="sc">/</span> ((sd1 <span class="sc">+</span> sd2) <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  d_av</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>get_s_diff <span class="ot">&lt;-</span> <span class="cf">function</span>(sd1, sd2, cor12) {</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  s_diff <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(sd1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> sd2<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> cor12 <span class="sc">*</span> sd1 <span class="sc">*</span> sd2)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  s_diff</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>get_d_rm <span class="ot">&lt;-</span> <span class="cf">function</span>(mean_diff, sd1, sd2, cor12) {</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  s_diff <span class="ot">&lt;-</span> <span class="fu">get_s_diff</span>(<span class="at">sd1 =</span> sd1, <span class="at">sd2 =</span> sd2, <span class="at">cor12 =</span> cor12)</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  d_rm <span class="ot">&lt;-</span> mean_diff <span class="sc">/</span> s_diff <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> cor12))</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  d_rm</span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>correct_d_to_g <span class="ot">&lt;-</span> <span class="cf">function</span>(d, N) {</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  g <span class="ot">&lt;-</span>  d <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> (<span class="dv">3</span> <span class="sc">/</span> (<span class="dv">8</span> <span class="sc">*</span> N <span class="sc">-</span> <span class="dv">9</span>)))</span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  g</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>get_cle <span class="ot">&lt;-</span> <span class="cf">function</span>(mean1, mean2, sd1, sd2, cor12) {</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  Z_cle <span class="ot">&lt;-</span> (mean2 <span class="sc">-</span> mean1) <span class="sc">/</span> <span class="fu">get_s_diff</span>(<span class="at">sd1 =</span> sd1, <span class="at">sd2 =</span> sd2, <span class="at">cor12 =</span> cor12)</span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>  Z_cle <span class="sc">%&gt;%</span> <span class="fu">pnorm</span>(<span class="at">lower.tail =</span> F)</span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>get_d_Z <span class="ot">&lt;-</span> <span class="cf">function</span>(mean_diff, sd_diff) {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  d_Z <span class="ot">&lt;-</span> mean_diff <span class="sc">/</span> sd_diff</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  d_Z</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>get_d_av <span class="ot">&lt;-</span> <span class="cf">function</span>(mean_diff, sd1, sd2) {</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  d_av <span class="ot">&lt;-</span> mean_diff <span class="sc">/</span> ((sd1 <span class="sc">+</span> sd2) <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  d_av</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>get_s_diff <span class="ot">&lt;-</span> <span class="cf">function</span>(sd1, sd2, cor12) {</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  s_diff <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(sd1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> sd2<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> cor12 <span class="sc">*</span> sd1 <span class="sc">*</span> sd2)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  s_diff</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>get_d_rm <span class="ot">&lt;-</span> <span class="cf">function</span>(mean_diff, sd1, sd2, cor12) {</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  s_diff <span class="ot">&lt;-</span> <span class="fu">get_s_diff</span>(<span class="at">sd1 =</span> sd1, <span class="at">sd2 =</span> sd2, <span class="at">cor12 =</span> cor12)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  d_rm <span class="ot">&lt;-</span> mean_diff <span class="sc">/</span> s_diff <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> cor12))</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  d_rm</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>correct_d_to_g <span class="ot">&lt;-</span> <span class="cf">function</span>(d, N) {</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  g <span class="ot">&lt;-</span>  d <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> (<span class="dv">3</span> <span class="sc">/</span> (<span class="dv">8</span> <span class="sc">*</span> N <span class="sc">-</span> <span class="dv">9</span>)))</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  g</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>get_cle <span class="ot">&lt;-</span> <span class="cf">function</span>(mean1, mean2, sd1, sd2, cor12) {</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>  Z_cle <span class="ot">&lt;-</span> (mean2 <span class="sc">-</span> mean1) <span class="sc">/</span> <span class="fu">get_s_diff</span>(<span class="at">sd1 =</span> sd1, <span class="at">sd2 =</span> sd2, <span class="at">cor12 =</span> cor12)</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>  Z_cle <span class="sc">%&gt;%</span> <span class="fu">pnorm</span>(<span class="at">lower.tail =</span> F)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>transcendence_differences <span class="ot">&lt;-</span> data_long_single <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(factor <span class="sc">==</span> <span class="st">"Transcendence"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">format =</span> format <span class="sc">%&gt;%</span> <span class="fu">tolower</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">gsub</span>(<span class="st">"auro-3d"</span>, <span class="st">"auro"</span>, .),</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">factor =</span> factor <span class="sc">%&gt;%</span> <span class="fu">tolower</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> participant,</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> score,</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="fu">c</span>(format, factor),</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_sep =</span> <span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diff_stereo_surround =</span> surround_transcendence <span class="sc">-</span> stereo_transcendence,</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">diff_stereo_auro =</span> auro_transcendence <span class="sc">-</span> stereo_transcendence,</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">diff_surround_auro =</span> auro_transcendence <span class="sc">-</span> surround_transcendence)</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>transcendence_effsizes <span class="ot">&lt;-</span> transcendence_differences <span class="sc">%&gt;%</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(participant, <span class="fu">starts_with</span>(<span class="st">"diff"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">"diff"</span>),</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"contrast"</span>,</span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"diff"</span>,</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_prefix =</span> <span class="st">"diff_"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(contrast) <span class="sc">%&gt;%</span></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_diff =</span> <span class="fu">mean</span>(diff),</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd_diff =</span> <span class="fu">sd</span>(diff)) <span class="sc">%&gt;%</span></span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">format1 =</span> <span class="fu">str_split</span>(contrast, <span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>           <span class="fu">lapply</span>(<span class="cf">function</span>(x) x[[<span class="dv">1</span>]]) <span class="sc">%&gt;%</span> unlist,</span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">format2 =</span> <span class="fu">str_split</span>(contrast, <span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>           <span class="fu">lapply</span>(<span class="cf">function</span>(x) x[[<span class="dv">2</span>]]) <span class="sc">%&gt;%</span> unlist) <span class="sc">%&gt;%</span></span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cohens_d_Z =</span> <span class="fu">get_d_Z</span>(<span class="at">mean_diff =</span> mean_diff, <span class="at">sd_diff =</span> sd_diff),</span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">cohens_d_av =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(.<span class="sc">$</span>format1),</span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>                              <span class="cf">function</span>(x) {</span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>                                f1 <span class="ot">&lt;-</span> format1[[x]]</span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>                                f2 <span class="ot">&lt;-</span> format2[[x]]</span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">get_d_av</span>(<span class="at">mean_diff =</span> mean_diff[[x]],</span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">sd1 =</span> <span class="fu">sd</span>(transcendence_differences[[</span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">str_c</span>(f1, <span class="st">"_transcendence"</span>)]]),</span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">sd2 =</span> <span class="fu">sd</span>(transcendence_differences[[</span>
-<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">str_c</span>(f2, <span class="st">"_transcendence"</span>)]]))</span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>                              }),</span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>         <span class="at">cohens_d_rm =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(.<span class="sc">$</span>format1),</span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>                              <span class="cf">function</span>(x) {</span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>                                f1 <span class="ot">&lt;-</span> format1[[x]]</span>
-<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>                                f2 <span class="ot">&lt;-</span> format2[[x]]</span>
-<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>                                cor_str <span class="ot">&lt;-</span></span>
-<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_c</span>(f1, <span class="st">" -- "</span>, <span class="fu">ifelse</span>(f2 <span class="sc">==</span> <span class="st">"auro"</span>,</span>
-<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>                                                           <span class="st">"Auro-3D"</span>, f2)) <span class="sc">%&gt;%</span></span>
-<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>                                  tools<span class="sc">::</span><span class="fu">toTitleCase</span>()</span>
-<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">get_d_rm</span>(<span class="at">mean_diff =</span> mean_diff[[x]],</span>
-<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">sd1 =</span> <span class="fu">sd</span>(transcendence_differences[[</span>
-<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">str_c</span>(f1, <span class="st">"_transcendence"</span>)]]),</span>
-<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">sd2 =</span> <span class="fu">sd</span>(transcendence_differences[[</span>
-<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">str_c</span>(f2, <span class="st">"_transcendence"</span>)]]),</span>
-<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">cor12 =</span> cor_table<span class="sc">$</span>r[</span>
-<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a>                                           cor_table<span class="sc">$</span>Formats <span class="sc">==</span> cor_str])</span>
-<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a>                              }),</span>
-<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a>         <span class="at">hedges_g_av =</span> <span class="fu">correct_d_to_g</span>(cohens_d_av, N),</span>
-<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a>         <span class="at">hedges_g_rm =</span> <span class="fu">correct_d_to_g</span>(cohens_d_rm, N),</span>
-<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a>         <span class="at">cle =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(.<span class="sc">$</span>format1),</span>
-<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>                      <span class="cf">function</span>(x) {</span>
-<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>                        f2 <span class="ot">&lt;-</span> format1[[x]]</span>
-<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a>                        f1 <span class="ot">&lt;-</span> format2[[x]]</span>
-<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a>                        cor_str <span class="ot">&lt;-</span></span>
-<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f2, <span class="st">" -- "</span>, <span class="fu">ifelse</span>(f1 <span class="sc">==</span> <span class="st">"auro"</span>,</span>
-<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a>                                                   <span class="st">"Auro-3D"</span>, f1)) <span class="sc">%&gt;%</span></span>
-<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a>                          tools<span class="sc">::</span><span class="fu">toTitleCase</span>()</span>
-<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a>                        mean1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(transcendence_differences[[</span>
-<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f1, <span class="st">"_transcendence"</span>)]])</span>
-<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>                        mean2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(transcendence_differences[[</span>
-<span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f2, <span class="st">"_transcendence"</span>)]])</span>
-<span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a>                        sd1 <span class="ot">&lt;-</span> <span class="fu">sd</span>(transcendence_differences[[</span>
-<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f1, <span class="st">"_transcendence"</span>)]])</span>
-<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a>                        sd2 <span class="ot">&lt;-</span> <span class="fu">sd</span>(transcendence_differences[[</span>
-<span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f2, <span class="st">"_transcendence"</span>)]])</span>
-<span id="cb24-71"><a href="#cb24-71" aria-hidden="true" tabindex="-1"></a>                        cor12 <span class="ot">&lt;-</span> cor_table<span class="sc">$</span>r[cor_table<span class="sc">$</span>Formats <span class="sc">==</span> cor_str]</span>
-<span id="cb24-72"><a href="#cb24-72" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">get_cle</span>(<span class="at">mean1 =</span> mean1, <span class="at">mean2 =</span> mean2,</span>
-<span id="cb24-73"><a href="#cb24-73" aria-hidden="true" tabindex="-1"></a>                                <span class="at">sd1 =</span> sd1, <span class="at">sd2 =</span> sd2, <span class="at">cor12 =</span> cor12)</span>
-<span id="cb24-74"><a href="#cb24-74" aria-hidden="true" tabindex="-1"></a>                      }))</span>
-<span id="cb24-75"><a href="#cb24-75" aria-hidden="true" tabindex="-1"></a>transcendence_effsizes <span class="sc">%&gt;%</span></span>
-<span id="cb24-76"><a href="#cb24-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">contrast =</span> <span class="fu">str_c</span>(format1, <span class="st">" -- "</span>, format2) <span class="sc">%&gt;%</span></span>
-<span id="cb24-77"><a href="#cb24-77" aria-hidden="true" tabindex="-1"></a>           <span class="fu">gsub</span>(<span class="st">"auro"</span>, <span class="st">"Auro-3D"</span>, .) <span class="sc">%&gt;%</span></span>
-<span id="cb24-78"><a href="#cb24-78" aria-hidden="true" tabindex="-1"></a>           tools<span class="sc">::</span><span class="fu">toTitleCase</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb24-79"><a href="#cb24-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(format1, format2, <span class="fu">ends_with</span>(<span class="st">"_diff"</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb24-80"><a href="#cb24-80" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Contrast"</span>, <span class="st">"$d_Z$"</span>, <span class="st">"$d_{av}$"</span>, <span class="st">"$d_{rm}$"</span>,</span>
-<span id="cb24-81"><a href="#cb24-81" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"$g_{av}$"</span>, <span class="st">"$g_{rm}$"</span>, <span class="st">"CLE"</span>),</span>
-<span id="cb24-82"><a href="#cb24-82" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="st">"lcccccc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>transcendence_differences <span class="ot">&lt;-</span> data_long_single <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(factor <span class="sc">==</span> <span class="st">"Transcendence"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">format =</span> format <span class="sc">%&gt;%</span> <span class="fu">tolower</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">gsub</span>(<span class="st">"auro-3d"</span>, <span class="st">"auro"</span>, .),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">factor =</span> factor <span class="sc">%&gt;%</span> <span class="fu">tolower</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> participant,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> score,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="fu">c</span>(format, factor),</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_sep =</span> <span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diff_stereo_surround =</span> surround_transcendence <span class="sc">-</span> stereo_transcendence,</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">diff_stereo_auro =</span> auro_transcendence <span class="sc">-</span> stereo_transcendence,</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">diff_surround_auro =</span> auro_transcendence <span class="sc">-</span> surround_transcendence)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>transcendence_effsizes <span class="ot">&lt;-</span> transcendence_differences <span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(participant, <span class="fu">starts_with</span>(<span class="st">"diff"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">"diff"</span>),</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"contrast"</span>,</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"diff"</span>,</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_prefix =</span> <span class="st">"diff_"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(contrast) <span class="sc">%&gt;%</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_diff =</span> <span class="fu">mean</span>(diff),</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd_diff =</span> <span class="fu">sd</span>(diff)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">format1 =</span> <span class="fu">str_split</span>(contrast, <span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>           <span class="fu">lapply</span>(<span class="cf">function</span>(x) x[[<span class="dv">1</span>]]) <span class="sc">%&gt;%</span> unlist,</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">format2 =</span> <span class="fu">str_split</span>(contrast, <span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>           <span class="fu">lapply</span>(<span class="cf">function</span>(x) x[[<span class="dv">2</span>]]) <span class="sc">%&gt;%</span> unlist) <span class="sc">%&gt;%</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cohens_d_Z =</span> <span class="fu">get_d_Z</span>(<span class="at">mean_diff =</span> mean_diff, <span class="at">sd_diff =</span> sd_diff),</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">cohens_d_av =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(.<span class="sc">$</span>format1),</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>                              <span class="cf">function</span>(x) {</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>                                f1 <span class="ot">&lt;-</span> format1[[x]]</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>                                f2 <span class="ot">&lt;-</span> format2[[x]]</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">get_d_av</span>(<span class="at">mean_diff =</span> mean_diff[[x]],</span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">sd1 =</span> <span class="fu">sd</span>(transcendence_differences[[</span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">str_c</span>(f1, <span class="st">"_transcendence"</span>)]]),</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">sd2 =</span> <span class="fu">sd</span>(transcendence_differences[[</span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">str_c</span>(f2, <span class="st">"_transcendence"</span>)]]))</span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>                              }),</span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>         <span class="at">cohens_d_rm =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(.<span class="sc">$</span>format1),</span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>                              <span class="cf">function</span>(x) {</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>                                f1 <span class="ot">&lt;-</span> format1[[x]]</span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>                                f2 <span class="ot">&lt;-</span> format2[[x]]</span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>                                cor_str <span class="ot">&lt;-</span></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_c</span>(f1, <span class="st">" -- "</span>, <span class="fu">ifelse</span>(f2 <span class="sc">==</span> <span class="st">"auro"</span>,</span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>                                                           <span class="st">"Auro-3D"</span>, f2)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>                                  tools<span class="sc">::</span><span class="fu">toTitleCase</span>()</span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">get_d_rm</span>(<span class="at">mean_diff =</span> mean_diff[[x]],</span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">sd1 =</span> <span class="fu">sd</span>(transcendence_differences[[</span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">str_c</span>(f1, <span class="st">"_transcendence"</span>)]]),</span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">sd2 =</span> <span class="fu">sd</span>(transcendence_differences[[</span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>                                           <span class="fu">str_c</span>(f2, <span class="st">"_transcendence"</span>)]]),</span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">cor12 =</span> cor_table<span class="sc">$</span>r[</span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a>                                           cor_table<span class="sc">$</span>Formats <span class="sc">==</span> cor_str])</span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a>                              }),</span>
+<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a>         <span class="at">hedges_g_av =</span> <span class="fu">correct_d_to_g</span>(cohens_d_av, N),</span>
+<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a>         <span class="at">hedges_g_rm =</span> <span class="fu">correct_d_to_g</span>(cohens_d_rm, N),</span>
+<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a>         <span class="at">cle =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(.<span class="sc">$</span>format1),</span>
+<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a>                      <span class="cf">function</span>(x) {</span>
+<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a>                        f2 <span class="ot">&lt;-</span> format1[[x]]</span>
+<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a>                        f1 <span class="ot">&lt;-</span> format2[[x]]</span>
+<span id="cb27-59"><a href="#cb27-59" aria-hidden="true" tabindex="-1"></a>                        cor_str <span class="ot">&lt;-</span></span>
+<span id="cb27-60"><a href="#cb27-60" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f2, <span class="st">" -- "</span>, <span class="fu">ifelse</span>(f1 <span class="sc">==</span> <span class="st">"auro"</span>,</span>
+<span id="cb27-61"><a href="#cb27-61" aria-hidden="true" tabindex="-1"></a>                                                   <span class="st">"Auro-3D"</span>, f1)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-62"><a href="#cb27-62" aria-hidden="true" tabindex="-1"></a>                          tools<span class="sc">::</span><span class="fu">toTitleCase</span>()</span>
+<span id="cb27-63"><a href="#cb27-63" aria-hidden="true" tabindex="-1"></a>                        mean1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(transcendence_differences[[</span>
+<span id="cb27-64"><a href="#cb27-64" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f1, <span class="st">"_transcendence"</span>)]])</span>
+<span id="cb27-65"><a href="#cb27-65" aria-hidden="true" tabindex="-1"></a>                        mean2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(transcendence_differences[[</span>
+<span id="cb27-66"><a href="#cb27-66" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f2, <span class="st">"_transcendence"</span>)]])</span>
+<span id="cb27-67"><a href="#cb27-67" aria-hidden="true" tabindex="-1"></a>                        sd1 <span class="ot">&lt;-</span> <span class="fu">sd</span>(transcendence_differences[[</span>
+<span id="cb27-68"><a href="#cb27-68" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f1, <span class="st">"_transcendence"</span>)]])</span>
+<span id="cb27-69"><a href="#cb27-69" aria-hidden="true" tabindex="-1"></a>                        sd2 <span class="ot">&lt;-</span> <span class="fu">sd</span>(transcendence_differences[[</span>
+<span id="cb27-70"><a href="#cb27-70" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">str_c</span>(f2, <span class="st">"_transcendence"</span>)]])</span>
+<span id="cb27-71"><a href="#cb27-71" aria-hidden="true" tabindex="-1"></a>                        cor12 <span class="ot">&lt;-</span> cor_table<span class="sc">$</span>r[cor_table<span class="sc">$</span>Formats <span class="sc">==</span> cor_str]</span>
+<span id="cb27-72"><a href="#cb27-72" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">get_cle</span>(<span class="at">mean1 =</span> mean1, <span class="at">mean2 =</span> mean2,</span>
+<span id="cb27-73"><a href="#cb27-73" aria-hidden="true" tabindex="-1"></a>                                <span class="at">sd1 =</span> sd1, <span class="at">sd2 =</span> sd2, <span class="at">cor12 =</span> cor12)</span>
+<span id="cb27-74"><a href="#cb27-74" aria-hidden="true" tabindex="-1"></a>                      }))</span>
+<span id="cb27-75"><a href="#cb27-75" aria-hidden="true" tabindex="-1"></a>transcendence_effsizes <span class="sc">%&gt;%</span></span>
+<span id="cb27-76"><a href="#cb27-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">contrast =</span> <span class="fu">str_c</span>(format1, <span class="st">" -- "</span>, format2) <span class="sc">%&gt;%</span></span>
+<span id="cb27-77"><a href="#cb27-77" aria-hidden="true" tabindex="-1"></a>           <span class="fu">gsub</span>(<span class="st">"auro"</span>, <span class="st">"Auro-3D"</span>, .) <span class="sc">%&gt;%</span></span>
+<span id="cb27-78"><a href="#cb27-78" aria-hidden="true" tabindex="-1"></a>           tools<span class="sc">::</span><span class="fu">toTitleCase</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb27-79"><a href="#cb27-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(format1, format2, <span class="fu">ends_with</span>(<span class="st">"_diff"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb27-80"><a href="#cb27-80" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Contrast"</span>, <span class="st">"$d_Z$"</span>, <span class="st">"$d_{av}$"</span>, <span class="st">"$d_{rm}$"</span>,</span>
+<span id="cb27-81"><a href="#cb27-81" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"$g_{av}$"</span>, <span class="st">"$g_{rm}$"</span>, <span class="st">"CLE"</span>),</span>
+<span id="cb27-82"><a href="#cb27-82" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="st">"lcccccc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <colgroup>
@@ -1138,10 +1169,10 @@ Z_{\textrm{CLE}} =
 </div>
 <p>Using the correction formula for multiple groups from <span class="citation" data-cites="mcgraw_common_1992">McGraw &amp; Wong (<a href="#ref-mcgraw_common_1992" role="doc-biblioref">1992</a>)</span>, the CLE for higher values in Auro than in Stereo and Surround is:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>p_auro <span class="ot">&lt;-</span> .<span class="dv">88</span> <span class="sc">*</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prod</span>(transcendence_effsizes<span class="sc">$</span>cle[transcendence_effsizes<span class="sc">$</span>format2 <span class="sc">==</span> <span class="st">"auro"</span>]) <span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  .<span class="dv">11</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>p_auro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>p_auro <span class="ot">&lt;-</span> .<span class="dv">88</span> <span class="sc">*</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prod</span>(transcendence_effsizes<span class="sc">$</span>cle[transcendence_effsizes<span class="sc">$</span>format2 <span class="sc">==</span> <span class="st">"auro"</span>]) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  .<span class="dv">11</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>p_auro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5498967</code></pre>
 </div>
@@ -1207,8 +1238,8 @@ Supply arguments directly to `.fns` through an anonymous function instead.
 </div>
 <p>To get a mean correlation, individual correlation coefficients have to be Fisher <span class="math inline">\(z\)</span>-transformed <span class="citation" data-cites="corey_averaging_1998">(<a href="#ref-corey_averaging_1998" role="doc-biblioref">Corey et al., 1998</a>)</span>. The Fisher <span class="math inline">\(z\)</span>-transformation is equivalent to the inverse hyperbolic tangent.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>avg_cor_z <span class="ot">&lt;-</span> <span class="fu">mean</span>(cor_table<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>avg_cor_r <span class="ot">&lt;-</span> <span class="fu">tanh</span>(avg_cor_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>avg_cor_z <span class="ot">&lt;-</span> <span class="fu">mean</span>(cor_table<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>avg_cor_r <span class="ot">&lt;-</span> <span class="fu">tanh</span>(avg_cor_z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Taking the averaged Fisher <span class="math inline">\(z\)</span>-transformed values results in a value of 0.9619. Back-transformed to Person’s <span class="math inline">\(r\)</span> the average correlation between the three audio formats for the GEMS factor Transcendence is 0.7451.</p>
 </section>
@@ -1220,69 +1251,69 @@ Supply arguments directly to `.fns` through an anonymous function instead.
 <h2 class="anchored" data-anchor-id="preparation-1">Preparation</h2>
 <p>Load the outlier-adjusted data from <span class="citation" data-cites="wycisk_wrapped_2022">Wycisk et al. (<a href="#ref-wycisk_wrapped_2022" role="doc-biblioref">2022</a>)</span> containing <em>N</em> = 190 participants. Then calculate the IMEI score, i.e., the average of the ten items, as well as the mean IMEI score per audio format.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>imei_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/imei_data_outlier_adjusted.csv"</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>imei_items <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"imei"</span>, <span class="fu">c</span>(<span class="dv">15</span>,<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">21</span>,<span class="dv">19</span>,<span class="dv">6</span>,<span class="dv">11</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">4</span>))</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>imei_data_long <span class="ot">&lt;-</span> imei_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(participant, piece,</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                            version, <span class="fu">all_of</span>(imei_items)) <span class="sc">%&gt;%</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">piece =</span> piece <span class="sc">%&gt;%</span> <span class="fu">recode</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"radio"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"hantel"</span>,</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"jene"</span>, <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"rokoko"</span>),</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">version =</span> version <span class="sc">%&gt;%</span> <span class="fu">recode</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"mono"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"stereo"</span>,</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"3d"</span>) <span class="sc">%&gt;%</span> <span class="fu">as_factor</span>())</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>imei_data_long<span class="sc">$</span>imei <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(imei_items)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>()</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>imei_data_wide <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> participant,</span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="fu">c</span>(piece, version),</span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> imei,</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_glue =</span> <span class="st">"{piece}_{version}_imei"</span>)</span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"mono"</span>, <span class="st">"stereo"</span>, <span class="st">"3d"</span>)) {</span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>  temp <span class="ot">&lt;-</span> imei_data_wide <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">contains</span>(v)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>()</span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">eval</span>(<span class="fu">str2expression</span>(<span class="fu">paste0</span>(<span class="st">"imei_data_wide$mean_"</span>, v, <span class="st">"_imei &lt;- temp"</span>)))</span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(temp, v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>imei_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/imei_data_outlier_adjusted.csv"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>imei_items <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"imei"</span>, <span class="fu">c</span>(<span class="dv">15</span>,<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">21</span>,<span class="dv">19</span>,<span class="dv">6</span>,<span class="dv">11</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">4</span>))</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>imei_data_long <span class="ot">&lt;-</span> imei_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(participant, piece,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                            version, <span class="fu">all_of</span>(imei_items)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">piece =</span> piece <span class="sc">%&gt;%</span> <span class="fu">recode</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"radio"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"hantel"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"jene"</span>, <span class="st">"4"</span> <span class="ot">=</span> <span class="st">"rokoko"</span>),</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">version =</span> version <span class="sc">%&gt;%</span> <span class="fu">recode</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="st">"mono"</span>, <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"stereo"</span>,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"3d"</span>) <span class="sc">%&gt;%</span> <span class="fu">as_factor</span>())</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>imei_data_long<span class="sc">$</span>imei <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(imei_items)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>()</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>imei_data_wide <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> participant,</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="fu">c</span>(piece, version),</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> imei,</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_glue =</span> <span class="st">"{piece}_{version}_imei"</span>)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"mono"</span>, <span class="st">"stereo"</span>, <span class="st">"3d"</span>)) {</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  temp <span class="ot">&lt;-</span> imei_data_wide <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">contains</span>(v)) <span class="sc">%&gt;%</span> <span class="fu">rowMeans</span>()</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">eval</span>(<span class="fu">str2expression</span>(<span class="fu">paste0</span>(<span class="st">"imei_data_wide$mean_"</span>, v, <span class="st">"_imei &lt;- temp"</span>)))</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(temp, v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="imei-correlations-across-audio-formats" class="level2">
 <h2 class="anchored" data-anchor-id="imei-correlations-across-audio-formats">IMEI Correlations Across Audio Formats</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>imei_cor_mono_stereo <span class="ot">&lt;-</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_mono_imei, imei_data_wide<span class="sc">$</span>mean_stereo_imei,</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>imei_cor_mono_3d <span class="ot">&lt;-</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_mono_imei, imei_data_wide<span class="sc">$</span>mean_3d_imei,</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>imei_cor_stereo_3d <span class="ot">&lt;-</span></span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_stereo_imei, imei_data_wide<span class="sc">$</span>mean_3d_imei,</span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>imei_cor_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Formats =</span> <span class="fu">c</span>(<span class="st">"Mono -- Stereo"</span>,</span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Mono -- 3D"</span>,</span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Stereo -- 3D"</span>),</span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">r =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>estimate,</span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_mono_3d<span class="sc">$</span>estimate,</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_stereo_3d<span class="sc">$</span>estimate),</span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>                             <span class="at">p =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>p.value,</span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_mono_3d<span class="sc">$</span>p.value,</span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_stereo_3d<span class="sc">$</span>p.value),</span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>                             <span class="at">LL =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_mono_3d<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_stereo_3d<span class="sc">$</span>conf.int[<span class="dv">1</span>]),</span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>                             <span class="at">UL =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_mono_3d<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_stereo_3d<span class="sc">$</span>conf.int[<span class="dv">2</span>])) <span class="sc">%&gt;%</span></span>
-<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">atanh</span>(r),</span>
-<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> <span class="fu">sapply</span>(p,</span>
-<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x) <span class="fu">ifelse</span>(x <span class="sc">&lt;</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">3</span>, <span class="st">"&lt; .001"</span>, x))) <span class="sc">%&gt;%</span></span>
-<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">Formats =</span> <span class="st">"Average"</span>,</span>
-<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">r =</span> <span class="fu">mean</span>(.<span class="sc">$</span>r),</span>
-<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>          <span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(.<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">Formats =</span> <span class="st">"Back-transformed Fisher's $z$ average"</span>,</span>
-<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">r =</span> <span class="fu">tanh</span>(.<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>[.<span class="sc">$</span>Formats <span class="sc">==</span> <span class="st">"Average"</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>imei_cor_mono_stereo <span class="ot">&lt;-</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_mono_imei, imei_data_wide<span class="sc">$</span>mean_stereo_imei,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>imei_cor_mono_3d <span class="ot">&lt;-</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_mono_imei, imei_data_wide<span class="sc">$</span>mean_3d_imei,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>imei_cor_stereo_3d <span class="ot">&lt;-</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor.test</span>(imei_data_wide<span class="sc">$</span>mean_stereo_imei, imei_data_wide<span class="sc">$</span>mean_3d_imei,</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"greater"</span>,</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">conf.level =</span> .<span class="dv">95</span>)</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>imei_cor_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Formats =</span> <span class="fu">c</span>(<span class="st">"Mono -- Stereo"</span>,</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Mono -- 3D"</span>,</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Stereo -- 3D"</span>),</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">r =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>estimate,</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_mono_3d<span class="sc">$</span>estimate,</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_stereo_3d<span class="sc">$</span>estimate),</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>                             <span class="at">p =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>p.value,</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_mono_3d<span class="sc">$</span>p.value,</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>                                   imei_cor_stereo_3d<span class="sc">$</span>p.value),</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>                             <span class="at">LL =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_mono_3d<span class="sc">$</span>conf.int[<span class="dv">1</span>],</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_stereo_3d<span class="sc">$</span>conf.int[<span class="dv">1</span>]),</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>                             <span class="at">UL =</span> <span class="fu">c</span>(imei_cor_mono_stereo<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_mono_3d<span class="sc">$</span>conf.int[<span class="dv">2</span>],</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>                                    imei_cor_stereo_3d<span class="sc">$</span>conf.int[<span class="dv">2</span>])) <span class="sc">%&gt;%</span></span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">atanh</span>(r),</span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> <span class="fu">sapply</span>(p,</span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(x) <span class="fu">ifelse</span>(x <span class="sc">&lt;</span> <span class="dv">10</span><span class="sc">^-</span><span class="dv">3</span>, <span class="st">"&lt; .001"</span>, x))) <span class="sc">%&gt;%</span></span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">Formats =</span> <span class="st">"Average"</span>,</span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">r =</span> <span class="fu">mean</span>(.<span class="sc">$</span>r),</span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>          <span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(.<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(<span class="at">Formats =</span> <span class="st">"Back-transformed Fisher's $z$ average"</span>,</span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">r =</span> <span class="fu">tanh</span>(.<span class="sc">$</span><span class="st">`</span><span class="at">Fisher's z</span><span class="st">`</span>[.<span class="sc">$</span>Formats <span class="sc">==</span> <span class="st">"Average"</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1354,35 +1385,35 @@ Supply arguments directly to `.fns` through an anonymous function instead.
 <section id="imei-common-language-effect-sizes" class="level2">
 <h2 class="anchored" data-anchor-id="imei-common-language-effect-sizes">IMEI Common Language Effect Sizes</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>imei_desc <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(participant, piece, version, imei) <span class="sc">%&gt;%</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">version =</span> version <span class="sc">%&gt;%</span> <span class="fu">as_factor</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">recode_factor</span>(<span class="at">mono =</span> <span class="st">"Mono"</span>,</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">stereo =</span> <span class="st">"Stereo"</span>,</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                         <span class="st">`</span><span class="at">3d</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"3D"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(participant, version) <span class="sc">%&gt;%</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">imei =</span> <span class="fu">mean</span>(imei)) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(version) <span class="sc">%&gt;%</span></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">M =</span> <span class="fu">mean</span>(imei), <span class="at">SD =</span> <span class="fu">sd</span>(imei))</span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>imei_cle_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">format1 =</span> <span class="fu">c</span>(<span class="st">"3D"</span>, <span class="st">"3D"</span>, <span class="st">"Stereo"</span>),</span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">format2 =</span> <span class="fu">c</span>(<span class="st">"Stereo"</span>, <span class="st">"Mono"</span>, <span class="st">"Mono"</span>))</span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>imei_cle_table<span class="sc">$</span>cle <span class="ot">&lt;-</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mapply</span>(<span class="cf">function</span>(f1, f2) {</span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    mean1 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>M[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f1]</span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    mean2 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>M[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f2]</span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    sd1 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>SD[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f1]</span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    sd2 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>SD[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f2]</span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    cor12 <span class="ot">&lt;-</span> imei_cor_table<span class="sc">$</span>r[imei_cor_table<span class="sc">$</span>Formats <span class="sc">==</span> <span class="fu">str_c</span>(f2, <span class="st">" -- "</span>, f1)]</span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">get_cle</span>(<span class="at">mean1 =</span> mean1,</span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean2 =</span> mean2,</span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd1 =</span> sd1,</span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd2 =</span> sd2,</span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">cor12 =</span> cor12)</span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>  }, imei_cle_table<span class="sc">$</span>format1, imei_cle_table<span class="sc">$</span>format2)</span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>imei_cle_table <span class="sc">%&gt;%</span></span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), round, <span class="at">digits =</span> <span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Format 1"</span>, <span class="st">"Format 2"</span>, <span class="st">"CLE"</span>),</span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="st">"llc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>imei_desc <span class="ot">&lt;-</span> imei_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(participant, piece, version, imei) <span class="sc">%&gt;%</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">version =</span> version <span class="sc">%&gt;%</span> <span class="fu">as_factor</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">recode_factor</span>(<span class="at">mono =</span> <span class="st">"Mono"</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">stereo =</span> <span class="st">"Stereo"</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>                         <span class="st">`</span><span class="at">3d</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"3D"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(participant, version) <span class="sc">%&gt;%</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">imei =</span> <span class="fu">mean</span>(imei)) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(version) <span class="sc">%&gt;%</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">M =</span> <span class="fu">mean</span>(imei), <span class="at">SD =</span> <span class="fu">sd</span>(imei))</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>imei_cle_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">format1 =</span> <span class="fu">c</span>(<span class="st">"3D"</span>, <span class="st">"3D"</span>, <span class="st">"Stereo"</span>),</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">format2 =</span> <span class="fu">c</span>(<span class="st">"Stereo"</span>, <span class="st">"Mono"</span>, <span class="st">"Mono"</span>))</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>imei_cle_table<span class="sc">$</span>cle <span class="ot">&lt;-</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mapply</span>(<span class="cf">function</span>(f1, f2) {</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    mean1 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>M[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f1]</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    mean2 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>M[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f2]</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    sd1 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>SD[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f1]</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>    sd2 <span class="ot">&lt;-</span> imei_desc<span class="sc">$</span>SD[imei_desc<span class="sc">$</span>version <span class="sc">==</span> f2]</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>    cor12 <span class="ot">&lt;-</span> imei_cor_table<span class="sc">$</span>r[imei_cor_table<span class="sc">$</span>Formats <span class="sc">==</span> <span class="fu">str_c</span>(f2, <span class="st">" -- "</span>, f1)]</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">get_cle</span>(<span class="at">mean1 =</span> mean1,</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean2 =</span> mean2,</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd1 =</span> sd1,</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd2 =</span> sd2,</span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">cor12 =</span> cor12)</span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>  }, imei_cle_table<span class="sc">$</span>format1, imei_cle_table<span class="sc">$</span>format2)</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>imei_cle_table <span class="sc">%&gt;%</span></span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), round, <span class="at">digits =</span> <span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Format 1"</span>, <span class="st">"Format 2"</span>, <span class="st">"CLE"</span>),</span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="st">"llc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <thead>
@@ -1413,7 +1444,7 @@ Supply arguments directly to `.fns` through an anonymous function instead.
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>p_3d <span class="ot">&lt;-</span> .<span class="dv">88</span> <span class="sc">*</span> <span class="fu">prod</span>(imei_cle_table<span class="sc">$</span>cle[imei_cle_table<span class="sc">$</span>format1 <span class="sc">==</span> <span class="st">"3D"</span>]) <span class="sc">+</span> .<span class="dv">11</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>p_3d <span class="ot">&lt;-</span> .<span class="dv">88</span> <span class="sc">*</span> <span class="fu">prod</span>(imei_cle_table<span class="sc">$</span>cle[imei_cle_table<span class="sc">$</span>format1 <span class="sc">==</span> <span class="st">"3D"</span>]) <span class="sc">+</span> .<span class="dv">11</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Once again using the correction formula for multiple conditions from <span class="citation" data-cites="mcgraw_common_1992">McGraw &amp; Wong (<a href="#ref-mcgraw_common_1992" role="doc-biblioref">1992</a>)</span>, the CLE for 3D versus Stereo and Mono is 0.5073903.</p>
 </section>
