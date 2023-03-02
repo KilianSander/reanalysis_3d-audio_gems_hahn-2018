@@ -1,7 +1,7 @@
 # ANOVAs for all GEMS Factors --------------------------------------------------
 # Run `reanalysis_on_emotional_effects_of_music_in_various_audio_formats.qmd` to
 # code chunk `long formats` to obtain the data frame `data_long_mult`.
-all_anovas <-
+all_individual_anovas <-
   map(gems_factors,
       function(gems_factor) {
         #
@@ -39,4 +39,6 @@ all_anovas <-
                results = get_anova_table(anova))
         results
 })
-names(all_anovas) <- gems_factors
+names(all_individual_anovas) <- gems_factors
+save(all_individual_anovas,
+     file = "results/all_individual_anovas.Rda")
