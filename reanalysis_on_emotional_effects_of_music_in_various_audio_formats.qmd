@@ -1,7 +1,7 @@
 ---
 title: "Supplementary Materials: Added Emotional Value by Immersive 3D Audio? Reanalysis of Data From a Study by Hahn (2018) on the Emotional Effects of Music Presented in Various Audio Formats"
 author: "Kilian Sander, Yves Wycisk, Reinhard Kopiez"
-date: "2023-02-09"
+date: "2023-03-02"
 format:
   html:
     toc: true
