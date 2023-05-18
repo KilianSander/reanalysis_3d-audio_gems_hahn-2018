@@ -44,13 +44,14 @@ transcendence_error_plot <-
             error_arg = list(width = .1),
             emmeans_arg = list(model = "univariate")) +
   jtools::theme_apa() +
+  theme(panel.grid.major.y = element_line(colour = "lightgray", linetype = 3)) +
   ylim(2.4, 3.2) +
   ylab("Transcendence") +
   scale_x_discrete(name = "Format",
                    labels = c("stereo" = "Stereo",
                               "surround" = "Surround",
                               "auro" = "Auro-3D"))
-ggsave(filename = "transcendence_error_plot.svg",
+ggsave(filename = "results/transcendence_error_plot.svg",
        device = "svg",
        units = "mm",
        width = 84,
