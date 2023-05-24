@@ -25,6 +25,7 @@ must be present in the same directory.
 
 ## License
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />The original data set, the sociodemographics, and the filtered data set are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+Credit Kilian Sander, Yves Wycisk, Reinhard Kopiez, and Ephraim Hahn as creators.
 
 ## References
 Hahn, E. (2018, July 6&#8211;9). *Musical emotions evoked by 3D audio* [Conference paper]. AES Conference on Spatial Reproduction, Tokyo, Japan. http://www.aes.org/e-lib/browse.cfm?elib=19640
