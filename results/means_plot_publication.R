@@ -16,6 +16,7 @@ means_plot <- ggplot(data = descriptives %>% group_by(format),
   jtools::theme_apa() +
   #theme_pubr() +
   theme(legend.position = c(.99,.01),
+        panel.grid.major.y = element_line(colour = "lightgray", linetype = 3),
         legend.justification = c(1,0)) +
   xlab("GEMS Factor") +
   theme(axis.text = element_text(size = 8)) +
@@ -24,7 +25,7 @@ means_plot <- ggplot(data = descriptives %>% group_by(format),
   labs(linetype = "Format",
        color = "Format",
        shape = "Format")
-ggsave(filename = "means_plot.svg",
+ggsave(filename = "results/means_plot.svg",
        plot = means_plot,
        device = "svg",
        units = "mm",
@@ -43,13 +44,14 @@ transcendence_error_plot <-
             error_arg = list(width = .1),
             emmeans_arg = list(model = "univariate")) +
   jtools::theme_apa() +
+  theme(panel.grid.major.y = element_line(colour = "lightgray", linetype = 3)) +
   ylim(2.4, 3.2) +
   ylab("Transcendence") +
   scale_x_discrete(name = "Format",
                    labels = c("stereo" = "Stereo",
                               "surround" = "Surround",
                               "auro" = "Auro-3D"))
-ggsave(filename = "transcendence_error_plot.svg",
+ggsave(filename = "results/transcendence_error_plot.svg",
        device = "svg",
        units = "mm",
        width = 84,
