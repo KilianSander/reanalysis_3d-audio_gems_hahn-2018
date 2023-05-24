@@ -577,7 +577,7 @@ in Stereo and Surround is `r round(p_auro, digits = 4)*100`%.
 ### Correlations
 ```{r correlations table, echo=FALSE}
 knitr::kable(cor_table %>% 
-  mutate(across(where(is.numeric), round, digits = 4)),
+  mutate(across(where(is.numeric), \(x) round(x, digits = 4))),
              col.names = c("Formats", "$r$", "$p$", "CI LL",
                            "CI UL", "Fisher's $z$"),
              align = "lccccc")
