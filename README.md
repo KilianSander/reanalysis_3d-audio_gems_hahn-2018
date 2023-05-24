@@ -15,13 +15,16 @@ must be present in the same directory.
 `data/` contains all data sets used in the analyses:
 
 * original data set from Hahn (2018) in wide format (`data_raw.Rda` and `data_raw.csv`).
-* sociodemographics of the Hahn's (2018) sample (`sociodemographics.Rda` and `sociodemographics.csv`)
+* sociodemographics of Hahn's (2018) sample (`sociodemographics.Rda` and `sociodemographics.csv`)
 * filtered data set with calculated scores in wide format (`data_filtered.Rda` and `data_filtered.csv`)
 * outlier-adjusted data set from Wycisk et al. (2022) in long format (`imei_data_outlier_adjusted.Rda` and `imei_data_outlier_adjusted.csv`)
 
 `inst/` contains the `apa.csl` citation style language file and the bibliography file `reanalysis_3d-audio_gems_hahn.bib` which is formatted according to biblatex-apa. They are used for citations in the Quarto document.
 
 `results/` contains some intermediate results and plots, e.g., the output of the multivariate analysis of variance (`rm_manova.Rda`).
+
+## License
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />The original data set, the sociodemographics, and the filtered data set are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 
 ## References
 Hahn, E. (2018, July 6&#8211;9). *Musical emotions evoked by 3D audio* [Conference paper]. AES Conference on Spatial Reproduction, Tokyo, Japan. http://www.aes.org/e-lib/browse.cfm?elib=19640
