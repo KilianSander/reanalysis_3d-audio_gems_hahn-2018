@@ -42,3 +42,11 @@ all_individual_anovas <-
 names(all_individual_anovas) <- gems_factors
 save(all_individual_anovas,
      file = "results/all_individual_anovas.Rda")
+
+# render Rmarkdown files for each individual ANOVA
+for (gf in gems_factors) {
+  rmarkdown::render("results/all_individual_anovas_report_template.Rmd",
+                    params = list(gems_factor = gf),
+                    output_format = "all",
+                    output_file = str_c("ANOVA_", gf))
+}

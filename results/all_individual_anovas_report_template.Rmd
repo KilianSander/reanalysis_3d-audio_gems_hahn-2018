@@ -1,0 +1,50 @@
+---
+params:
+  gems_factor: ""
+title: "Individual ANOVA for `r params$gems_factor`"
+output:
+  html_document: default
+  word_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Preparation
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+gf <- params$gems_factor
+library(tidyverse)
+load("all_individual_anovas.Rda")
+```
+
+# Assumptions
+## Outliers
+```{r boxplots}
+all_individual_anovas[[gf]]$boxplots
+```
+```{r outliers}
+all_individual_anovas[[gf]]$outliers %>%
+    knitr::kable()
+```
+
+## Normality: QQ Plots and Shapiro-Wilk Test
+```{r qqplots}
+all_individual_anovas[[gf]]$normality_qqplots
+```
+```{r shapiro-wilk}
+all_individual_anovas[[gf]]$normality_test %>%
+    knitr::kable()
+```
+
+## Sphericity
+```{r sphericity}
+all_individual_anovas[[gf]]$sphericity %>%
+    knitr::kable()
+```
+
+# Results
+```{r results}
+all_individual_anovas[[gf]]$results %>%
+    knitr::kable()
+```
+
