@@ -1,5 +1,5 @@
-# Supplementary Materials: Added Emotional Value by Immersive 3D Audio? Reanalysis of Data from a Study by Hahn (2018) on the Emotional Effects of Music Presented in Various Audio Formats
-This repository supplements the paper <q>Added Emotional Value by Immersive 3D Audio? Reanalysis of Data from a Study by Hahn (2018) on the Emotional Effects of Music Presented in Various Audio Formats</q> by Kilian Sander, Yves Wycisk, and Reinhard Kopiez.
+# Supplementary Materials: Limited Emotional Value Added by Immersive 3D Audio: A Reanalysis
+This repository supplements the paper <q>Limited Emotional Value Added by Immersive 3D Audio: A Reanalysis</q> by Kilian Sander, Yves Wycisk, and Reinhard Kopiez.
 
 ## Files
 All analyses are conducted within the Quarto document
