@@ -702,7 +702,7 @@ imei_cle_table$cle <-
             cor12 = cor12)
   }, imei_cle_table$format1, imei_cle_table$format2)
 imei_cle_table %>%
-  mutate(across(where(is.numeric), round, digits = 4)) %>%
+  mutate(across(where(is.numeric), \(x) round(x, digits = 4))) %>%
   knitr::kable(col.names = c("Format 1", "Format 2", "CLE"),
                align = "llc")
 ```

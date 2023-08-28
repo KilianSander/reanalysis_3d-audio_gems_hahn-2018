@@ -1371,22 +1371,9 @@ Z_{\textrm{CLE}} =
 <span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">cor12 =</span> cor12)</span>
 <span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>  }, imei_cle_table<span class="sc">$</span>format1, imei_cle_table<span class="sc">$</span>format2)</span>
 <span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>imei_cle_table <span class="sc">%&gt;%</span></span>
-<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), round, <span class="at">digits =</span> <span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), \(x) <span class="fu">round</span>(x, <span class="at">digits =</span> <span class="dv">4</span>))) <span class="sc">%&gt;%</span></span>
 <span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Format 1"</span>, <span class="st">"Format 2"</span>, <span class="st">"CLE"</span>),</span>
 <span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="st">"llc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: There was 1 warning in `mutate()`.
-ℹ In argument: `across(where(is.numeric), round, digits = 4)`.
-Caused by warning:
-! The `...` argument of `across()` is deprecated as of dplyr 1.1.0.
-Supply arguments directly to `.fns` through an anonymous function instead.
-
-  # Previously
-  across(a:b, mean, na.rm = TRUE)
-
-  # Now
-  across(a:b, \(x) mean(x, na.rm = TRUE))</code></pre>
-</div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <thead>
@@ -1417,7 +1404,7 @@ Supply arguments directly to `.fns` through an anonymous function instead.
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>p_3d <span class="ot">&lt;-</span> .<span class="dv">88</span> <span class="sc">*</span> <span class="fu">prod</span>(imei_cle_table<span class="sc">$</span>cle[imei_cle_table<span class="sc">$</span>format1 <span class="sc">==</span> <span class="st">"3D"</span>]) <span class="sc">+</span> .<span class="dv">11</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>p_3d <span class="ot">&lt;-</span> .<span class="dv">88</span> <span class="sc">*</span> <span class="fu">prod</span>(imei_cle_table<span class="sc">$</span>cle[imei_cle_table<span class="sc">$</span>format1 <span class="sc">==</span> <span class="st">"3D"</span>]) <span class="sc">+</span> .<span class="dv">11</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Once again using the correction formula for multiple conditions from <span class="citation" data-cites="mcgraw_common_1992">McGraw &amp; Wong (<a href="#ref-mcgraw_common_1992" role="doc-biblioref">1992</a>)</span>, the CLE for 3D versus Stereo and Mono is 0.5073903.</p>
 </section>
