@@ -5,7 +5,6 @@ date: "2023-03-02"
 format:
   html:
     toc: true
-  docx: default
 csl: inst/apa.csl
 bibliography: "inst/reanalysis_3d-audio_gems_hahn.bib"
 ---
